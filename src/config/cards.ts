@@ -11,37 +11,37 @@ export const cards: CardData[] = [
     {
         id: "1",
         title: "Proyecto 1",
-        description: "Descripción...",
-        img: "public/assets/web1.png", // Nombre correcto
-        buttonText: "Ver más" // Nueva prop requerida
+        description: "E-commerce de audifonos",
+        img: "assets/web1.png", // Nombre correcto
+        buttonText: "Ver más.." // Nueva prop requerida
     },
     {
         id: "2",
-        title: "Proyecto 1",
-        description: "Descripción...",
+        title: "Proyecto 2",
+        description: "E-commerce de teclados gaming",
         img: "assets/web2.png", // Nombre correcto
-        buttonText: "Ver más" // Nueva prop requerida
+        buttonText: "Ver más.." // Nueva prop requerida
     },
     {
         id: "3",
-        title: "Proyecto 1",
-        description: "Descripción...",
-        img: "public/assets/web3.png", // Nombre correcto
-        buttonText: "Ver más" // Nueva prop requerida
+        title: "Proyecto 3",
+        description: "Proximamente...",
+        img: "assets/web3.png", // Nombre correcto
+        buttonText: "Ver más..." // Nueva prop requerida
     },
     {
         id: "4",
-        title: "Proyecto 1",
-        description: "Descripción...",
-        img: "public/assets/web4.png", // Nombre correcto
-        buttonText: "Ver más" // Nueva prop requerida
+        title: "Proyecto 4",
+        description: "Proximamente..",
+        img: "assets/web4.png", // Nombre correcto
+        buttonText: "Ver más..." // Nueva prop requerida
     },
     {
         id: "5",
-        title: "Proyecto 1",
-        description: "Descripción...",
-        img: "public/assets/web5.png", // Nombre correcto
-        buttonText: "Ver más" // Nueva prop requerida
+        title: "Proyecto 5",
+        description: "No disponible",
+        img: "assets/web5.png", // Nombre correcto
+        buttonText: "No disponible" // Nueva prop requerida
     },
     //...
 ];
