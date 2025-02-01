@@ -19,7 +19,7 @@ export const cards: CardData[] = [
         id: "2",
         title: "Proyecto 1",
         description: "Descripción...",
-        img: "public/assets/web2.png", // Nombre correcto
+        img: "assets/web2.png", // Nombre correcto
         buttonText: "Ver más" // Nueva prop requerida
     },
     {
