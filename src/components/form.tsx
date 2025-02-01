@@ -2,10 +2,11 @@
 
 import React, { useRef, useState } from 'react';
 import IonIcon from '@reacticons/ionicons';
-import Input from './inpput'
+import Input from './inpput';
 import useGsapAnimation from './../hook/useGsapAnimation';
 import { isValidEmail } from './utils/validation';
-import { sendContactForm } from './../services/contactService';
+import { collection, addDoc } from "firebase/firestore"; // Importa Firestore
+import { db } from "../config/firebase"; // Importa la instancia de Firestore
 
 const ContactForm = () => {
   const formRef = useRef(null);
@@ -32,6 +33,7 @@ const ContactForm = () => {
     e.preventDefault();
 
     try {
+      // Validaciones del formulario
       if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
         setError('Por favor, completa todos los campos del formulario.');
         return;
@@ -47,23 +49,20 @@ const ContactForm = () => {
         return;
       }
 
-      const data = await sendContactForm(formData);
+      // Enviar datos a Firestore
+      await addDoc(collection(db, "contactFormSubmissions"), formData); // Guarda los datos en la colección "contactFormSubmissions"
 
-      if (data.status === 'success') {
-        setResponseMessage(data.message);
-        setError('');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          message: ''
-        });
-      } else {
-        setResponseMessage('');
-        setError(data.message || 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
-      }
+      // Si el envío es exitoso
+      setResponseMessage('¡Formulario enviado con éxito!');
+      setError('');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
+      console.error('Error al enviar los datos a Firestore:', error);
       setResponseMessage('');
       setError('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
     }
