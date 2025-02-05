@@ -10,38 +10,38 @@ export interface CardData {
 export const cards: CardData[] = [
     {
         id: "1",
-        title: "Proyecto 1",
-        description: "E-commerce de audifonos",
-        img: "assets/web1.png", // Nombre correcto
-        buttonText: "Ver más.." // Nueva prop requerida
+        title: "HP Headphones",
+        description: "Landing Page de Auriculares",
+        img: "assets/web1.png", 
+        buttonText: "Ver más..." 
     },
     {
         id: "2",
-        title: "Proyecto 2",
+        title: "FutureCart",
         description: "E-commerce de teclados gaming",
-        img: "assets/web2.png", // Nombre correcto
-        buttonText: "Ver más.." // Nueva prop requerida
+        img: "assets/web2.png", 
+        buttonText: "Ver más..." 
     },
     {
         id: "3",
-        title: "Proyecto 3",
-        description: "Proximamente...",
-        img: "assets/web3.png", // Nombre correcto
-        buttonText: "Ver más..." // Nueva prop requerida
+        title: "Barberia",
+        description: "Interfaz de reserva - Selección de servicios y barberos.",
+        img: "assets/web3.png", 
+        buttonText: "Ver más..." 
     },
     {
         id: "4",
-        title: "Proyecto 4",
-        description: "Proximamente..",
-        img: "assets/web4.png", // Nombre correcto
-        buttonText: "Ver más..." // Nueva prop requerida
+        title: "Formulario",
+        description: "Sistema de autenticación con login y registro",
+        img: "assets/web4.png", 
+        buttonText: "Ver más..." 
     },
     {
         id: "5",
-        title: "Proyecto 5",
-        description: "No disponible",
-        img: "assets/web5.png", // Nombre correcto
-        buttonText: "No disponible" // Nueva prop requerida
+        title: "Paleta de colores",
+        description: "Aplicacion de react que genera 21 tonalidades de cualquier color",
+        img: "assets/web5.png", 
+        buttonText: "Ver mas..." 
     },
     //...
 ];

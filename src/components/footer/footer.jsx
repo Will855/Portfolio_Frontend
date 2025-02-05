@@ -34,7 +34,7 @@ const Footer = () => {
             <div className="flex flex-col items-center space-y-4">
               <div className="bg-white/10 p-3 rounded-lg hover:scale-105 transition-transform">
                 <img
-                  src="assets/qrWhatsapp.png"
+                  src="assets/qrWhatsapp.jpg"
                   alt="Código QR de WhatsApp"
                   className="w-32 h-32 object-contain"
                 />

@@ -1,3 +1,7 @@
+import AuthSystem from "../components/demos/authSystem";
+import BarberiaPremium from "../components/demos/barberia";
+import ColorPaletteGenerator from "../components/demos/colorPalette";
+import FutureCart from "../components/demos/futureCart";
 import HeadPhones from "../components/demos/headphones";
 import NotFound from "../pages/404";
 
@@ -15,35 +19,35 @@ export const projects: Project[] = [
         id: "1",
         content: HeadPhones,
         bgProyect: "/images/bg-proyecto1.jpg",
-        codeUrl: "https://github.com/tu-usuario/proyecto-1", // Enlace externo
-        demoUrl: "/404"                // Ruta interna
+        codeUrl: "https://github.com/Will855/HeadPhones",
+        demoUrl: "https://will855.github.io/HeadPhones/"                
     },
-    {
+    {//listo
         id: "2",
-        content: NotFound,
+        content: FutureCart,
         bgProyect: "/images/bg-proyecto2.jpg",
-        codeUrl: "https://github.com/tu-usuario/proyecto-2",
-        demoUrl: "/404"
+        codeUrl: "https://github.com/Will855/Carrito-de-Compras-JavaScript",
+        demoUrl: "https://will855.github.io/Carrito-de-Compras-JavaScript/"
     },
     {
         id: "3",
-        content: NotFound,
-        bgProyect: "/images/bg-proyecto2.jpg",
-        codeUrl: "https://github.com/tu-usuario/proyecto-2",
-        demoUrl: "/404"
+        content: BarberiaPremium,
+        bgProyect: "/images/bg-proyecto2.jpg",//cambiar
+        codeUrl: "https://github.com/Will855/Barberia--Agendado-de-citas-",
+        demoUrl: "https://will855.github.io/Barberia--Agendado-de-citas-/#servicios"
     },
     {
         id: "4",
-        content: NotFound,
+        content: AuthSystem,
         bgProyect: "/images/bg-proyecto2.jpg",
-        codeUrl: "https://github.com/tu-usuario/proyecto-2",
-        demoUrl: "/404"
+        codeUrl: "https://github.com/Will855/formulario",
+        demoUrl: "https://will855.github.io/formulario/"
     },
     {
         id: "5",
-        content: NotFound,
+        content: ColorPaletteGenerator,
         bgProyect: "/images/bg-proyecto2.jpg",
-        codeUrl: "https://github.com/tu-usuario/proyecto-2",
-        demoUrl: "/404"
+        codeUrl: "https://github.com/Will855/paleta-de-colores",
+        demoUrl: "https://will855.github.io/paleta-de-colores/"
     }
 ];
