@@ -12,11 +12,6 @@ const HeadPhones: React.FC = () => {
 
       {/* Imagen o GIF */}
       <div className="mb-8">
-        <img
-          src="ruta-del-gif.gif" // Cambia esto por la URL o ruta de tu GIF
-          alt="Demo interactivo"
-          className="w-full max-w-md mx-auto bg-gray-100 rounded-xl mb-4"
-        />
         <p className="text-gray-500 text-sm text-center">
           Demo interactivo - Cambio de colores y animaciones
         </p>
