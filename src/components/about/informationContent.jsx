@@ -68,7 +68,7 @@ const InformationContent = () => {
                             <div className="absolute left-[-9px] top-3 w-4 h-4 bg-blue-400 rounded-full opacity-30 group-hover:opacity-100 transition-opacity"/>
                             <h3 className="text-xl font-medium mb-2">🛒 E-commerce de teclados</h3>
                             <ul className="space-y-2 text-sm text-slate-300">
-                                <li>• Desarrollo con React + TypeScript</li>
+                                <li>• Desarrollo con Javascript</li>
                                 <li>• Animaciones GSAP ScrollTrigger</li>
                                 <li>• Diseño responsive con Tailwind</li>
                                 <li>• Optimización Core Web Vitals ≥90</li>
@@ -79,7 +79,7 @@ const InformationContent = () => {
                             <div className="absolute left-[-9px] top-3 w-4 h-4 bg-purple-400 rounded-full opacity-30 group-hover:opacity-100 transition-opacity"/>
                             <h3 className="text-xl font-medium mb-2">✂️ Sitio para barbería</h3>
                             <ul className="space-y-2 text-sm text-slate-300">
-                                <li>• Arquitectura HTML/CSS + Bootstrap</li>
+                                <li>• Arquitectura HTML/CSS + Tailwind</li>
                                 <li>• Sistema de reservas integrado</li>
                                 <li>• Mejora de tasa de conversión en 35%</li>
                                 <li>• Diseño mobile-first</li>
@@ -108,7 +108,7 @@ const InformationContent = () => {
                     <div className="p-4 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-lg border border-white/10">
                         <p className="text-lg font-medium mb-2">Perfeccionismo creativo</p>
                         <p className="text-slate-300">
-                            Combino atención al detalle con enfoque estratégico, asegurando que cada componente: 
+                            Combino atención al detalle con enfoque estratégico 
                         </p>
                         <ul className="mt-2 space-y-2 text-sm">
                             <li>• Código limpio y mantenible</li>

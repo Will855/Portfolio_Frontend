@@ -16,13 +16,13 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="mailto:tuemail@gmail.com" className="flex items-center gap-2 hover:text-blue-300 transition-colors">
+                  <a href="mailto:lynchwilmer@gmail.com" className="flex items-center gap-2 hover:text-blue-300 transition-colors">
                     <span className="i-ion-mail-open-outline text-xl"></span>
                     lynchwilmer@gmail.com
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+1234567890" className="flex items-center gap-2 hover:text-purple-300 transition-colors">
+                  <a href="tel:+584265940917" className="flex items-center gap-2 hover:text-purple-300 transition-colors">
                     <span className="i-ion-call-outline text-xl"></span>
                     +58 4265940917
                   </a>
