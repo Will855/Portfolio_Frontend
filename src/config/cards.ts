@@ -43,5 +43,12 @@ export const cards: CardData[] = [
         img: "assets/web5.png", 
         buttonText: "Ver mas..." 
     },
+    {
+        id: "6",
+        title: "CRUD/Rest API",
+        description: "CRUD de NodeJS con rest API para login con seguridad hash y manejo de errores",
+        img: "assets/web6.png", 
+        buttonText: "Ver mas..." 
+    },
     //...
 ];

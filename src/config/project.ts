@@ -1,9 +1,10 @@
 import AuthSystem from "../components/demos/authSystem";
 import BarberiaPremium from "../components/demos/barberia";
 import ColorPaletteGenerator from "../components/demos/colorPalette";
+import BackendSystemDocumentation from "../components/demos/crudNode";
 import FutureCart from "../components/demos/futureCart";
 import HeadPhones from "../components/demos/headphones";
-import NotFound from "../pages/404";
+//import NotFound from "../pages/404";
 
 export interface Project {
     id: string;
@@ -49,5 +50,13 @@ export const projects: Project[] = [
         bgProyect: "/images/bg-proyecto2.jpg",
         codeUrl: "https://github.com/Will855/paleta-de-colores",
         demoUrl: "https://will855.github.io/paleta-de-colores/"
-    }
+    },
+    {
+        id: "6",
+        content: BackendSystemDocumentation,
+        bgProyect: "/images/bg-proyecto2.jpg",
+        codeUrl: "https://github.com/Will855/CRUD-NodeJS",
+        demoUrl: '../pages/404'
+    },
+
 ];
