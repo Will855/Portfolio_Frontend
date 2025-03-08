@@ -19,8 +19,7 @@ const EcommercePage: React.FC = () => {
                     <h3 className="text-lg sm:text-xl font-semibold">Qué es</h3>
                     <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
                         Plataforma de comercio electrónico de última generación con gestión inteligente de inventario,
-                        carrito persistente y análisis en tiempo real. Integra búsqueda predictiva, recomendaciones
-                        personalizadas y flujo de compra optimizado para máxima conversión.
+                        carrito persistente, análisis en tiempo real y flujo de compra optimizado para máxima conversión.
                     </p>
                 </div>
 
