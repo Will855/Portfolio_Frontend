@@ -4,6 +4,7 @@ import ColorPaletteGenerator from "../components/demos/colorPalette";
 import BackendSystemDocumentation from "../components/demos/crudNode";
 import FutureCart from "../components/demos/futureCart";
 import HeadPhones from "../components/demos/headphones";
+import EcommercePage from "../components/demos/ecomerce";
 //import NotFound from "../pages/404";
 
 export interface Project {
@@ -58,5 +59,12 @@ export const projects: Project[] = [
         codeUrl: "https://github.com/Will855/CRUD-NodeJS",
         demoUrl: '../pages/404'
     },
+    {
+        id: "7",
+        content: EcommercePage,
+        bgProyect: "/images/bg-proyecto2.jpg",
+        codeUrl: "https://github.com/Will855/fakeStore",
+        demoUrl: 'https://fakestore-will2003.web.app/'
+    }
 
 ];

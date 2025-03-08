@@ -50,5 +50,12 @@ export const cards: CardData[] = [
         img: "assets/web6.png", 
         buttonText: "Ver mas..." 
     },
+    {
+        id: "7",
+        title: "E-Commerce",
+        description: "Aplicacion de React con Redux y FakeStore API para crea un E-commerce",
+        img: "assets/web7.png", 
+        buttonText: "Ver mas..." 
+    }
     //...
 ];
