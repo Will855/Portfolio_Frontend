@@ -17,8 +17,8 @@ const Information: React.FC = () => {
         <SkillsSection />
         <ProjectsSection />
         <EducationAndCTASection />
-        <Footer />
       </motion.div>
+      <Footer />
     </motion.section>
   );
 };
