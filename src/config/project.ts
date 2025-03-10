@@ -19,10 +19,10 @@ export interface Project {
 export const projects: Project[] = [
     {
         id: "1",
-        content: HeadPhones,
-        bgProyect: "/images/bg-proyecto1.jpg",
-        codeUrl: "https://github.com/Will855/HeadPhones",
-        demoUrl: "https://will855.github.io/HeadPhones/"                
+        content: EcommercePage,
+        bgProyect: "/images/bg-proyecto2.jpg",
+        codeUrl: "https://github.com/Will855/fakeStore",
+        demoUrl: 'https://fakestore-will2003.web.app/'
     },
     {//listo
         id: "2",
@@ -61,10 +61,11 @@ export const projects: Project[] = [
     },
     {
         id: "7",
-        content: EcommercePage,
-        bgProyect: "/images/bg-proyecto2.jpg",
-        codeUrl: "https://github.com/Will855/fakeStore",
-        demoUrl: 'https://fakestore-will2003.web.app/'
+        content: HeadPhones,
+        bgProyect: "/images/bg-proyecto1.jpg",
+        codeUrl: "https://github.com/Will855/HeadPhones",
+        demoUrl: "https://will855.github.io/HeadPhones/"
     }
 
 ];
+

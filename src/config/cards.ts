@@ -10,52 +10,53 @@ export interface CardData {
 export const cards: CardData[] = [
     {
         id: "1",
-        title: "HP Headphones",
-        description: "Landing Page de Auriculares",
-        img: "assets/web1.png", 
-        buttonText: "Ver más..." 
+        title: "E-Commerce",
+        description: "Aplicacion de React con Redux y FakeStore API para crea un E-commerce",
+        img: "assets/web7.png",
+        buttonText: "Ver mas..."
     },
     {
         id: "2",
         title: "FutureCart",
         description: "E-commerce de teclados gaming",
-        img: "assets/web2.png", 
-        buttonText: "Ver más..." 
+        img: "assets/web2.png",
+        buttonText: "Ver más..."
     },
     {
         id: "3",
         title: "Barberia",
         description: "Interfaz de reserva - Selección de servicios y barberos.",
-        img: "assets/web3.png", 
-        buttonText: "Ver más..." 
+        img: "assets/web3.png",
+        buttonText: "Ver más..."
     },
     {
         id: "4",
         title: "Formulario",
         description: "Sistema de autenticación con login y registro",
-        img: "assets/web4.png", 
-        buttonText: "Ver más..." 
+        img: "assets/web4.png",
+        buttonText: "Ver más..."
     },
     {
         id: "5",
         title: "Paleta de colores",
         description: "Aplicacion de react que genera 21 tonalidades de cualquier color",
-        img: "assets/web5.png", 
-        buttonText: "Ver mas..." 
+        img: "assets/web5.png",
+        buttonText: "Ver mas..."
     },
     {
         id: "6",
         title: "CRUD/Rest API",
         description: "CRUD de NodeJS con rest API para login con seguridad hash y manejo de errores",
-        img: "assets/web6.png", 
-        buttonText: "Ver mas..." 
+        img: "assets/web6.png",
+        buttonText: "Ver mas..."
     },
     {
         id: "7",
-        title: "E-Commerce",
-        description: "Aplicacion de React con Redux y FakeStore API para crea un E-commerce",
-        img: "assets/web7.png", 
-        buttonText: "Ver mas..." 
+        title: "HP Headphones",
+        description: "Landing Page de Auriculares",
+        img: "assets/web1.png",
+        buttonText: "Ver más..."
     }
     //...
 ];
+

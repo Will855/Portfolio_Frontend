@@ -131,8 +131,8 @@ function Nodes() {
 
 const BackgroundNodes = () => (
   <Canvas
-    className="hidden sm:block w-full h-full -z-10 nodeBg"
-    style={{ position: 'absolute', top: 0, left: 0, background: '#000' }} // Fondo negro
+    className="hidden sm:block w-full -z-10 nodeBg"
+    style={{ position: 'fixed', top: 0, left: 0, background: '#000', height: '100%' }} // Fondo negro
     frameloop="always"
     gl={{ antialias: true, alpha: true }}
     camera={{ position: [0, 0, 300], fov: 75 }}

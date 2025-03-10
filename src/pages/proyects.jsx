@@ -4,9 +4,10 @@ import Footer from "../components/footer/footer"
 
 export const Proyects = () => {
     return <>
-        <div className="h-screen overflow-scroll sm:overflow-auto p-8 pt-32">
-            <Grid/>
+        <div className="p-8 pt-32">
+            <Grid />
+            <Footer />
         </div>
-        <Footer/>
+
     </>
 }

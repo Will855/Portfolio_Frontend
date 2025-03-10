@@ -1,5 +1,4 @@
 import React from 'react';
-import BackgroundNodes from '../animations/backgrounds/bgNodes';
 
 // Configuración reutilizable
 const CONTACT_INFO = {
@@ -15,12 +14,9 @@ const CONTACT_INFO = {
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative overflow-hidden border-t border-white/10 text-slate-50">
-      <BackgroundNodes />
-
+    <footer className="relative overflow-hidden text-slate-50">
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="backdrop-blur-lg bg-white/5 rounded-2xl p-8 shadow-xl transition-all hover:shadow-2xl">
-
           {/* Sección de Contacto */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Bloque de Contacto */}
