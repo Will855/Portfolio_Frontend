@@ -1,22 +1,60 @@
 import React from "react";
 
+/**
+ * Componente reutilizable para encabezados de sección
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {React.ReactNode} props.children - Contenido del encabezado
+ */
+const SectionHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
+        {children}
+    </h2>
+);
+
+/**
+ * Componente para mostrar tecnologías en formato de píldora
+ * @component
+ * @param {Object} props - Propiedades del componente
+ * @param {string} props.colorClass - Clases de Tailwind para el color
+ * @param {React.ReactNode} props.children - Contenido de la píldora
+ */
+const TechPill: React.FC<{ colorClass: string; children: React.ReactNode }> = ({
+    colorClass,
+    children
+}) => (
+    <span className={`px-3 py-1 rounded-full text-xs sm:text-sm ${colorClass}`}>
+        {children}
+    </span>
+);
+
+/**
+ * Componente principal de documentación del sistema backend
+ * @component
+ * @description Muestra la documentación técnica completa del sistema SecureCRUD API
+ * @returns {JSX.Element} Componente React con todas las secciones de información técnica
+ */
 const BackendSystemDocumentation: React.FC = () => {
     return (
         <div className="bg-gray-50 p-4 sm:p-6 md:p-12 font-mono">
-            {/* Encabezado */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-center bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
-                SecureCRUD API
-            </h1>
+            {/* Encabezado oculto para SEO */}
+            <h1 className="sr-only">Documentación del Sistema SecureCRUD API</h1>
 
-            {/* Diagrama de flujo */}
-            <div className="mb-8">
-                <p className="text-gray-500 text-sm text-center">
+            {/* Título principal */}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-center bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+                SecureCRUD API
+            </h2>
+
+            {/* Descripción de arquitectura */}
+            <div className="mb-8 text-center">
+                <p className="text-gray-500 text-sm">
                     Arquitectura de capas - MVC con seguridad JWT
                 </p>
             </div>
 
-            {/* Descripción del Sistema */}
+            {/* Sección de características principales */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
+                {/* Bloque: Funcionalidades principales */}
                 <div className="space-y-4 border-l-4 border-blue-500 pl-4">
                     <h3 className="text-lg sm:text-xl font-semibold">Core Features</h3>
                     <ul className="list-disc list-inside text-gray-600 space-y-2 text-sm sm:text-base">
@@ -28,6 +66,7 @@ const BackendSystemDocumentation: React.FC = () => {
                     </ul>
                 </div>
 
+                {/* Bloque: Medidas de seguridad */}
                 <div className="space-y-4 border-l-4 border-cyan-500 pl-4">
                     <h3 className="text-lg sm:text-xl font-semibold">Seguridad</h3>
                     <ul className="list-disc list-inside text-gray-600 space-y-2 text-sm sm:text-base">
@@ -40,35 +79,21 @@ const BackendSystemDocumentation: React.FC = () => {
                 </div>
             </div>
 
-            {/* Stack Tecnológico */}
+            {/* Sección de tecnologías */}
             <div className="mb-8">
-                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
-                    Tecnologías Clave
-                </h2>
+                <SectionHeader>Tecnologías Clave</SectionHeader>
                 <div className="flex flex-wrap justify-center md:justify-start gap-3">
-                    <span className="px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs sm:text-sm">
-                        Node.js 18
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-cyan-100 text-cyan-800 text-xs sm:text-sm">
-                        Express 4
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-xs sm:text-sm">
-                        MySQL2
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs sm:text-sm">
-                        JWT
-                    </span>
-                    <span className="px-3 py-1 rounded-full bg-red-100 text-red-800 text-xs sm:text-sm">
-                        Bcrypt
-                    </span>
+                    <TechPill colorClass="bg-blue-100 text-blue-800">Node.js 18</TechPill>
+                    <TechPill colorClass="bg-cyan-100 text-cyan-800">Express 4</TechPill>
+                    <TechPill colorClass="bg-purple-100 text-purple-800">MySQL2</TechPill>
+                    <TechPill colorClass="bg-green-100 text-green-800">JWT</TechPill>
+                    <TechPill colorClass="bg-red-100 text-red-800">Bcrypt</TechPill>
                 </div>
             </div>
 
-            {/* Lógica de Autenticación */}
+            {/* Sección de autenticación */}
             <div className="border-t pt-6">
-                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
-                    Flujo de Autenticación
-                </h2>
+                <SectionHeader>Flujo de Autenticación</SectionHeader>
                 <div className="bg-black rounded-xl p-4 sm:p-6 overflow-x-auto">
                     <pre className="text-green-400 text-xs sm:text-sm">
                         <code>
@@ -106,11 +131,9 @@ const authMiddleware = (req, res, next) => {
                 </div>
             </div>
 
-            {/* Manejo de Base de Datos */}
+            {/* Sección de configuración de base de datos */}
             <div className="border-t pt-6">
-                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
-                    Conexión Avanzada a MySQL
-                </h2>
+                <SectionHeader>Conexión Avanzada a MySQL</SectionHeader>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-4 border-l-4 border-sky-400 pl-4">
                         <h4 className="text-lg sm:text-xl font-semibold">Pool Config:</h4>
@@ -134,11 +157,9 @@ const authMiddleware = (req, res, next) => {
                 </div>
             </div>
 
-            {/* Optimizaciones */}
-            <div className="border-t pt-6">
-                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
-                    Patrones de Diseño
-                </h2>
+            {/* Sección de patrones de diseño */}
+            <div className="pt-6">
+                <SectionHeader>Patrones de Diseño</SectionHeader>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-4 border-l-4 border-blue-600 pl-4">
                         <h4 className="text-lg sm:text-xl font-semibold">Estrategias:</h4>
@@ -164,4 +185,4 @@ const authMiddleware = (req, res, next) => {
     );
 };
 
-export default BackendSystemDocumentation;
+export default React.memo(BackendSystemDocumentation);

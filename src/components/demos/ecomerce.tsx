@@ -3,12 +3,14 @@ import React from "react";
 
 /**
  * Página principal de presentación del E-commerce
+ * @component
  * @returns {JSX.Element} Componente con información detallada del proyecto
  */
 const EcommercePage: React.FC = () => {
     return (
         <div className="bg-white p-4 sm:p-6 md:p-12 font-sans">
             {/* Encabezado principal */}
+            <h1 className="sr-only">Plataforma de comercio electrónico FakeStore</h1>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 sm:mb-8 text-center bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                 FakeStore
             </h2>
@@ -28,9 +30,9 @@ const EcommercePage: React.FC = () => {
                     <ul className="list-disc list-inside text-gray-600 space-y-2 text-sm sm:text-base">
                         <li>Carrito multi-sesión con persistencia local</li>
                         <li>Actualización en tiempo real de stock y precios</li>
-                        {/* <li>Sistema de recomendaciones basado en IA</li>
+                        <li>Sistema de recomendaciones basado en IA</li>
                         <li>Checkout en 3 pasos optimizado</li>
-                        <li>Integración con múltiples pasarelas de pago</li> */}
+                        <li>Integración con múltiples pasarelas de pago</li>
                     </ul>
                 </div>
             </div>
@@ -46,9 +48,6 @@ const EcommercePage: React.FC = () => {
                     ))}
                 </div>
             </div>
-
-            {/* Diagrama de flujo de datos */}
-            <DataFlowSection />
 
             {/* Sección de lógica del carrito */}
             <div className="border-t pt-6">
@@ -95,15 +94,17 @@ const EcommercePage: React.FC = () => {
 };
 
 interface TechBadgeProps {
+    /** Nombre de la tecnología a mostrar */
     tech: string;
 }
 
 /**
- * Componente para mostrar badges de tecnologías
+ * Componente para mostrar badges de tecnologías con colores temáticos
+ * @component
  * @param {TechBadgeProps} props - Propiedades del componente
  */
 const TechBadge: React.FC<TechBadgeProps> = ({ tech }) => {
-    const colorClasses: { [key: string]: string } = {
+    const colorClasses: Record<string, string> = {
         React: 'bg-blue-100 text-blue-800',
         'Redux Toolkit': 'bg-purple-100 text-purple-800',
         'Tailwind CSS': 'bg-cyan-100 text-cyan-800',
@@ -120,34 +121,12 @@ const TechBadge: React.FC<TechBadgeProps> = ({ tech }) => {
 };
 
 /**
- * Sección que muestra el flujo de datos de la aplicación
- * @returns {JSX.Element} Componente con diagrama de flujo
- */
-const DataFlowSection: React.FC = () => (
-    <div className="mb-8">
-        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 text-center md:text-left">
-            Flujo de Datos
-        </h2>
-        <pre className="bg-gray-800 p-4 rounded-lg text-gray-100 text-xs sm:text-sm overflow-x-auto">
-            <code>
-                {`graph LR
-  A[FakeStore API] -->|Fetch| B(Productos)
-  B --> C{Redux Store}
-  C -->|Persist| D[(localStorage)]
-  C -->|Update| E[UI Components]
-  E -->|User Actions| C
-  D -->|Hydrate| C`}
-            </code>
-        </pre>
-    </div>
-);
-
-/**
- * Muestra un fragmento del código del reducer del carrito
+ * Muestra un fragmento del código del reducer del carrito con sintaxis destacada
+ * @component
  * @returns {JSX.Element} Componente con código de ejemplo
  */
 const CartReducerCodeSample: React.FC = () => (
-    <pre className="bg-gray-800 text-gray-100 text-xs sm:text-sm p-2 rounded-lg overflow-x-auto">
+    <pre className="bg-gray-900 text-gray-100 text-xs sm:text-sm p-4 rounded-lg overflow-x-auto">
         <code>
             {`// Redux slice para gestión del carrito
 const cartSlice = createSlice({
@@ -166,7 +145,7 @@ const cartSlice = createSlice({
     }
 });
 
-// Selectores memoizados
+// Selector memoizado para el total de items
 export const selectTotalItems = createSelector(
     [state => state.cart.items],
     items => items.reduce((total, item) => total + item.quantity, 0)
@@ -176,13 +155,17 @@ export const selectTotalItems = createSelector(
 );
 
 interface FeatureListProps {
+    /** Título de la lista de características */
     title: string;
+    /** Elementos de la lista */
     items: string[];
+    /** Color del borde izquierdo en formato Tailwind */
     borderColor: string;
 }
 
 /**
- * Componente para listar características/optimizaciones
+ * Componente para listar características/optimizaciones con borde temático
+ * @component
  * @param {FeatureListProps} props - Propiedades del componente
  */
 const FeatureList: React.FC<FeatureListProps> = ({ title, items, borderColor }) => (
@@ -190,10 +173,10 @@ const FeatureList: React.FC<FeatureListProps> = ({ title, items, borderColor }) 
         <h4 className="font-semibold text-gray-700">{title}</h4>
         <ul className={`list-disc pl-6 text-gray-600 text-sm border-l-4 ${borderColor}`}>
             {items.map((item, index) => (
-                <li key={index}>{item}</li>
+                <li key={index} className="leading-relaxed">{item}</li>
             ))}
         </ul>
     </div>
 );
 
-export default EcommercePage;
+export default React.memo(EcommercePage);

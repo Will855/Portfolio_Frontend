@@ -43,16 +43,6 @@ const AuthSystem: React.FC = () => {
                 FormGuard
             </h2>
 
-            {/* Sección de demostración visual */}
-            <div className="mb-8 relative h-64" role="img" aria-label="Demo de transición entre login y registro">
-                <img
-                    src="assets/auth-demo.gif"
-                    alt="Demostración de transiciones fluidas entre formularios"
-                    className="rounded-lg object-cover h-full w-full shadow-lg border border-gray-200"
-                    loading="lazy"
-                />
-            </div>
-
             {/* Sección de características principales */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-8">
                 {/* Bloque: Descripción del sistema */}
@@ -91,7 +81,7 @@ const AuthSystem: React.FC = () => {
             <div className="border-t pt-6">
                 <SectionHeader>Arquitectura Segura</SectionHeader>
 
-                {/* Componente de bloque de código mejorado */}
+                {/* Componente de bloque de código*/}
                 <div className="bg-gray-900 rounded-xl p-4 sm:p-6 overflow-x-auto">
                     <pre className="text-emerald-400 text-xs sm:text-sm">
                         <code>
