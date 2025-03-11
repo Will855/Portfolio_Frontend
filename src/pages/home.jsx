@@ -5,6 +5,7 @@ import { WebPlansGrid } from "../components/cards/webPlanCard";
 import MagneticBtn from "../components/buttons/MagneticBtn";
 import { PLANS } from '../config/webPlans';
 import IonIcon from '@reacticons/ionicons';
+import Footer from "../components/footer/footer";
 
 const Home = () => {
     return (
@@ -35,6 +36,7 @@ const Home = () => {
 
                 <WebPlansGrid plans={PLANS} />
             </div>
+            <Footer/>
         </div>
     );
 };
