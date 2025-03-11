@@ -78,7 +78,7 @@ const WebPlanCard: React.FC<{ plan: WebPlan }> = ({ plan }) => {
                 <div className="border-t border-white/20 pt-4">
                     <p className="text-3xl font-bold text-slate-100">
                         ${plan.price}
-                        <span className="text-sm text-slate-300 ml-2">/único</span>
+                        <span className="text-sm text-slate-300 ml-2">40% / 40% / 20% Pagos distibuidos. </span>
                     </p>
                 </div>
             </div>

@@ -21,7 +21,7 @@ export const PLANS: WebPlan[] = [
         subtitle: "Presencia online esencial para startups y profesionales",
         features: [
             "1 página principal + 4 secciones",
-            "Hosting + dominio (.com.ve) 1 año GRATIS",
+            "Hosting + dominio ( 1 año GRATIS )",
             "Diseño 100% mobile-first",
             "SEO básico integrado",
             "Formulario de contacto",
@@ -48,7 +48,7 @@ export const PLANS: WebPlan[] = [
         features: [
             "Web app personalizada",
             "Carrito de compras avanzado",
-            "CMS administrativo",
+            "Panel administrativo",
             "Analítica de datos integrada",
             "Marketing automation básico",
             "Soporte 24/7 + mantenimiento anual"

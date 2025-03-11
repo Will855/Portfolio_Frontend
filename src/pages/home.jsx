@@ -11,7 +11,7 @@ const Home = () => {
         <div className="min-h-screen flex flex-col items-center justify-center p-8 space-y-12 mt-24">
             {/* Sección superior con error 404 */}
             <div className="text-center space-y-20">
-                <Glitch title="Hi I'm Wilmer" subtitle="Web Developer" />
+                <Glitch title="Wilmer Lynch" subtitle="Web Developer" />
 
                 <MagneticBtn iconName="help-outline" subtitle="Quien Soy?" />
 
