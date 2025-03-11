@@ -9,7 +9,7 @@ export const Home = () => {
                     <Glitch title="Hi I'm Wilmer" subtitle="Web Developer"/>
                 </div>
                 <div className="mx-auto self-start">
-                    <MagneticBtn iconName="logo-github" subtitle="GitHub"/>
+                    <MagneticBtn iconName="cube-outline" subtitle="Informacion"/>
                 </div>
             </div>
         </>

@@ -1,21 +1,37 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
+import { useNavigate } from 'react-router-dom';
 import IonIcon from '@reacticons/ionicons';
 
-// Definimos los props del componente
+/**
+ * Propiedades para el componente MagneticBtn.
+ * @interface MagneticBtnProps
+ * @property {"link"} iconName - Nombre del icono de IonIcon a mostrar
+ * @property {string} subtitle - Texto complementario debajo del icono
+ */
 interface MagneticBtnProps {
-    iconName: "link"; // Propiedad para el nombre del icono
-    subtitle: string; // Texto complementario
+    iconName: "link";
+    subtitle: string;
 }
 
+/**
+ * Componente de botón interactivo con efecto magnético que redirige a la ruta '/informacion'
+ * @component
+ * @param {MagneticBtnProps} props - Propiedades del componente
+ * @returns {JSX.Element} Elemento JSX del botón magnético
+ */
 const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
     const magneticBtnRef = useRef<HTMLButtonElement | null>(null);
     const magneticBtnTextRef = useRef<HTMLSpanElement | null>(null);
     const lastPosition = useRef({ x: 0, y: 0 });
     const touchStartTime = useRef(0);
     const touchStartPos = useRef({ x: 0, y: 0 });
+    const navigate = useNavigate();
 
-    // 1. Definir resetPosition primero
+    /**
+     * Restablece la posición del botón y su texto usando animación elástica
+     * @function resetPosition
+     */
     const resetPosition = () => {
         gsap.to([magneticBtnRef.current, magneticBtnTextRef.current], {
             x: 0,
@@ -25,6 +41,12 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
         });
     };
 
+    /**
+     * Maneja el efecto magnético durante el movimiento del cursor/touch
+     * @function handleMove
+     * @param {number} clientX - Posición X del cursor
+     * @param {number} clientY - Posición Y del cursor
+     */
     const handleMove = (clientX: number, clientY: number) => {
         if (!magneticBtnRef.current) return;
         const bounds = magneticBtnRef.current.getBoundingClientRect();
@@ -64,10 +86,18 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
         }
     };
 
+    /**
+     * Maneja la redirección a la página de información
+     * @function handleRedirect
+     */
     const handleRedirect = () => {
-        window.open('https://github.com/Will855', '_blank');
+        navigate('/informacion');
     };
 
+    /**
+     * Efecto para manejar eventos de interacción
+     * @effect
+     */
     useEffect(() => {
         const btn = magneticBtnRef.current;
         if (!btn) return;
@@ -118,20 +148,18 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
             ref={magneticBtnRef}
             onClick={handleRedirect}
             className="group relative w-40 h-40 rounded-full bg-transparent backdrop-blur-lg border hover:bg-slate-100 transition-all duration-300 hover:scale-105 cursor-alias"
-            aria-label="Visitar perfil de GitHub"
+            aria-label="Ver información adicional"
             role="link"
         >
             <span
                 ref={magneticBtnTextRef}
                 className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white hover:text-black group-hover:scale-110 transition-transform"
             >
-                {/* Usamos el prop iconName para definir el icono */}
                 <IonIcon
                     name={iconName}
                     className="text-3xl motion-safe:animate-pulse"
                     aria-hidden="true"
                 />
-                {/* Mostramos el subtítulo */}
                 <span className="text-sm font-medium">{subtitle}</span>
             </span>
         </button>
