@@ -139,12 +139,12 @@ export const EfficiencyCard: React.FC = () => {
                     whileHover="hover"
                     whileTap="tap"
                 >
-                    <Link
-                        to="/contacto"
+                    <a
+                        href="https://wa.me/+584265940917" 
                         className="block w-full mt-4 bg-gradient-to-r from-green-500 to-cyan-400 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity text-center"
                     >
                         🚀 Quiero mi ventaja competitiva
-                    </Link>
+                    </a>
                 </motion.div>
             </div>
         </motion.div>

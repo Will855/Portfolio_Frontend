@@ -11,6 +11,7 @@ import ResponsiveMenu from './components/navbar/menuResponsive';
 import CardDetails from './components/cards/proyectPage';
 import NotFound from './pages/404';
 import { projects } from './config/project';
+import Freelance from './pages/freelance';
 
 const GA4_ID = 'G-HL1MY2MS9S'; // Reemplazar con tu Measurement ID
 
@@ -57,6 +58,7 @@ const RouterWrapper = () => {
         <Route path="/page/:id" element={<CardDetails />} />
         <Route path="/demos/:projectId" element={<ContentHandler />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/Planes" element={<Freelance/>}> </Route>
       </Routes>
     </>
   );

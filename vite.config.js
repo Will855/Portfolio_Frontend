@@ -19,5 +19,13 @@ export default defineConfig({
   build: {
     outDir: 'dist', // Directorio de build
     emptyOutDir: true // Limpiar directorio en cada build
+  },
+  optimizeDeps: {
+    include: [
+      'three/examples/jsm/postprocessing/EffectComposer',  
+      'three',
+      'three/addons/postprocessing/EffectComposer.js',
+      'three/addons/geometries/TextGeometry.js'
+    ]
   }
 });

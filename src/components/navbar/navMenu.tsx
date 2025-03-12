@@ -19,7 +19,7 @@ function NavMenu() {
   }, []); // Dependencias vacías para ejecutar solo al montar
 
   // Elementos del menú de navegación
-  const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto'];
+  const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto', 'Planes'];
 
   return (
     <nav className={`

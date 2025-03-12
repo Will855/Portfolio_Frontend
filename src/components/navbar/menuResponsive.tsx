@@ -14,7 +14,7 @@ function ResponsiveMenu() {
     const animationRef = useRef<gsap.core.Timeline | null>(null); // Referencia para la animación
 
     // Lista de elementos del menú
-    const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto'];
+    const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto', 'Planes'];
 
     // useEffect para inicializar el estado del menú y sus elementos
     useEffect(() => {
