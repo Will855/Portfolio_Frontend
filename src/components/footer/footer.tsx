@@ -52,7 +52,7 @@ const Footer: React.FC = () => {
             <div className="flex flex-col items-center space-y-4">
               <div className="bg-white/10 p-3 rounded-lg hover:scale-105 transition-transform duration-300">
                 <img
-                  src="/assets/qrWhatsapp.jpg"
+                  src="/assets/qrWhatsapp.webp"
                   alt="Código QR para contacto por WhatsApp"
                   className="w-32 h-32 object-contain"
                   loading="lazy"

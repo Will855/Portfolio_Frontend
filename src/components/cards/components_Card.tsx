@@ -1,66 +1,117 @@
 import React, { useRef, useEffect } from "react";
-import { CardProps } from "../../types/types"; // Tipos para las props del componente
-import { handleMouseMove, resetCardPosition } from "./../utils/cardAnimations"; // Importamos las funciones separadas
-import { useNavigate } from "react-router-dom"; // <-- Importamos useNavigate
+import { CardProps } from "../../types/types";
+import { handleMouseMove, resetCardPosition } from "./../utils/cardAnimations";
+import { useNavigate } from "react-router-dom";
 
 /**
- * Componente Card
- * Representa una tarjeta interactiva con animaciones al mover el mouse.
+ * Componente de tarjeta interactiva con efectos de movimiento y navegación
+ * @component
+ * @param {CardProps} props - Propiedades del componente
+ * @param {string} props.id - Identificador único del proyecto
+ * @param {string} props.img - URL de la imagen de fondo
+ * @param {string} props.title - Título de la tarjeta
+ * @param {string} props.description - Descripción corta del proyecto
+ * @param {string} props.buttonText - Texto del botón de acción
+ * @returns {JSX.Element} Tarjeta interactiva con efecto parallax y navegación
+ * 
+ * @example
+ * <Card
+ *   id="proyecto-1"
+ *   img="/imagen.jpg"
+ *   title="Mi Proyecto"
+ *   description="Descripción detallada"
+ *   buttonText="Ver demo"
+ * />
  */
 const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) => {
-  // Referencias para el contenedor de la tarjeta y su contenido
   const cardRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
-  // Hook para la navegación
-  const navigate = useNavigate(); // <-- Inicializamos useNavigate
-
-  // Efecto para configurar los eventos de animación
+  /**
+   * Efecto para configurar interacciones de movimiento
+   * @effect
+   * @description Configura los listeners de eventos para las animaciones
+   * - Movimiento del mouse: Aplica efecto parallax
+   * - Salida del mouse: Restablece posición
+   * - Limpieza automática al desmontar el componente
+   */
   useEffect(() => {
     const card = cardRef.current;
     const content = contentRef.current;
 
     if (!card || !content) return;
 
-    // Evento: Movimiento del mouse
-    const onMouseMove = (e: MouseEvent) => handleMouseMove(e, card, content);
+    // Configurar sensibilidad del efecto
+    const sensitivity = 1.15;
 
-    // Evento: Salida del mouse
-    const onMouseLeave = () => resetCardPosition(card, content);
+    const optimizedMouseMove = (e: MouseEvent) => {
+      handleMouseMove(e, card, content, sensitivity);
+    };
 
-    // Agregar eventos
-    card.addEventListener("mousemove", onMouseMove);
-    card.addEventListener("mouseleave", onMouseLeave);
+    card.addEventListener("mousemove", optimizedMouseMove);
+    card.addEventListener("mouseleave", () => resetCardPosition(card, content));
 
-    // Cleanup: Eliminar eventos al desmontar el componente
     return () => {
-      card.removeEventListener("mousemove", onMouseMove);
-      card.removeEventListener("mouseleave", onMouseLeave);
+      card.removeEventListener("mousemove", optimizedMouseMove);
+      card.removeEventListener("mouseleave", () => resetCardPosition(card, content));
     };
   }, []);
 
-  // Renderizado del componente
+  /**
+   * Maneja la navegación a la página de demo
+   * @function handleNavigation
+   * @description Navega a la ruta del proyecto y hace scroll suave al inicio
+   */
+  const handleNavigation = () => {
+    navigate(`/demos/${id}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div
       ref={cardRef}
-      className="relative overflow-hidden rounded-lg bg-white bg-opacity-10 p-6 backdrop-blur-lg backdrop-filter transition-all duration-300 ease-in-out hover:shadow-xl w-auto h-56"
-      style={{ transformStyle: "preserve-3d" }}
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-xl transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
+      role="article"
+      aria-label={`Tarjeta del proyecto: ${title}`}
+      style={{
+        transformStyle: "preserve-3d",
+        willChange: "transform" // Optimización para animaciones
+      }}
     >
-      {/* Imagen de fondo */}
+      {/* Imagen con efecto de profundidad */}
       <img
         src={img}
-        alt={title}
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        alt={`Visualización del proyecto ${title}`}
+        className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
+        loading="lazy"
+        decoding="async"
       />
-      {/* Contenido de la tarjeta */}
-      <div ref={contentRef} className="relative z-10">
-        <h2 className="mb-2 text-2xl font-bold text-white">{title}</h2>
-        <p className="mb-4 text-white">{description}</p>
+
+      {/* Contenido con efecto de flotación */}
+      <div
+        ref={contentRef}
+        className="relative z-10 h-full flex flex-col justify-between transform-gpu"
+      >
+        <div className="space-y-4">
+          <h2 className="text-3xl font-bold text-white drop-shadow-lg">
+            {title}
+          </h2>
+          <p className="text-white/80 text-lg leading-relaxed">
+            {description}
+          </p>
+        </div>
+
+        {/* Botón con feedback interactivo */}
         <button
-          className="rounded bg-white bg-opacity-20 px-4 py-2 text-white transition-colors duration-300 hover:bg-opacity-30"
-          onClick={() => navigate(`/demos/${id}`)} // <-- Redirige a la página demo
+          onClick={handleNavigation}
+          className="w-fit px-6 py-3 rounded-lg bg-white/5 backdrop-blur-lg border border-white/20 shadow-lg hover:shadow-xl text-white/90 font-medium transition-all duration-300 flex items-center gap-2 hover:bg-white/10 hover:border-white/30 hover:text-white active:scale-95"
+          aria-label={`Ver demo del proyecto: ${title}`}
         >
-          {buttonText}
+          <span>{buttonText}</span>
+          <span className="opacity-80 group-hover:translate-x-1 group-hover:opacity-100 transition-transform">
+            →
+          </span>
         </button>
       </div>
     </div>
