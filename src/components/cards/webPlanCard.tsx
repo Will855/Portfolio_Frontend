@@ -31,7 +31,7 @@ const hoverVariants = {
 const WebPlanCard: React.FC<{ plan: WebPlan }> = ({ plan }) => {
     return (
         <motion.div
-            className="p-6 rounded-xl border border-white/20 min-w-[280px] flex flex-col justify-between relative overflow-hidden "
+            className="p-6 rounded-xl border border-white/20 flex flex-col justify-between relative overflow-hidden mx-auto"
             style={{
                 background: "rgba(255, 255, 255, 0.05)",
                 backdropFilter: "blur(12px)",
@@ -89,7 +89,7 @@ const WebPlanCard: React.FC<{ plan: WebPlan }> = ({ plan }) => {
 export const WebPlansGrid: React.FC<{ plans: WebPlan[] }> = ({ plans }) => {
     return (
         <motion.div
-            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
+            className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 "
             initial="hidden"
             animate="visible"
         >

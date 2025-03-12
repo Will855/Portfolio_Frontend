@@ -27,7 +27,7 @@ export const PLANS: WebPlan[] = [
             "Formulario de contacto",
             "Soporte técnico 3 meses"
         ],
-        price: 120
+        price: 150
     },
     {
         header: "💼 Avanzado PYME",
