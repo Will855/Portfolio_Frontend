@@ -14,40 +14,6 @@ import { projects } from './config/project';
 
 const GA4_ID = 'G-HL1MY2MS9S'; // Reemplazar con tu Measurement ID
 
-/**
- * Hook personalizado para el tracking analítico de rutas
- * @function useRouteTracker
- * @description Maneja la inicialización de GA4 y el tracking de cambios de ruta
- */
-const useRouteTracker = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    GA4.initialize(GA4_ID);
-  }, []);
-
-  useEffect(() => {
-    GA4.send({
-      hitType: 'pageview',
-      page: location.pathname + location.search
-    });
-  }, [location.pathname, location.search]);
-};
-
-/**
- * Componente para manejar la carga dinámica de contenido de proyectos
- * @function ContentHandler
- * @returns {JSX.Element} Componente del proyecto o página 404
- * @description Maneja la carga dinámica de contenido basado en el parámetro de URL
- */
-const ContentHandler = () => {
-  const { projectId } = useParams();
-  const project = projects.find(p => p.id === projectId);
-
-  return project?.content ?
-    <project.content /> :
-    <NotFound />;
-};
 
 /**
  * Componente principal de la aplicación
@@ -69,11 +35,16 @@ const ContentHandler = () => {
  * - Maneja rutas estáticas y dinámicas con seguimiento analítico
  * - Proporciona un fallback 404 para rutas no encontradas
  */
-function App() {
-  useRouteTracker();
-
+/**
+ * Componente wrapper para manejar el tracking analítico
+ * @function RouterWrapper
+ * @description Envuelve las rutas y maneja el tracking de navegación
+ */
+const RouterWrapper = () => {
+  useRouteTracker(); // Ahora está dentro del contexto del Router
+  
   return (
-    <Router>
+    <>
       <NavMenu />
       <BackgroundStars />
       <ResponsiveMenu />
@@ -87,6 +58,51 @@ function App() {
         <Route path="/demos/:projectId" element={<ContentHandler />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+    </>
+  );
+};
+
+/**
+ * Hook personalizado para el tracking analítico de rutas
+ * @function useRouteTracker
+ * @description Maneja la inicialización de GA4 y el tracking de cambios de ruta
+ */
+const useRouteTracker = () => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    GA4.initialize(GA4_ID);
+  }, []);
+
+  useEffect(() => {
+    GA4.send({
+      hitType: 'pageview',
+      page: location.pathname + location.search
+    });
+  }, [location.pathname, location.search]);
+};
+
+/**
+ * Componente para manejar la carga dinámica de contenido de proyectos
+ * @function ContentHandler
+ * @returns {JSX.Element} Componente del proyecto o página 404
+ */
+const ContentHandler = () => {
+  const { projectId } = useParams();
+  const project = projects.find(p => p.id === projectId);
+
+  return project?.content ? <project.content /> : <NotFound />;
+};
+
+/**
+ * Componente principal de la aplicación
+ * @function App
+ * @returns {JSX.Element} Estructura principal de la aplicación
+ */
+function App() {
+  return (
+    <Router>
+      <RouterWrapper /> {/* Todos los componentes con hooks de routing están dentro de Router */}
     </Router>
   );
 }

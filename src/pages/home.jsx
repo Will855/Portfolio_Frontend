@@ -14,7 +14,7 @@ const Home = () => {
             <div className="text-center space-y-20">
                 <Glitch title="Wilmer Lynch" subtitle="Web Developer" />
 
-                <MagneticBtn iconName="help-outline" subtitle="Quien Soy?" />
+                <MagneticBtn iconName="person-outline" subtitle="Informacion" />
 
             </div>
 
