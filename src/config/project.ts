@@ -22,7 +22,7 @@ export const projects: Project[] = [
         content: EcommercePage,
         bgProyect: "/images/bg-proyecto2.jpg",
         codeUrl: "https://github.com/Will855/fakeStore",
-        demoUrl: 'https://fakestore-will2003.web.app/'
+        demoUrl: ' https://fakestore-edf2003.web.app/'
     },
     {//listo
         id: "2",
