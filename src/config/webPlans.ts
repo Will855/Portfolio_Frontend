@@ -12,6 +12,7 @@ export interface WebPlan {
     subtitle: string;
     features: string[];
     price: number;
+    paymentPlan: string;
 }
 
 //planes web competitivos en Venezuela
@@ -27,20 +28,22 @@ export const PLANS: WebPlan[] = [
             "Formulario de contacto",
             "Soporte técnico 3 meses"
         ],
-        price: 150
+        price: 150,
+        paymentPlan: "40% / 40% / 20% Pagos distribuidos"
     },
     {
         header: "💼 Avanzado PYME",
         subtitle: "Solución completa para pequeñas y medianas empresas",
         features: [
             "Hasta 8 páginas personalizadas",
-            "Tienda online básica (hasta 15 productos)",
+            "Tienda online básica",
             "Integración redes sociales",
             "SSL Certificado incluido",
             "Backups semanales",
             "Soporte prioritario 6 meses"
         ],
-        price: 280
+        price: 280,
+        paymentPlan: "40% / 40% / 20% Pagos distribuidos"
     },
     {
         header: "🏆 Premium Corporativo",
@@ -53,7 +56,8 @@ export const PLANS: WebPlan[] = [
             "Marketing automation básico",
             "Soporte 24/7 + mantenimiento anual"
         ],
-        price: 550
+        price: 550,
+        paymentPlan: "40% / 40% / 20% Pagos distribuidos"
     },
     {
         header: "✨ Solución a Medida",
@@ -66,6 +70,7 @@ export const PLANS: WebPlan[] = [
             "Sistema de reservas/pagos",
             "Garantía de rendimiento"
         ],
-        price: 850
+        price: 850,
+        paymentPlan: "40% / 40% / 20% Pagos distribuidos"
     }
 ];

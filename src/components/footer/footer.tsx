@@ -14,7 +14,7 @@ const CONTACT_INFO = {
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative overflow-hidden text-slate-50">
+    <footer className="relative text-slate-50">
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="backdrop-blur-lg bg-white/5 rounded-2xl p-8 shadow-xl transition-all hover:shadow-2xl">
           {/* Sección de Contacto */}
@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                 <li>
                   <a
                     href={`mailto:${CONTACT_INFO.email}`}
-                    className="flex items-center gap-2 hover:text-blue-300 transition-colors duration-300"
+                    className="flex items-center gap-2 hover:text-blue-300 transition-colors duration-300 overflow-clip"
                     aria-label="Enviar correo electrónico"
                   >
                     <span className="i-ion-mail-open-outline text-xl" aria-hidden />
