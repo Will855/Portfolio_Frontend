@@ -48,7 +48,7 @@ export const SectionGuideCards: React.FC = () => {
             title: "💡 Quiero mi Web",
             description: "Inicia tu proyecto digital con soluciones a medida",
             icon: "rocket-outline",
-            path: "/quiero-web",
+            path: "/Planes",
             color: "from-orange-400 to-yellow-400"
         }
     ];
