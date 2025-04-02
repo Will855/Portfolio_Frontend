@@ -5,7 +5,7 @@ const BackgroundStars = () => {
     const containerRef = useRef<HTMLDivElement>(null);
     const scene = useRef<THREE.Scene>(new THREE.Scene());
     const camera = useRef<THREE.PerspectiveCamera>(
-        new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+        new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 500)
     );
     const renderer = useRef<THREE.WebGLRenderer>();
     const stars = useRef<THREE.Points>();
@@ -27,7 +27,7 @@ const BackgroundStars = () => {
 
         // Crear estrellas
         const starGeometry = new THREE.BufferGeometry();
-        const starCount = 1000;
+        const starCount = 500;
         const positions = new Float32Array(starCount * 3);
 
         for (let i = 0; i < starCount * 3; i += 3) {
