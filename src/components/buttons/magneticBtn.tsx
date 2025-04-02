@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { useNavigate } from 'react-router-dom';
 import IonIcon from '@reacticons/ionicons';
+import { trackButtonClick } from '../../utils/analytics';
 
 /**
  * Propiedades para el componente MagneticBtn.
@@ -91,6 +92,7 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
      * @function handleRedirect
      */
     const handleRedirect = () => {
+        trackButtonClick('Magnetic Button', 'Home Section');
         navigate('/informacion');
     };
 

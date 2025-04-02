@@ -8,6 +8,14 @@ import useGsapAnimation from './../hook/useGsapAnimation'; // Hook para animacio
 import { isValidEmail } from './utils/validation'; // Función para validar correos electrónicos
 import { collection, addDoc } from "firebase/firestore"; // Métodos de Firestore
 import { db } from "../config/firebase"; // Configuración de Firestore
+import { trackContactAttempt } from '../utils/analytics';
+
+// Configuración de redes sociales
+const SOCIAL_LINKS = {
+  whatsapp: 'https://wa.me/+584265940917',
+  instagram: 'https://www.instagram.com/techno__monster/',
+  github: 'https://github.com/Will855'
+};
 
 // Componente principal del formulario de contacto
 const ContactForm = () => {
@@ -118,10 +126,37 @@ const ContactForm = () => {
         {error && <p className="text-center text-red-500 mt-4">{error}</p>}
 
         {/* Iconos de redes sociales */}
-        <div className="flex justify-center space-x-4 mt-6 text-white text-2xl">
-          <IonIcon className='cursor-pointer' name="logo-whatsapp"></IonIcon>
-          <IonIcon className='cursor-pointer' name="logo-instagram"></IonIcon>
-          <IonIcon className='cursor-pointer' name="logo-github"></IonIcon>
+        <div className="flex justify-center space-x-6 mt-8">
+          <a
+            href={SOCIAL_LINKS.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackContactAttempt('whatsapp')}
+            className="text-white hover:text-green-400 transition-colors duration-300"
+            aria-label="Contactar por WhatsApp"
+          >
+            <IonIcon name="logo-whatsapp" className="text-2xl cursor-pointer" />
+          </a>
+          <a
+            href={SOCIAL_LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackContactAttempt('instagram')}
+            className="text-white hover:text-pink-400 transition-colors duration-300"
+            aria-label="Seguir en Instagram"
+          >
+            <IonIcon name="logo-instagram" className="text-2xl cursor-pointer" />
+          </a>
+          <a
+            href={SOCIAL_LINKS.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackContactAttempt('github')}
+            className="text-white hover:text-gray-400 transition-colors duration-300"
+            aria-label="Ver perfil de GitHub"
+          >
+            <IonIcon name="logo-github" className="text-2xl cursor-pointer" />
+          </a>
         </div>
       </form>
     </div>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useParams, useLocation } from 'react-router-dom';
-import  GA4  from 'react-ga4';
+import GA4 from 'react-ga4';
 import NavMenu from "./components/navbar/navMenu";
 import Home from './pages/home';
 import Information from './pages/information';
@@ -12,9 +12,10 @@ import CardDetails from './components/cards/proyectPage';
 import NotFound from './pages/404';
 import { projects } from './config/project';
 import Freelance from './pages/freelance';
+import { useAnalytics } from './hooks/useAnalytics';
+import { trackPageView, trackSectionNavigation } from './utils/analytics';
 
-const GA4_ID = 'G-HL1MY2MS9S'; // Reemplazar con tu Measurement ID
-
+const GA4_ID = 'G-HL1MY2MS9S';
 
 /**
  * Componente principal de la aplicación
@@ -42,8 +43,26 @@ const GA4_ID = 'G-HL1MY2MS9S'; // Reemplazar con tu Measurement ID
  * @description Envuelve las rutas y maneja el tracking de navegación
  */
 const RouterWrapper = () => {
-  useRouteTracker(); // Ahora está dentro del contexto del Router
+  const location = useLocation();
+  const previousPath = React.useRef(location.pathname);
   
+  useAnalytics(); // Implementa el tracking de tiempo y scroll
+  
+  useEffect(() => {
+    GA4.initialize(GA4_ID);
+  }, []);
+
+  useEffect(() => {
+    // Tracking de vista de página
+    trackPageView(location.pathname + location.search);
+    
+    // Tracking de navegación entre secciones
+    if (previousPath.current !== location.pathname) {
+      trackSectionNavigation(previousPath.current, location.pathname);
+      previousPath.current = location.pathname;
+    }
+  }, [location.pathname, location.search]);
+
   return (
     <>
       <NavMenu />
@@ -62,26 +81,6 @@ const RouterWrapper = () => {
       </Routes>
     </>
   );
-};
-
-/**
- * Hook personalizado para el tracking analítico de rutas
- * @function useRouteTracker
- * @description Maneja la inicialización de GA4 y el tracking de cambios de ruta
- */
-const useRouteTracker = () => {
-  const location = useLocation();
-  
-  useEffect(() => {
-    GA4.initialize(GA4_ID);
-  }, []);
-
-  useEffect(() => {
-    GA4.send({
-      hitType: 'pageview',
-      page: location.pathname + location.search
-    });
-  }, [location.pathname, location.search]);
 };
 
 /**

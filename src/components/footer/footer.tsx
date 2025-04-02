@@ -1,4 +1,5 @@
 import React from 'react';
+import { trackContactAttempt } from '../../utils/analytics';
 
 // Configuración reutilizable
 const CONTACT_INFO = {
@@ -8,11 +9,27 @@ const CONTACT_INFO = {
     github: {
       url: 'https://github.com/Will855',
       label: 'GitHub/Will855'
+    },
+    instagram: {
+      url: 'https://www.instagram.com/techno__monster/',
+      label: 'Instagram/techno_monster'
+    },
+    linkedin: {
+      url: 'https://www.linkedin.com/in/wilmer-lynch/',
+      label: 'LinkedIn/wilmer-lynch'
+    },
+    whatsapp: {
+      url: 'https://wa.me/+584265940917',
+      label: 'WhatsApp'
     }
   }
 };
 
 const Footer: React.FC = () => {
+  const handleSocialClick = (platform: string) => {
+    trackContactAttempt(platform);
+  };
+
   return (
     <footer className="relative text-slate-50">
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
@@ -30,6 +47,7 @@ const Footer: React.FC = () => {
                     href={`mailto:${CONTACT_INFO.email}`}
                     className="flex items-center gap-2 hover:text-blue-300 transition-colors duration-300 overflow-clip"
                     aria-label="Enviar correo electrónico"
+                    onClick={() => handleSocialClick('email')}
                   >
                     <span className="i-ion-mail-open-outline text-xl" aria-hidden />
                     {CONTACT_INFO.email}
@@ -40,6 +58,7 @@ const Footer: React.FC = () => {
                     href={`tel:${CONTACT_INFO.phone.replace(/\s/g, '')}`}
                     className="flex items-center gap-2 hover:text-purple-300 transition-colors duration-300"
                     aria-label="Llamar por teléfono"
+                    onClick={() => handleSocialClick('phone')}
                   >
                     <span className="i-ion-call-outline text-xl" aria-hidden />
                     {CONTACT_INFO.phone}
@@ -68,18 +87,21 @@ const Footer: React.FC = () => {
                 Redes
               </h3>
               <ul className="space-y-3">
-                <li>
-                  <a
-                    href={CONTACT_INFO.socialMedia.github.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 hover:text-blue-300 transition-colors duration-300"
-                    aria-label="Perfil de GitHub"
-                  >
-                    <span className="i-ion-logo-github text-xl" aria-hidden />
-                    {CONTACT_INFO.socialMedia.github.label}
-                  </a>
-                </li>
+                {Object.entries(CONTACT_INFO.socialMedia).map(([key, social]) => (
+                  <li key={key}>
+                    <a
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 hover:text-blue-300 transition-colors duration-300"
+                      aria-label={`Perfil de ${social.label}`}
+                      onClick={() => handleSocialClick(key)}
+                    >
+                      <span className={`i-ion-logo-${key} text-xl`} aria-hidden />
+                      {social.label}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

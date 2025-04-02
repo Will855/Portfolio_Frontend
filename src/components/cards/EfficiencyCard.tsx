@@ -1,9 +1,8 @@
 // components/EfficiencyCard.tsx
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
-const cardVariants = {
+export const cardVariants = {
     offscreen: {
         y: 30,
         opacity: 0,
@@ -19,7 +18,7 @@ const cardVariants = {
     }
 };
 
-const hoverVariants = {
+export const hoverVariants = {
     hover: {
         background: "rgba(255, 255, 255, 0.1)",
         boxShadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
@@ -28,7 +27,7 @@ const hoverVariants = {
     }
 };
 
-const buttonHover = {
+export const buttonHover = {
     hover: {
         scale: 1.05,
         transition: {
@@ -134,7 +133,7 @@ export const EfficiencyCard: React.FC = () => {
                     </motion.div>
                 </div>
 
-                <motion.div
+                {/* <motion.div
                     variants={buttonHover}
                     whileHover="hover"
                     whileTap="tap"
@@ -145,7 +144,7 @@ export const EfficiencyCard: React.FC = () => {
                     >
                         🚀 Quiero mi ventaja competitiva
                     </a>
-                </motion.div>
+                </motion.div> */}
             </div>
         </motion.div>
     );

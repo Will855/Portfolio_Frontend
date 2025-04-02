@@ -1,12 +1,6 @@
-// pages/Home.jsx (considera renombrar el archivo)
-import React from "react";
-import IonIcon from "@reacticons/ionicons";
-import { WebPlansGrid } from "../components/cards/webPlanCard";
-import MagneticBtn from "../components/buttons/MagneticBtn";
 import Glitch from "../components/animations/glitchPresentation";
 import Footer from "../components/footer/footer";
-import { EfficiencyCard } from "../components/cards/EfficiencyCard";
-import { PLANS } from "../config/webPlans";
+
 import { WebSalesCards } from "../components/cards/WebSalesCards";
 import { SectionGuideCards } from "../components/cards/SectionGuideCards";
 import { motion } from "framer-motion";
