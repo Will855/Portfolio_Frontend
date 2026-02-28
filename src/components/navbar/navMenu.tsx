@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'; // Importar React y hooks
-import { NavLink } from 'react-router-dom'; // Importar NavLink para la navegación
+import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import { useNavItems } from '../../hooks/useNavItems';
 
 // Componente funcional NavMenu
 function NavMenu() {
@@ -18,8 +19,7 @@ function NavMenu() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []); // Dependencias vacías para ejecutar solo al montar
 
-  // Elementos del menú de navegación
-  const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto', 'Planes'];
+  const navItems = useNavItems();
 
   return (
     <nav className={`

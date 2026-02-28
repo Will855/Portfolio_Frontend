@@ -1,52 +1,23 @@
 import Glitch from "../components/animations/glitchPresentation";
+import CircleProfile from "../components/CircleProfile";
 import Footer from "../components/footer/footer";
+import WordCloud from "../components/animations/WordCloud";
+import { useHeroContent } from "../hooks/useHeroContent";
 
-import { WebSalesCards } from "../components/cards/WebSalesCards";
-import { SectionGuideCards } from "../components/cards/SectionGuideCards";
-import { motion } from "framer-motion";
-
-
-/**
- * Página principal que muestra planes de desarrollo web y argumentos de conversión
- * @component
- * @returns {JSX.Element} Componente de página principal
- */
 const Home = () => {
-    // Componente reutilizable para flechas animadas
-    // const AnimatedArrow = () => (
-    //     <IonIcon
-    //         name="arrow-down-outline"
-    //         className="text-3xl motion-safe:animate-pulse"
-    //         aria-hidden="true"
-    //     />
-    // );
-
+    const { hero } = useHeroContent();
     return (
-        <div className="min-h-screen flex flex-col items-center p-8 space-y-20 mt-24">
-            {/* Sección Hero principal */}
-            <section className="text-center space-y-16 w-full max-w-6xl">
-                <Glitch title="Wilmer Lynch" subtitle="Web Developer" />
-                
-                <motion.div 
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                >
-                </motion.div>
+        <div className="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10 sm:space-y-14 lg:space-y-16 mt-16 sm:mt-20">
+            <section className="text-center space-y-4 sm:space-y-10 md:space-y-8 w-full max-w-md sm:max-w-lg md:max-w-2xl">
+                <CircleProfile
+                    src={hero.profile_image_url}
+                    alt={hero.title}
+                    size="xl"
+                    ring={false}
+                />
+                <Glitch title={hero.title} subtitle={hero.subtitle} />
             </section>
-    
-            {/* Guía de navegación entre secciones */}
-            <section className="w-full max-w-7xl px-4 space-y-8">
-                <h2 className="text-2xl text-slate-300 text-center mb-12">
-                    ¿Qué necesitas hoy?
-                </h2>
-                <SectionGuideCards />
-            </section>
-    
-            {/* Tarjetas de venta estratégica */}
-            <WebSalesCards/>
-    
-            {/* Pie de página */}
+            <WordCloud />
             <Footer />
         </div>
     );

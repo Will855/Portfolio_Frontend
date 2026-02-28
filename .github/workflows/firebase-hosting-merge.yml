@@ -34,3 +34,67 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTAFOLIO_56D5E }}
           channelId: live
           projectId: portafolio-56d5e
+
+# ===========================================
+# 📚 EXPLICACIÓN DIDÁCTICA DEL CÓDIGO
+# ===========================================
+# 
+# Este archivo es un WORKFLOW de GitHub Actions que automatiza el despliegue
+# de tu portfolio a Firebase Hosting. Te explico paso a paso qué hace cada parte:
+#
+# 🎯 ¿QUÉ ES ESTE ARCHIVO?
+# Es una "receta" que le dice a GitHub: "cada vez que hago cambios en mi código, 
+# haz estas tareas automáticamente". Es como tener un asistente que construye 
+# y publica tu sitio web sin que tengas que hacerlo manualmente.
+#
+# 📋 DESGLOSE POR SECCIONES:
+#
+# 1. INFORMACIÓN BÁSICA (líneas 1-9):
+#    - name: Le da un nombre al workflow para identificarlo
+#    - Es como el título de una lista de tareas
+#
+# 2. CUÁNDO SE EJECUTA (líneas 6-9):
+#    - on: push branches: main
+#    - Solo cuando haces 'git push' a la rama 'main'
+#    - "Cada vez que subas código a la rama principal, haz todo esto"
+#
+# 3. EL TRABAJO PRINCIPAL (líneas 11-36):
+#    - jobs: build_and_deploy
+#    - runs-on: ubuntu-latest (servidor Ubuntu gratuito)
+#
+# 4. LOS PASOS:
+#    PASO 1 (líneas 16-17): Checkout code
+#    - Descarga tu código desde GitHub al servidor
+#    - "Trae mi código aquí para poder trabajar con él"
+#
+#    PASO 2 (líneas 20-23): Setup Node.js
+#    - Instala Node.js versión '20.15.0'
+#    - Tu proyecto React necesita Node.js para funcionar
+#    - "Instala la herramienta necesaria para ejecutar mi código JavaScript"
+#
+#    PASO 3 (líneas 26-27): Install dependencies and build
+#    - npm ci: Instala todas las dependencias (librerías)
+#    - npm run build: Compila tu código React para producción
+#    - "Descarga herramientas y convierte mi código en versión optimizada"
+#
+#    PASO 4 (líneas 30-36): Deploy to Firebase Hosting
+#    - Sube tu sitio web construido a Firebase Hosting
+#    - repoToken: Token para acceder a tu repositorio
+#    - firebaseServiceAccount: Credenciales secretas de Firebase
+#    - channelId: live (sitio web público)
+#    - projectId: ID de tu proyecto Firebase
+#
+# 🔐 CONCEPTOS IMPORTANTES:
+# - Secrets: Variables secretas para contraseñas y tokens API
+# - Actions: Acciones predefinidas reutilizables
+# - Pipeline CI/CD: Integración Continua/Despliegue Continuo
+#
+# 🎯 RESUMEN:
+# Este archivo crea un flujo automático que cada vez que subes código:
+# 1. ✅ Descarga tu código
+# 2. ✅ Instala Node.js  
+# 3. ✅ Construye tu proyecto React
+# 4. ✅ Lo publica automáticamente en Firebase Hosting
+#
+# ¡Es como tener un asistente automático que actualiza tu portfolio!
+# ===========================================

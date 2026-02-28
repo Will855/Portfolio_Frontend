@@ -19,3 +19,77 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PORTAFOLIO_56D5E }}
           projectId: portafolio-56d5e
+
+# ===========================================
+# 📚 EXPLICACIÓN DIDÁCTICA DEL CÓDIGO
+# ===========================================
+# 
+# Este archivo es un WORKFLOW de GitHub Actions que crea una VISTA PREVIA
+# de tu sitio web cuando alguien crea un Pull Request. Te explico qué hace cada parte:
+#
+# 🎯 ¿QUÉ ES ESTE ARCHIVO?
+# Es diferente al archivo anterior. Este crea una versión temporal de tu sitio
+# (preview) cuando alguien quiere hacer cambios. Es como un "borrador" que
+# puedes ver y probar antes de decidir si aceptar los cambios o no.
+#
+# 📋 DESGLOSE POR SECCIONES:
+#
+# 1. INFORMACIÓN BÁSICA (líneas 1-9):
+#    - name: "Deploy to Firebase Hosting on PR"
+#    - Es como un título que dice "Despliega cuando hay un Pull Request"
+#
+# 2. CUÁNDO SE EJECUTA (línea 5):
+#    on: pull_request
+#    - Se activa cuando alguien crea un Pull Request (PR)
+#    - NO se activa cuando haces push normal
+#    - "Cada vez que alguien proponga cambios, crea una vista previa"
+#
+# 3. PERMISOS (líneas 6-9):
+#    permissions:
+#      checks: write      - Puede escribir resultados de pruebas
+#      contents: read     - Puede leer el código
+#      pull-requests: write - Puede comentar en el Pull Request
+#    - Le dice a GitHub qué puede y qué no puede hacer este workflow
+#
+# 4. CONDICIÓN DE SEGURIDAD (línea 12):
+#    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+#    - Solo funciona si el PR viene del mismo repositorio
+#    - Evita que extraños usen tu Firebase con PRs maliciosos
+#    - "Solo haz esto si confías en el origen del cambio"
+#
+# 5. LOS PASOS (líneas 14-21):
+#    PASO 1 (línea 15): actions/checkout@v4
+#    - Descarga el código del Pull Request (no el código principal)
+#
+#    PASO 2 (línea 16): npm ci && npm run build
+#    - Instala dependencias y construye el proyecto
+#    - NOTA: Más compacto que el otro archivo, sin nombres detallados
+#
+#    PASO 3 (líneas 17-21): Deploy a Firebase Hosting
+#    - Sube el sitio construido a Firebase como PREVIEW
+#    - channelId NO especificado = usa canal automático para previews
+#    - projectId: tu proyecto Firebase
+#
+# 🔄 DIFERENCIAS CON EL ARCHIVO ANTERIOR:
+# 1. Trigger diferente: pull_request vs push to main
+# 2. No especifica channelId (Firebase crea automáticamente previews)
+# 3. Tiene validación de seguridad adicional
+# 4. Permisos más específicos para PRs
+#
+# 🎯 ¿PARA QUÉ SIRVE?
+# Cuando alguien (o tú mismo) hace un Pull Request:
+# 1. ✅ Se construye una versión temporal de tu sitio
+# 2. ✅ Se despliega como preview en Firebase
+# 3. ✅ Puedes ver un link de vista previa en el PR
+# 4. ✅ Puedes probar los cambios ANTES de aceptarlos
+#
+# 🚀 FLUJO COMPLETO:
+# 1. Haces cambios en una rama
+# 2. Creas Pull Request
+# 3. Este workflow crea preview automáticamente
+# 4. Revisas el preview
+# 5. Si te gusta, aceptas el PR
+# 6. El otro workflow (merge) despliega a producción
+#
+# ¡Es como tener una "zona de pruebas" antes de publicar!
+# ===========================================

@@ -1,20 +1,14 @@
-// Importaciones necesarias
-import React, { useState, useEffect, useRef } from 'react'; // Hooks de React
-import { NavLink } from 'react-router-dom'; // Componente para navegación
-import { gsap } from 'gsap'; // Librería para animaciones
-import IonIcon from '@reacticons/ionicons'; // Iconos de Ionicons
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink } from 'react-router-dom';
+import { gsap } from 'gsap';
+import IonIcon from '@reacticons/ionicons';
+import { useNavItems } from '../../hooks/useNavItems';
 
-// Componente principal del menú responsivo
 function ResponsiveMenu() {
-    // Estado para controlar si el menú está abierto o cerrado
     const [isOpen, setIsOpen] = useState(false);
-
-    // Referencias para manipular elementos DOM directamente
-    const sidebarRef = useRef(null); // Referencia al contenedor del menú
-    const animationRef = useRef<gsap.core.Timeline | null>(null); // Referencia para la animación
-
-    // Lista de elementos del menú
-    const navItems = ['Inicio', 'Informacion', 'Proyectos', 'Contacto', 'Planes'];
+    const sidebarRef = useRef(null);
+    const animationRef = useRef<gsap.core.Timeline | null>(null);
+    const navItems = useNavItems();
 
     // useEffect para inicializar el estado del menú y sus elementos
     useEffect(() => {

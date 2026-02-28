@@ -65,7 +65,10 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
    */
   const handleNavigation = () => {
     navigate(`/demos/${id}`);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ 
+      top: -80, // Scroll al inicio de la página
+      behavior: "smooth" // Efecto de scroll suave
+    });
   };
 
   return (
@@ -84,8 +87,8 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
         src={img}
         alt={`Visualización del proyecto ${title}`}
         className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
-        loading="lazy"
-        decoding="async"
+        loading="lazy" 
+        decoding="async" 
       />
 
       {/* Contenido con efecto de flotación */}
@@ -119,3 +122,142 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
 };
 
 export default Card;
+
+// ===========================================
+// 📚 EXPLICACIÓN DIDÁCTICA DEL CÓDIGO
+// ===========================================
+// 
+// Este archivo es un COMPONENTE REACT que implementa una tarjeta interactiva
+// con efectos de parallax y navegación. Es un ejemplo perfecto de cómo crear
+// componentes reutilizables con animaciones avanzadas y buena documentación.
+// Te explico paso a paso qué hace cada parte:
+//
+// 🎯 ¿QUÉ ES ESTE ARCHIVO?
+// Es un componente de tarjeta que muestra información de proyectos con
+// efectos visuales interactivos. Combina parallax, navegación, y optimizaciones
+// de rendimiento para crear una experiencia de usuario atractiva.
+//
+// 📋 DESGLOSE POR SECCIONES:
+//
+// 1. IMPORTS Y DEPENDENCIAS (líneas 1-4):
+//    - React: useRef, useEffect para manejo de estado y referencias
+//    - CardProps: Interface TypeScript importada desde types
+//    - cardAnimations: Funciones utilitarias para animaciones
+//    - useNavigate: Hook de React Router para navegación
+//    - ¿Por qué esta estructura? Separación clara de responsabilidades
+//
+// 2. DOCUMENTACIÓN JSDOC (líneas 6-25):
+//    - @component: Marca el componente
+//    - @param: Documenta cada prop con tipo y descripción
+//    - @returns: Describe el elemento JSX retornado
+//    - @example: Ejemplo de uso del componente
+//    - ¿Por qué JSDoc? Mejora la experiencia de desarrollo y documentación
+//
+// 3. COMPONENTE PRINCIPAL (líneas 26-29):
+//    - Card: Componente funcional tipado con CardProps
+//    - Destructuring: Extrae todas las props necesarias
+//    - Refs: cardRef y contentRef para animaciones
+//    - navigate: Hook para navegación programática
+//    - ¿Por qué destructuring? Código más limpio y legible
+//
+// 4. CONFIGURACIÓN DE ANIMACIONES (líneas 39-59):
+//    - useEffect: Configura event listeners al montar
+//    - Verificación: if (!card || !content) return para seguridad
+//    - sensitivity: 1.15 para controlar la intensidad del efecto
+//    - optimizedMouseMove: Función optimizada para el evento
+//    - Event listeners: mousemove y mouseleave
+//    - Cleanup: Remueve listeners al desmontar
+//    - ¿Por qué cleanup? Previene memory leaks
+//
+// 5. FUNCIÓN DE NAVEGACIÓN (líneas 66-69):
+//    - handleNavigation: Función para navegar a la página del proyecto
+//    - navigate(`/demos/${id}`): Navegación dinámica basada en ID
+//    - window.scrollTo(): Scroll suave al inicio de la página
+//    - ¿Por qué scroll? Mejora la experiencia de usuario
+//
+// 6. RENDER PRINCIPAL (líneas 71-118):
+//    - div contenedor: Elemento principal con ref y estilos
+//    - Imagen: Fondo con efecto de profundidad
+//    - Contenido: Título, descripción y botón
+//    - Botón: Con feedback interactivo y navegación
+//
+// 🎨 CONCEPTOS DE DISEÑO:
+//
+// 1. PARALLAX EFFECT:
+//    - handleMouseMove: Función externa para efecto parallax
+//    - sensitivity: Controla la intensidad del movimiento
+//    - resetCardPosition: Restablece la posición al salir
+//    - ¿Por qué parallax? Crea sensación de profundidad
+//
+// 2. VISUAL LAYERING:
+//    - Imagen: Fondo con opacity 40%, aumenta a 50% en hover
+//    - Contenido: z-10 para estar sobre la imagen
+//    - Botón: Feedback visual con hover y active states
+//    - ¿Por qué capas? Crea profundidad visual
+//
+// 3. INTERACTIVE FEEDBACK:
+//    - hover:scale-[1.02]: Escala sutil en hover
+//    - hover:shadow-2xl: Sombra más intensa
+//    - active:scale-95: Feedback al hacer click
+//    - ¿Por qué feedback? Mejora la experiencia de usuario
+//
+// ⚡ OPTIMIZACIONES DE RENDIMIENTO:
+//
+// 1. CSS OPTIMIZATIONS:
+//    - transformStyle: "preserve-3d": Optimiza transformaciones 3D
+//    - willChange: "transform": Indica al navegador que optimice
+//    - transform-gpu: Fuerza aceleración por hardware
+//    - ¿Por qué optimizaciones? Mejor rendimiento en animaciones
+//
+// 2. IMAGE OPTIMIZATION:
+//    - loading="lazy": Carga diferida de imágenes
+//    - decoding="async": Decodificación asíncrona
+//    - object-cover: Mantiene proporciones
+//    - ¿Por qué lazy loading? Mejora el tiempo de carga inicial
+//
+// 3. EVENT OPTIMIZATION:
+//    - optimizedMouseMove: Función optimizada
+//    - Cleanup automático: Previene memory leaks
+//    - Event delegation: Un solo listener por evento
+//    - ¿Por qué optimización? Mejor rendimiento general
+//
+// 🎯 PATRONES APLICADOS:
+//
+// 1. COMPONENT COMPOSITION:
+//    - Props tipadas: CardProps interface
+//    - Reutilización: Componente genérico para cualquier proyecto
+//    - Separación: Lógica de animación en utils
+//    - ¿Por qué composición? Mejor mantenibilidad
+//
+// 2. ACCESSIBILITY:
+//    - role="article": Indica que es un artículo
+//    - aria-label: Descripción para lectores de pantalla
+//    - alt text: Descripción de la imagen
+//    - ¿Por qué accesibilidad? Inclusión para todos los usuarios
+//
+// 3. RESPONSIVE DESIGN:
+//    - Tailwind classes: Responsive por defecto
+//    - h-72: Altura fija para consistencia
+//    - flex layout: Adaptable a diferentes contenidos
+//    - ¿Por qué responsive? Funciona en todos los dispositivos
+//
+// 🚀 FLUJO DE INTERACCIÓN:
+// 1. Usuario mueve el mouse sobre la tarjeta
+// 2. handleMouseMove aplica efecto parallax
+// 3. La imagen y contenido se mueven independientemente
+// 4. Al salir del mouse, resetCardPosition restablece la posición
+// 5. Al hacer click en el botón, handleNavigation navega a la página
+// 6. window.scrollTo hace scroll suave al inicio
+//
+// 🎓 CONCEPTOS AVANZADOS APRENDIDOS:
+// - Component composition patterns
+// - Parallax effects con JavaScript
+// - Performance optimization
+// - Accessibility patterns
+// - Event handling y cleanup
+// - TypeScript interfaces
+// - JSDoc documentation
+// - Responsive design
+//
+// ¡Es un ejemplo excelente de cómo crear componentes reutilizables y bien documentados!
+// ===========================================

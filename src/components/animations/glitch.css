@@ -59,3 +59,153 @@
     90% { clip: rect(57px, 9999px, 73px, 0); }
     100% { clip: rect(30px, 9999px, 88px, 0); }
 }
+
+/* ===========================================
+ * 📚 EXPLICACIÓN DIDÁCTICA DEL CÓDIGO
+ * ===========================================
+ * 
+ * Este archivo CSS crea un EFECTO GLITCH avanzado usando pseudo-elementos
+ * y animaciones CSS. Es un ejemplo perfecto de cómo crear efectos visuales
+ * impresionantes usando solo CSS. Te explico paso a paso qué hace cada parte:
+ *
+ * 🎯 ¿QUÉ ES ESTE ARCHIVO?
+ * Es un archivo CSS que implementa un efecto de "glitch" (interferencia digital)
+ * en texto, simulando errores de visualización como los que se ven en
+ * películas de ciencia ficción. Usa técnicas avanzadas de CSS para crear
+ * el efecto sin JavaScript.
+ *
+ * 📋 DESGLOSE POR SECCIONES:
+ *
+ * 1. CLASE PRINCIPAL (líneas 2-5):
+ *    - .glitch-text: Clase base para aplicar el efecto
+ *    - position: relative: Permite posicionar pseudo-elementos
+ *    - display: inline-block: Comportamiento híbrido inline/block
+ *    - ¿Por qué relative? Los pseudo-elementos necesitan un contenedor
+ *
+ * 2. PSEUDO-ELEMENTOS BASE (líneas 8-16):
+ *    - ::before y ::after: Crean capas adicionales del texto
+ *    - content: attr(data-text): Usa el texto del atributo data-text
+ *    - position: absolute: Superpone las capas sobre el texto original
+ *    - top: 0, left: 0: Alineación perfecta con el texto original
+ *    - width: 100%, height: 100%: Mismo tamaño que el contenedor
+ *    - ¿Por qué pseudo-elementos? Crean capas sin HTML adicional
+ *
+ * 3. CAPA ROSA (líneas 19-24):
+ *    - left: 2px: Desplazamiento hacia la derecha
+ *    - text-shadow: -2px 0 #ff00c1: Sombra rosa hacia la izquierda
+ *    - clip: rect(): Recorta el texto para crear el efecto glitch
+ *    - animation: glitch-anim-1: Animación de 3 segundos
+ *    - alternate-reverse: Alterna la dirección de la animación
+ *
+ * 4. CAPA CIAN (líneas 27-31):
+ *    - left: -2px: Desplazamiento hacia la izquierda
+ *    - text-shadow: Doble sombra en cian y rosa
+ *    - animation: glitch-anim-2: Animación de 2 segundos
+ *    - Diferente timing: Crea desincronización visual
+ *
+ * 5. ANIMACIÓN 1 (líneas 34-46):
+ *    - @keyframes: Define los pasos de la animación
+ *    - clip: rect(): Recorta diferentes partes del texto
+ *    - Valores aleatorios: Simulan interferencia digital
+ *    - 10 pasos: 0%, 10%, 20%... hasta 100%
+ *    - ¿Por qué rect()? Permite recortar formas rectangulares
+ *
+ * 6. ANIMACIÓN 2 (líneas 49-61):
+ *    - Misma estructura que la animación 1
+ *    - Valores diferentes: Crea desincronización
+ *    - Timing diferente: 2s vs 3s
+ *    - Efecto de interferencia: Las dos capas se superponen
+ *
+ * 🎨 CONCEPTOS DE CSS AVANZADO:
+ *
+ * 1. PSEUDO-ELEMENTOS:
+ *    - ::before: Crea un elemento antes del contenido
+ *    - ::after: Crea un elemento después del contenido
+ *    - content: attr(): Usa el valor de un atributo HTML
+ *    - position: absolute: Posicionamiento independiente
+ *
+ * 2. CLIP PROPERTY:
+ *    - rect(top, right, bottom, left): Define un rectángulo
+ *    - Valores en píxeles: Controla qué parte se muestra
+ *    - 9999px: Valor grande para el ancho (truco para clip)
+ *    - ¿Por qué clip? Permite mostrar solo partes del elemento
+ *
+ * 3. TEXT-SHADOW:
+ *    - Múltiples sombras: Separa colores
+ *    - Desplazamiento: Crea efecto de separación
+ *    - Colores vibrantes: #ff00c1 (rosa), #00fff9 (cian)
+ *    - ¿Por qué sombras? Simula interferencia de color
+ *
+ * 4. ANIMACIONES CSS:
+ *    - @keyframes: Define los pasos de la animación
+ *    - infinite: Repetición infinita
+ *    - linear: Velocidad constante
+ *    - alternate-reverse: Alterna dirección
+ *    - Diferentes duraciones: Crea desincronización
+ *
+ * ⚡ TÉCNICAS AVANZADAS:
+ *
+ * 1. LAYERING:
+ *    - Múltiples capas: Texto original + 2 pseudo-elementos
+ *    - Superposición: Las capas se superponen
+ *    - Desplazamiento: Cada capa se mueve independientemente
+ *    - ¿Por qué capas? Crea profundidad visual
+ *
+ * 2. CLIPPING:
+ *    - rect(): Función de recorte rectangular
+ *    - Valores aleatorios: Simulan interferencia
+ *    - Animación: Cambia qué parte se muestra
+ *    - ¿Por qué clipping? Crea el efecto de "corte"
+ *
+ * 3. COLOR SEPARATION:
+ *    - RGB separation: Separa colores primarios
+ *    - text-shadow: Crea sombras de colores
+ *    - Desplazamiento: Separa los colores
+ *    - ¿Por qué separación? Simula error de display
+ *
+ * 4. TIMING:
+ *    - Diferentes duraciones: 2s vs 3s
+ *    - Desincronización: Las animaciones no coinciden
+ *    - alternate-reverse: Cambia dirección
+ *    - ¿Por qué timing diferente? Crea caos visual
+ *
+ * 🎯 PATRONES APLICADOS:
+ *
+ * 1. GLITCH AESTHETIC:
+ *    - Colores vibrantes: Rosa y cian
+ *    - Movimiento errático: Animaciones desincronizadas
+ *    - Interferencia: Efecto de corte y pegado
+ *    - ¿Por qué glitch? Estética cyberpunk/retro
+ *
+ * 2. LAYER COMPOSITION:
+ *    - Múltiples capas: Profundidad visual
+ *    - Superposición: Efectos combinados
+ *    - Desplazamiento: Movimiento independiente
+ *    - ¿Por qué composición? Crea complejidad visual
+ *
+ * 3. ANIMATION CHAOS:
+ *    - Valores aleatorios: Simulan interferencia
+ *    - Timing irregular: Crea caos
+ *    - Direcciones opuestas: Movimiento errático
+ *    - ¿Por qué caos? Simula error digital
+ *
+ * 🚀 FLUJO DE EJECUCIÓN:
+ * 1. Se aplica la clase .glitch-text al elemento
+ * 2. Se crean los pseudo-elementos ::before y ::after
+ * 3. Cada pseudo-elemento se desplaza y colorea
+ * 4. Las animaciones se ejecutan independientemente
+ * 5. El clipping cambia constantemente
+ * 6. Se crea el efecto de interferencia visual
+ *
+ * 🎓 CONCEPTOS AVANZADOS APRENDIDOS:
+ * - Pseudo-elementos para efectos visuales
+ * - Clip property para recorte de elementos
+ * - Text-shadow para efectos de color
+ * - Animaciones CSS complejas
+ * - Layer composition
+ * - Glitch aesthetic
+ * - CSS sin JavaScript
+ * - Efectos de interferencia digital
+ *
+ * ¡Es un ejemplo excelente de cómo crear efectos visuales impresionantes solo con CSS!
+ * =========================================== */

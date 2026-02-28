@@ -3,7 +3,7 @@ import React from 'react';
 import '../App.css';
 import Footer from '../components/footer/footer';
 import { motion } from "framer-motion";
-import { SkillsSection, ProjectsSection, EducationAndCTASection } from "../components/about/informationContent"
+import { SkillSection, ExpAndTecnologies} from "../components/about/informationContent"
 
 // Componente principal que renderiza el fondo
 const Information: React.FC = () => {
@@ -14,9 +14,8 @@ const Information: React.FC = () => {
       animate="visible"
     >
       <motion.div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 backdrop-blur-lg bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
-        <SkillsSection />
-        <ProjectsSection />
-        <EducationAndCTASection />
+        <SkillSection />
+        <ExpAndTecnologies />
       </motion.div>
       <Footer />
     </motion.section>

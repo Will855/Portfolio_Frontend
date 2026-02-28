@@ -6,14 +6,21 @@ import Home from './pages/home';
 import Information from './pages/information';
 import { Proyects } from './pages/proyects';
 import { Contact } from './pages/contact';
-import BackgroundStars from './components/animations/backgrounds/bgStars';
+import BackgroundStars from './components/animations/backgrounds/StarsBackground';
 import ResponsiveMenu from './components/navbar/menuResponsive';
 import CardDetails from './components/cards/proyectPage';
 import NotFound from './pages/404';
 import { projects } from './config/project';
-import Freelance from './pages/freelance';
 import { useAnalytics } from './hooks/useAnalytics';
 import { trackPageView, trackSectionNavigation } from './utils/analytics';
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminHero } from './pages/admin/sections/AdminHero';
+import { AdminCards } from './pages/admin/sections/AdminCards';
+import { AdminProjects } from './pages/admin/sections/AdminProjects';
+import { AdminContent } from './pages/admin/sections/AdminContent';
+import { AdminMessages } from './pages/admin/sections/AdminMessages';
 
 const GA4_ID = 'G-HL1MY2MS9S';
 
@@ -63,11 +70,17 @@ const RouterWrapper = () => {
     }
   }, [location.pathname, location.search]);
 
+  const isAdmin = location.pathname.startsWith('/admin');
+
   return (
     <>
-      <NavMenu />
-      <BackgroundStars />
-      <ResponsiveMenu />
+      {!isAdmin && (
+        <>
+          <NavMenu />
+          <BackgroundStars />
+          <ResponsiveMenu />
+        </>
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inicio" element={<Home />} />
@@ -76,8 +89,16 @@ const RouterWrapper = () => {
         <Route path="/contacto" element={<Contact />} />
         <Route path="/page/:id" element={<CardDetails />} />
         <Route path="/demos/:projectId" element={<ContentHandler />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="hero" element={<AdminHero />} />
+          <Route path="cards" element={<AdminCards />} />
+          <Route path="projects" element={<AdminProjects />} />
+          <Route path="content" element={<AdminContent />} />
+          <Route path="messages" element={<AdminMessages />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
-        <Route path="/Planes" element={<Freelance/>}> </Route>
       </Routes>
     </>
   );
