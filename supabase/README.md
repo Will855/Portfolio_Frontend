@@ -5,6 +5,8 @@
 3. In Supabase SQL Editor, run the migrations in order:
    - `migrations/20250228000001_initial_schema.sql`
    - `migrations/20250228000002_storage.sql`
+   - `migrations/20250228000003_unify_projects.sql` (añade code_url, demo_url, bg_image_path, order a cards)
+   - `migrations/20250228000004_project_content.sql` (tabla de bloques de contenido por proyecto)
 4. **Registro admin**: En la app ve a `/admin/login` y usa la pestaña "Registrarse" para crear tu cuenta. Si en Supabase está activada la confirmación de email, confirma el enlace que te llegue.
 5. **Permisos de admin**: Tras registrarte, añade tu email a la tabla de admins en Supabase → SQL Editor:
    ```sql
@@ -22,3 +24,7 @@
    - `public/assets/qrWhatsApp.webp` → `footer/qrWhatsApp.webp` (if you use it from content later)
 
 Until uploads are done, the site falls back to local asset paths when Supabase URLs are missing.
+
+**Probar peticiones a Supabase por proyecto:** En la web pública, entra en Proyectos y haz clic en una card: irás a `/page/:id`. Esa página lee `cards` (título, descripción, codeUrl, demoUrl, bgImage) y `project_content` (bloques de texto/imagen/video). Si no hay bloques, verás "Sin contenido para este proyecto. Añade bloques desde Admin → Contenido."
+
+**Probar el CRUD de contenido en /admin:** Inicia sesión en `/admin/login`, ve a **Contenido**, elige un proyecto en el desplegable, pulsa "Agregar bloque" → Texto, escribe algo (p. ej. `<p>Hola</p>`), "Guardar todo". Abre en otra pestaña `/page/1` (o el id que elegiste): debe aparecer el bloque. Editar y eliminar bloques también se guarda en Supabase (`project_content`).

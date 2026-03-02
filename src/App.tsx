@@ -10,14 +10,13 @@ import BackgroundStars from './components/animations/backgrounds/StarsBackground
 import ResponsiveMenu from './components/navbar/menuResponsive';
 import CardDetails from './components/cards/proyectPage';
 import NotFound from './pages/404';
-import { projects } from './config/project';
+import Demo from './pages/demos';
 import { useAnalytics } from './hooks/useAnalytics';
 import { trackPageView, trackSectionNavigation } from './utils/analytics';
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminHero } from './pages/admin/sections/AdminHero';
-import { AdminCards } from './pages/admin/sections/AdminCards';
 import { AdminProjects } from './pages/admin/sections/AdminProjects';
 import { AdminContent } from './pages/admin/sections/AdminContent';
 import { AdminMessages } from './pages/admin/sections/AdminMessages';
@@ -88,12 +87,11 @@ const RouterWrapper = () => {
         <Route path="/proyectos" element={<Proyects />} />
         <Route path="/contacto" element={<Contact />} />
         <Route path="/page/:id" element={<CardDetails />} />
-        <Route path="/demos/:projectId" element={<ContentHandler />} />
+        <Route path="/demos/:projectId" element={<Demo />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
           <Route path="hero" element={<AdminHero />} />
-          <Route path="cards" element={<AdminCards />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="content" element={<AdminContent />} />
           <Route path="messages" element={<AdminMessages />} />
@@ -102,18 +100,6 @@ const RouterWrapper = () => {
       </Routes>
     </>
   );
-};
-
-/**
- * Componente para manejar la carga dinámica de contenido de proyectos
- * @function ContentHandler
- * @returns {JSX.Element} Componente del proyecto o página 404
- */
-const ContentHandler = () => {
-  const { projectId } = useParams();
-  const project = projects.find(p => p.id === projectId);
-
-  return project?.content ? <project.content /> : <NotFound />;
 };
 
 /**

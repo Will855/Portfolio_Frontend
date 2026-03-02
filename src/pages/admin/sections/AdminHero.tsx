@@ -45,41 +45,94 @@ export const AdminHero: React.FC = () => {
     : '/profile.jpeg';
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <h2 className="text-2xl font-semibold">Hero</h2>
-      <div className="rounded-lg border border-slate-700 p-4 space-y-4">
-        <div className="flex items-center gap-4">
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-white">Hero</h2>
+
+      <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-5 sm:p-6 space-y-6">
+        {/* Profile image */}
+        <div className="flex flex-col sm:flex-row items-center gap-5">
           <img
             src={imgSrc}
             alt=""
-            className="w-24 h-24 rounded-full object-cover bg-slate-700"
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover bg-slate-700 border-2 border-white/10 shrink-0"
             onError={(e) => { (e.target as HTMLImageElement).src = '/profile.jpeg'; }}
           />
-          <div>
-            <label className="block text-sm mb-1">Foto de perfil</label>
-            <input type="file" accept="image/*" onChange={onFileChange} disabled={uploading} className="text-sm" />
-            {uploading && <p className="text-sm text-slate-400">Subiendo...</p>}
+          <div className="flex-1 space-y-2 text-center sm:text-left">
+            <label className="block text-sm font-medium text-slate-300">Foto de perfil</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={onFileChange}
+              disabled={uploading}
+              className="w-full text-sm text-slate-400 file:mr-3 file:py-2 file:px-4
+                         file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80
+                         file:font-medium file:cursor-pointer hover:file:bg-white/15
+                         file:transition-all cursor-pointer"
+            />
+            {uploading && (
+              <div className="flex items-center gap-2 text-sm text-slate-400">
+                <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+                Subiendo...
+              </div>
+            )}
           </div>
         </div>
-        <div>
-          <label className="block text-sm mb-1">Título</label>
+
+        {/* Title */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-medium text-slate-300">Título</label>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-600"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                       text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                       focus:ring-1 focus:ring-blue-500/20 transition-all"
           />
         </div>
-        <div>
-          <label className="block text-sm mb-1">Subtítulo</label>
+
+        {/* Subtitle */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-medium text-slate-300">Subtítulo</label>
           <input
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
-            className="w-full px-3 py-2 rounded bg-slate-800 border border-slate-600"
+            className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                       text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                       focus:ring-1 focus:ring-blue-500/20 transition-all"
           />
         </div>
-        <button onClick={saveText} disabled={saving} className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50">
+
+        {/* Save */}
+        <button
+          onClick={saveText}
+          disabled={saving}
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500
+                     text-white font-medium hover:from-blue-500 hover:to-blue-400
+                     transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50
+                     disabled:cursor-not-allowed active:scale-95 flex items-center gap-2"
+        >
+          {saving && (
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          )}
           {saving ? 'Guardando...' : 'Guardar textos'}
         </button>
+      </div>
+
+      {/* Preview */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-medium text-slate-300">Vista previa</h3>
+        <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 sm:p-8 flex flex-col items-center gap-4">
+          <img
+            src={imgSrc}
+            alt=""
+            className="w-20 h-20 rounded-full object-cover border-2 border-white/20"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/profile.jpeg'; }}
+          />
+          <div className="text-center">
+            <h4 className="text-2xl sm:text-3xl font-bold text-white">{title || DEFAULT_TITLE}</h4>
+            <p className="text-slate-400 mt-1">{subtitle || DEFAULT_SUBTITLE}</p>
+          </div>
+        </div>
       </div>
     </div>
   );

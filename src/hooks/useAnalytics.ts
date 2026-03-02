@@ -1,6 +1,23 @@
+/**
+ * @file useAnalytics.ts
+ * @description Hook que activa el tracking de analytics en la página actual:
+ * tiempo en página (cada 30s y al desmontar) y profundidad de scroll (porcentaje máximo).
+ * Delega en utilidades de ../utils/analytics (p. ej. Google Analytics 4).
+ */
 import { useEffect, useRef } from 'react';
 import { trackTimeOnPage, trackScrollDepth } from '../utils/analytics';
 
+/**
+ * Hook que registra tiempo en página y profundidad de scroll para analytics.
+ * Se ejecuta al montar y limpia intervalos/listeners al desmontar.
+ * Tiempo: cada 30 segundos y tiempo final al desmontar.
+ * Scroll: porcentaje cuando supera el máximo anterior.
+ * @example
+ * function MyPage() {
+ *   useAnalytics();
+ *   return <div>...</div>;
+ * }
+ */
 export const useAnalytics = () => {
   const startTime = useRef(Date.now());
   const maxScrollDepth = useRef(0);

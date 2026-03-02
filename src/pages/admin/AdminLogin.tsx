@@ -22,7 +22,9 @@ export const AdminLogin: React.FC = () => {
   if (!isConfigured) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
-        <p>Supabase no está configurado. Añade VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY en .env</p>
+        <div className="rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-6 max-w-sm text-center">
+          <p className="text-slate-300">Supabase no está configurado. Añade <code className="text-blue-400">VITE_SUPABASE_URL</code> y <code className="text-blue-400">VITE_SUPABASE_ANON_KEY</code> en .env</p>
+        </div>
       </div>
     );
   }
@@ -30,7 +32,10 @@ export const AdminLogin: React.FC = () => {
   if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200">
-        <p>Cargando...</p>
+        <div className="flex items-center gap-3">
+          <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+          <span>Cargando...</span>
+        </div>
       </div>
     );
   }
@@ -71,24 +76,25 @@ export const AdminLogin: React.FC = () => {
   if (signupSuccess) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
-        <div className="w-full max-w-sm space-y-4 rounded-xl bg-white/5 p-6 backdrop-blur border border-white/10">
-          <h2 className="text-lg font-semibold text-green-400">Cuenta creada</h2>
+        <div className="w-full max-w-sm space-y-4 rounded-2xl bg-white/5 backdrop-blur-xl p-6 border border-white/10">
+          <h2 className="text-lg font-bold text-emerald-400">Cuenta creada</h2>
           <p className="text-sm text-slate-300">
             Revisa tu correo y confirma el enlace si Supabase tiene confirmación activada.
           </p>
           <p className="text-sm text-slate-300">
             Para poder editar contenido, añade tu email como admin en Supabase:
           </p>
-          <pre className="text-xs bg-slate-800 p-3 rounded overflow-x-auto">
+          <pre className="text-xs bg-white/5 border border-white/10 p-3 rounded-xl overflow-x-auto text-slate-300">
             {`insert into public.admin_emails (email)\nvalues ('${email}');`}
           </pre>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Ejecuta ese SQL en el proyecto Supabase → SQL Editor. Luego inicia sesión aquí.
           </p>
           <button
             type="button"
             onClick={() => { setSignupSuccess(false); setMode('login'); }}
-            className="w-full py-2 rounded bg-slate-600 hover:bg-slate-500 text-white text-sm"
+            className="w-full py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80
+                       hover:bg-white/10 hover:text-white transition-all text-sm font-medium"
           >
             Ir a iniciar sesión
           </button>
@@ -101,48 +107,65 @@ export const AdminLogin: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
       <div className="w-full max-w-sm space-y-3">
         {dbTest && !dbTest.ok && (
-          <div className="rounded-lg bg-red-900/30 border border-red-500/50 p-3 text-sm text-red-200">
+          <div className="rounded-xl bg-red-500/10 border border-red-500/20 p-3 text-sm text-red-300">
             <strong>Base de datos:</strong> {dbTest.error}
-            <p className="mt-1 text-xs">Comprueba que las migraciones estén aplicadas en Supabase (SQL Editor).</p>
+            <p className="mt-1 text-xs text-red-400/70">Comprueba que las migraciones estén aplicadas en Supabase (SQL Editor).</p>
           </div>
         )}
         {dbTest?.ok && (
-          <p className="text-center text-xs text-green-400">Conexión a la base de datos correcta</p>
+          <p className="text-center text-xs text-emerald-400">Conexión a la base de datos correcta</p>
         )}
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 rounded-xl bg-white/5 p-6 backdrop-blur border border-white/10"
+          className="space-y-5 rounded-2xl bg-white/5 backdrop-blur-xl p-6 sm:p-8 border border-white/10"
         >
-          <h1 className="text-xl font-semibold text-center">Admin</h1>
+          <h1 className="text-xl font-bold text-center text-white">Admin</h1>
+
+          {/* Mode toggle */}
           <div className="flex gap-2 justify-center">
             <button
               type="button"
               onClick={() => { setMode('login'); setError(''); }}
-              className={`px-3 py-1.5 rounded text-sm ${mode === 'login' ? 'bg-slate-600' : 'bg-slate-800 hover:bg-slate-700'}`}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                mode === 'login'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
+              }`}
             >
               Entrar
             </button>
             <button
               type="button"
               onClick={() => { setMode('signup'); setError(''); }}
-              className={`px-3 py-1.5 rounded text-sm ${mode === 'signup' ? 'bg-slate-600' : 'bg-slate-800 hover:bg-slate-700'}`}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                mode === 'signup'
+                  ? 'bg-white/10 text-white border border-white/10'
+                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
+              }`}
             >
               Registrarse
             </button>
           </div>
-          <div>
-            <label htmlFor="email" className="block text-sm mb-1">Email</label>
+
+          {/* Email */}
+          <div className="space-y-1.5">
+            <label htmlFor="email" className="block text-sm font-medium text-slate-300">Email</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 rounded bg-slate-800 text-slate-100 border border-slate-600 focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                         text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                         focus:ring-1 focus:ring-blue-500/20 transition-all"
+              placeholder="tu@email.com"
             />
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm mb-1">Contraseña</label>
+
+          {/* Password */}
+          <div className="space-y-1.5">
+            <label htmlFor="password" className="block text-sm font-medium text-slate-300">Contraseña</label>
             <input
               id="password"
               type="password"
@@ -150,17 +173,35 @@ export const AdminLogin: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={6}
-              className="w-full px-3 py-2 rounded bg-slate-800 text-slate-100 border border-slate-600 focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                         text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                         focus:ring-1 focus:ring-blue-500/20 transition-all"
+              placeholder="••••••"
             />
-            {mode === 'signup' && <p className="text-xs text-slate-400 mt-1">Mínimo 6 caracteres</p>}
+            {mode === 'signup' && <p className="text-xs text-slate-500 mt-1">Mínimo 6 caracteres</p>}
           </div>
-          {error && <p className="text-red-400 text-sm">{error}</p>}
+
+          {error && (
+            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 rounded bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium"
+            className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500
+                       text-white font-medium hover:from-blue-500 hover:to-blue-400
+                       transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50
+                       disabled:cursor-not-allowed active:scale-95 flex items-center justify-center gap-2"
           >
-            {loading ? (mode === 'signup' ? 'Creando cuenta...' : 'Entrando...') : mode === 'signup' ? 'Registrarse' : 'Entrar'}
+            {loading && (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            )}
+            {loading
+              ? (mode === 'signup' ? 'Creando cuenta...' : 'Entrando...')
+              : mode === 'signup' ? 'Registrarse' : 'Entrar'
+            }
           </button>
         </form>
       </div>

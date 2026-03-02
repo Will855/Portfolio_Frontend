@@ -64,7 +64,7 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
    * @description Navega a la ruta del proyecto y hace scroll suave al inicio
    */
   const handleNavigation = () => {
-    navigate(`/demos/${id}`);
+    navigate(`/page/${id}`);
     window.scrollTo({ 
       top: -80, // Scroll al inicio de la página
       behavior: "smooth" // Efecto de scroll suave
@@ -171,7 +171,7 @@ export default Card;
 //
 // 5. FUNCIÓN DE NAVEGACIÓN (líneas 66-69):
 //    - handleNavigation: Función para navegar a la página del proyecto
-//    - navigate(`/demos/${id}`): Navegación dinámica basada en ID
+//    - navigate(`/page/${id}`): Navegación a la página del proyecto
 //    - window.scrollTo(): Scroll suave al inicio de la página
 //    - ¿Por qué scroll? Mejora la experiencia de usuario
 //

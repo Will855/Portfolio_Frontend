@@ -1,9 +1,23 @@
+/**
+ * @file useProjectsMeta.ts
+ * @description Hook para obtener metadata de proyectos (imagen de fondo, URLs de código y demo, orden)
+ * desde la tabla projects_meta de Supabase. Proporciona getMeta y fallbackMeta.
+ * Nota: Los datos principales están en cards (useCards); este hook puede usarse como respaldo.
+ */
 import { useQuery } from '@tanstack/react-query';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { getStoragePublicUrl } from '../utils/supabaseStorage';
 import type { ProjectMetaRow } from '../types/supabase';
-import { projects } from '../config/project';
+import { projectMetaFallback } from '../config/project';
 
+/**
+ * Metadata de un proyecto: fondo, URLs y orden.
+ * @property id - ID del proyecto
+ * @property bgProyect - URL de la imagen de fondo
+ * @property codeUrl - URL del repositorio (ej: GitHub)
+ * @property demoUrl - URL del demo en vivo
+ * @property order - Orden de visualización
+ */
 export interface ProjectMeta {
   id: string;
   bgProyect: string;
@@ -12,6 +26,11 @@ export interface ProjectMeta {
   order: number;
 }
 
+/**
+ * Obtiene toda la metadata de proyectos desde la tabla projects_meta.
+ * @returns Lista ordenada por `order` o null si no hay datos/error
+ * @internal
+ */
 async function fetchProjectsMeta(): Promise<ProjectMeta[] | null> {
   if (!isSupabaseConfigured) return null;
   const { data, error } = await supabase
@@ -28,6 +47,14 @@ async function fetchProjectsMeta(): Promise<ProjectMeta[] | null> {
   }));
 }
 
+/**
+ * Hook que expone la metadata de todos los proyectos con helpers getMeta y fallbackMeta.
+ * @returns projectsMeta, getMeta(id), fallbackMeta(id), isLoading, error y refetch
+ * @example
+ * const { getMeta, fallbackMeta } = useProjectsMeta();
+ * const meta = getMeta(projectId) ?? fallbackMeta(projectId);
+ * return <header style={{ backgroundImage: `url(${meta.bgProyect})` }} />;
+ */
 export function useProjectsMeta() {
   const q = useQuery({
     queryKey: ['projects_meta'],
@@ -42,9 +69,9 @@ export function useProjectsMeta() {
     projectsMeta: q.data ?? [],
     getMeta: (id: string): ProjectMeta | undefined => metaMap[id],
     fallbackMeta: (id: string): ProjectMeta => {
-      const p = projects.find((x) => x.id === id);
+      const p = projectMetaFallback[id];
       return p
-        ? { id: p.id, bgProyect: p.bgProyect, codeUrl: p.codeUrl, demoUrl: p.demoUrl, order: 0 }
+        ? { id, bgProyect: p.bgProyect, codeUrl: p.codeUrl, demoUrl: p.demoUrl, order: 0 }
         : { id, bgProyect: '/images/bg-proyecto2.jpg', codeUrl: '', demoUrl: '', order: 0 };
     },
     isLoading: q.isLoading,

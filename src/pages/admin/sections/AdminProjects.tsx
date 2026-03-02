@@ -1,126 +1,591 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../config/supabase';
-import { useProjectsMeta } from '../../../hooks/useProjectsMeta';
+import { useCards } from '../../../hooks/useCards';
 import { STORAGE_BUCKET } from '../../../types/supabase';
-import { projects } from '../../../config/project';
+import { getStoragePublicUrl } from '../../../utils/supabaseStorage';
+
+interface ProjectForm {
+  title: string;
+  description: string;
+  buttonText: string;
+  codeUrl: string;
+  demoUrl: string;
+  order: number;
+}
+
+const emptyForm: ProjectForm = {
+  title: '',
+  description: '',
+  buttonText: 'Ver más...',
+  codeUrl: '',
+  demoUrl: '',
+  order: 0,
+};
 
 export const AdminProjects: React.FC = () => {
-  const { projectsMeta, isLoading } = useProjectsMeta();
+  const { cards, isLoading } = useCards();
   const queryClient = useQueryClient();
-  const [uploadingId, setUploadingId] = useState<string | null>(null);
-  const [editing, setEditing] = useState<Record<string, { codeUrl: string; demoUrl: string }>>({});
 
-  const metaList = Array.isArray(projectsMeta) && projectsMeta.length > 0
-    ? projectsMeta
-    : projects.map((p, i) => ({
-        id: p.id,
-        bgProyect: p.bgProyect || '/images/bg-proyecto2.jpg',
-        codeUrl: p.codeUrl,
-        demoUrl: p.demoUrl,
-        order: i,
-      }));
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<ProjectForm>(emptyForm);
+  const [cardImage, setCardImage] = useState<File | null>(null);
+  const [bgImage, setBgImage] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const startEdit = (id: string) => {
-    const m = metaList.find((x) => x.id === id);
-    if (m) setEditing((s) => ({ ...s, [id]: { codeUrl: m.codeUrl, demoUrl: m.demoUrl } }));
-  };
+  const list = Array.isArray(cards) ? cards : [];
 
-  const saveProject = async (id: string) => {
-    const e = editing[id];
-    if (!e) return;
-    await supabase.from('projects_meta').upsert({
-      id,
-      code_url: e.codeUrl,
-      demo_url: e.demoUrl,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'id' });
-    queryClient.invalidateQueries({ queryKey: ['projects_meta'] });
-    setEditing((s) => {
-      const next = { ...s };
-      delete next[id];
-      return next;
+  const openCreate = useCallback(() => {
+    setEditingId(null);
+    setForm({ ...emptyForm, order: list.length + 1 });
+    setCardImage(null);
+    setBgImage(null);
+    setError(null);
+    setModalOpen(true);
+  }, [list.length]);
+
+  const openEdit = useCallback((id: string) => {
+    const card = list.find((c) => c.id === id);
+    if (!card) return;
+    setEditingId(id);
+    setForm({
+      title: card.title,
+      description: card.description,
+      buttonText: card.buttonText ?? 'Ver más...',
+      codeUrl: card.codeUrl ?? '',
+      demoUrl: card.demoUrl ?? '',
+      order: card.order ?? 0,
     });
+    setCardImage(null);
+    setBgImage(null);
+    setError(null);
+    setModalOpen(true);
+  }, [list]);
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+    setEditingId(null);
+    setForm(emptyForm);
+    setCardImage(null);
+    setBgImage(null);
+    setError(null);
+  }, []);
+
+  const uploadFile = async (file: File, folder: string, id: string): Promise<string> => {
+    const ext = file.name.split('.').pop() || 'webp';
+    const path = `${folder}/${id}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from(STORAGE_BUCKET)
+      .upload(path, file, { upsert: true });
+    if (uploadError) throw uploadError;
+    return path;
   };
 
-  const onFileChange = async (id: string, e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploadingId(id);
-    const ext = file.name.split('.').pop() || 'jpg';
-    const path = `projects-bg/${id}.${ext}`;
-    await supabase.storage.from(STORAGE_BUCKET).upload(path, file, { upsert: true });
-    await supabase.from('projects_meta').upsert({
-      id,
-      bg_image_path: path,
-      code_url: metaList.find((m) => m.id === id)?.codeUrl ?? '',
-      demo_url: metaList.find((m) => m.id === id)?.demoUrl ?? '',
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'id' });
-    queryClient.invalidateQueries({ queryKey: ['projects_meta'] });
-    setUploadingId(null);
-    e.target.value = '';
+  const handleSave = async () => {
+    if (!form.title.trim() || !form.description.trim()) {
+      setError('Título y descripción son obligatorios.');
+      return;
+    }
+    setSaving(true);
+    setError(null);
+
+    try {
+      if (editingId) {
+        const updates: Record<string, unknown> = {
+          title: form.title.trim(),
+          description: form.description.trim(),
+          button_text: form.buttonText.trim() || 'Ver más...',
+          code_url: form.codeUrl.trim(),
+          demo_url: form.demoUrl.trim(),
+          order: form.order,
+          updated_at: new Date().toISOString(),
+        };
+
+        if (cardImage) {
+          updates.image_path = await uploadFile(cardImage, 'cards', editingId);
+        }
+        if (bgImage) {
+          updates.bg_image_path = await uploadFile(bgImage, 'projects-bg', editingId);
+        }
+
+        const { error: dbError } = await supabase
+          .from('cards')
+          .update(updates)
+          .eq('id', editingId);
+        if (dbError) throw dbError;
+      } else {
+        const nextId = String(
+          Math.max(0, ...list.map((c) => Number(c.id) || 0)) + 1
+        );
+
+        let imagePath = '';
+        let bgImagePath = '';
+
+        if (cardImage) {
+          imagePath = await uploadFile(cardImage, 'cards', nextId);
+        }
+        if (bgImage) {
+          bgImagePath = await uploadFile(bgImage, 'projects-bg', nextId);
+        }
+
+        const { error: dbError } = await supabase.from('cards').insert({
+          id: nextId,
+          title: form.title.trim(),
+          description: form.description.trim(),
+          button_text: form.buttonText.trim() || 'Ver más...',
+          image_path: imagePath,
+          code_url: form.codeUrl.trim(),
+          demo_url: form.demoUrl.trim(),
+          bg_image_path: bgImagePath,
+          order: form.order,
+        });
+        if (dbError) throw dbError;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['cards'] });
+      closeModal();
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error al guardar.');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const placeholderImg = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="128" height="80" fill="%23334155"%3E%3Crect width="128" height="80"/%3E%3C/svg%3E';
+  const handleDelete = async (id: string) => {
+    setDeletingId(id);
+    try {
+      const { error: dbError } = await supabase.from('cards').delete().eq('id', id);
+      if (dbError) throw dbError;
+
+      await supabase.storage.from(STORAGE_BUCKET).remove([`cards/${id}.webp`, `cards/${id}.jpg`, `cards/${id}.png`]);
+      await supabase.storage.from(STORAGE_BUCKET).remove([`projects-bg/${id}.webp`, `projects-bg/${id}.jpg`, `projects-bg/${id}.png`]);
+
+      queryClient.invalidateQueries({ queryKey: ['cards'] });
+    } catch (err) {
+      console.error('Delete error:', err);
+    } finally {
+      setDeletingId(null);
+      setConfirmDeleteId(null);
+    }
+  };
+
+  const moveProject = async (id: string, direction: 'up' | 'down') => {
+    const sorted = [...list].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    const idx = sorted.findIndex((c) => c.id === id);
+    if (idx < 0) return;
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+
+    const current = sorted[idx];
+    const swap = sorted[swapIdx];
+
+    await Promise.all([
+      supabase.from('cards').update({ order: swap.order ?? swapIdx, updated_at: new Date().toISOString() }).eq('id', current.id),
+      supabase.from('cards').update({ order: current.order ?? idx, updated_at: new Date().toISOString() }).eq('id', swap.id),
+    ]);
+    queryClient.invalidateQueries({ queryKey: ['cards'] });
+  };
+
+  const placeholderImg =
+    'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="120" height="80" fill="%23334155"%3E%3Crect width="120" height="80" rx="8"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-size="12"%3ESin imagen%3C/text%3E%3C/svg%3E';
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Proyectos</h2>
-      {isLoading && metaList.length === 0 ? (
-        <p className="text-slate-400">Cargando proyectos...</p>
-      ) : metaList.length === 0 ? (
-        <p className="text-slate-400">No hay proyectos. Revisa config/project.ts y el seed de projects_meta.</p>
-      ) : (
-      <div className="space-y-4">
-        {metaList.map((m) => (
-          <div key={m.id} className="rounded-lg border border-slate-700 p-4 flex flex-wrap gap-4 items-start">
-            <div className="flex flex-col gap-1">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h2 className="text-2xl font-bold text-white">Proyectos</h2>
+        <button
+          onClick={openCreate}
+          className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium
+                     hover:from-blue-500 hover:to-blue-400 transition-all duration-300 shadow-lg shadow-blue-500/20
+                     active:scale-95 flex items-center gap-2 w-fit"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          Nuevo proyecto
+        </button>
+      </div>
+
+      {/* Loading */}
+      {isLoading && list.length === 0 && (
+        <div className="flex items-center gap-3 p-6 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+          <div className="w-5 h-5 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+          <span className="text-slate-400">Cargando proyectos...</span>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!isLoading && list.length === 0 && (
+        <div className="text-center py-16 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10">
+          <svg className="w-16 h-16 mx-auto text-slate-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+          </svg>
+          <p className="text-slate-400 text-lg">No hay proyectos todavía</p>
+          <p className="text-slate-500 text-sm mt-1">Crea tu primer proyecto con el botón de arriba</p>
+        </div>
+      )}
+
+      {/* Project grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {[...list]
+          .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+          .map((card, idx) => (
+          <div
+            key={card.id}
+            className="group relative rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10
+                       overflow-hidden transition-all duration-300 hover:border-white/20 hover:bg-white/[0.07]"
+          >
+            {/* Card image */}
+            <div className="relative h-40 overflow-hidden">
               <img
-                src={m.bgProyect || placeholderImg}
-                alt=""
-                className="w-32 h-20 rounded object-cover bg-slate-700"
+                src={card.img || placeholderImg}
+                alt={card.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 onError={(e) => { (e.target as HTMLImageElement).src = placeholderImg; }}
               />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => onFileChange(m.id, e)}
-                disabled={uploadingId === m.id}
-                className="text-sm"
-              />
-              {uploadingId === m.id && <span className="text-xs text-slate-400">Subiendo...</span>}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+
+              {/* Order badge */}
+              <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/40 backdrop-blur-sm
+                               text-xs font-medium text-white/80 border border-white/10">
+                #{card.order ?? idx + 1}
+              </span>
+
+              {/* Reorder buttons */}
+              <div className="absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  onClick={() => moveProject(card.id, 'up')}
+                  disabled={idx === 0}
+                  className="p-1.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10
+                             text-white/70 hover:text-white hover:bg-black/60 disabled:opacity-30
+                             disabled:cursor-not-allowed transition-all"
+                  title="Subir"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => moveProject(card.id, 'down')}
+                  disabled={idx === list.length - 1}
+                  className="p-1.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10
+                             text-white/70 hover:text-white hover:bg-black/60 disabled:opacity-30
+                             disabled:cursor-not-allowed transition-all"
+                  title="Bajar"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
             </div>
-            {editing[m.id] ? (
-              <div className="flex-1 min-w-[200px] space-y-2">
-                <input
-                  value={editing[m.id].codeUrl}
-                  onChange={(e) => setEditing((s) => ({ ...s, [m.id]: { ...s[m.id], codeUrl: e.target.value } }))}
-                  className="w-full px-2 py-1 rounded bg-slate-800 text-sm"
-                  placeholder="URL código"
-                />
-                <input
-                  value={editing[m.id].demoUrl}
-                  onChange={(e) => setEditing((s) => ({ ...s, [m.id]: { ...s[m.id], demoUrl: e.target.value } }))}
-                  className="w-full px-2 py-1 rounded bg-slate-800 text-sm"
-                  placeholder="URL demo"
-                />
-                <div className="flex gap-2">
-                  <button onClick={() => saveProject(m.id)} className="px-3 py-1 rounded bg-blue-600 text-sm">Guardar</button>
-                  <button onClick={() => setEditing((s) => ({ ...s, [m.id]: undefined }))} className="px-3 py-1 rounded bg-slate-600 text-sm">Cancelar</button>
-                </div>
+
+            {/* Card content */}
+            <div className="p-4 space-y-3">
+              <h3 className="text-lg font-semibold text-white truncate">{card.title}</h3>
+              <p className="text-sm text-slate-400 line-clamp-2 leading-relaxed">{card.description}</p>
+
+              {/* URLs */}
+              <div className="space-y-1">
+                {card.codeUrl && (
+                  <a
+                    href={card.codeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 truncate transition-colors"
+                  >
+                    <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                    </svg>
+                    {card.codeUrl}
+                  </a>
+                )}
+                {card.demoUrl && (
+                  <a
+                    href={card.demoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs text-emerald-400 hover:text-emerald-300 truncate transition-colors"
+                  >
+                    <svg className="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    {card.demoUrl}
+                  </a>
+                )}
               </div>
-            ) : (
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium">Proyecto {m.id}</p>
-                <p className="text-xs text-slate-400 truncate">{m.codeUrl}</p>
-                <p className="text-xs text-slate-400 truncate">{m.demoUrl}</p>
-                <button onClick={() => startEdit(m.id)} className="text-sm text-blue-400 hover:underline mt-1">Editar URLs</button>
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2 border-t border-white/5">
+                <button
+                  onClick={() => openEdit(card.id)}
+                  className="flex-1 px-3 py-2 rounded-xl bg-white/5 border border-white/10
+                             text-sm text-white/80 hover:bg-white/10 hover:text-white
+                             transition-all duration-200 flex items-center justify-center gap-1.5"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Editar
+                </button>
+                {confirmDeleteId === card.id ? (
+                  <div className="flex gap-1">
+                    <button
+                      onClick={() => handleDelete(card.id)}
+                      disabled={deletingId === card.id}
+                      className="px-3 py-2 rounded-xl bg-red-500/20 border border-red-500/30
+                                 text-sm text-red-400 hover:bg-red-500/30 transition-all duration-200
+                                 disabled:opacity-50"
+                    >
+                      {deletingId === card.id ? '...' : 'Sí'}
+                    </button>
+                    <button
+                      onClick={() => setConfirmDeleteId(null)}
+                      className="px-3 py-2 rounded-xl bg-white/5 border border-white/10
+                                 text-sm text-slate-400 hover:bg-white/10 transition-all duration-200"
+                    >
+                      No
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmDeleteId(card.id)}
+                    className="px-3 py-2 rounded-xl bg-white/5 border border-white/10
+                               text-sm text-red-400/70 hover:bg-red-500/10 hover:text-red-400
+                               hover:border-red-500/20 transition-all duration-200"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                )}
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+          {/* Modal content */}
+          <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl
+                          bg-slate-900/90 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/40">
+            {/* Modal header */}
+            <div className="sticky top-0 z-10 flex items-center justify-between p-6 pb-4
+                            bg-slate-900/80 backdrop-blur-xl border-b border-white/5">
+              <h3 className="text-xl font-bold text-white">
+                {editingId ? 'Editar proyecto' : 'Nuevo proyecto'}
+              </h3>
+              <button
+                onClick={closeModal}
+                className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-400
+                           hover:text-white hover:bg-white/10 transition-all"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Form */}
+            <div className="p-6 space-y-5">
+              {error && (
+                <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              {/* Title */}
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-slate-300">Título *</label>
+                <input
+                  value={form.title}
+                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all"
+                  placeholder="Nombre del proyecto"
+                />
+              </div>
+
+              {/* Description */}
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-slate-300">Descripción *</label>
+                <textarea
+                  value={form.description}
+                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                  rows={3}
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all resize-none"
+                  placeholder="Breve descripción del proyecto"
+                />
+              </div>
+
+              {/* Button text */}
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-slate-300">Texto del botón</label>
+                <input
+                  value={form.buttonText}
+                  onChange={(e) => setForm((f) => ({ ...f, buttonText: e.target.value }))}
+                  className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all"
+                  placeholder="Ver más..."
+                />
+              </div>
+
+              {/* URLs row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-slate-300">URL del código</label>
+                  <input
+                    value={form.codeUrl}
+                    onChange={(e) => setForm((f) => ({ ...f, codeUrl: e.target.value }))}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                               text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                               focus:ring-1 focus:ring-blue-500/20 transition-all"
+                    placeholder="https://github.com/..."
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-slate-300">URL del demo</label>
+                  <input
+                    value={form.demoUrl}
+                    onChange={(e) => setForm((f) => ({ ...f, demoUrl: e.target.value }))}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                               text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                               focus:ring-1 focus:ring-blue-500/20 transition-all"
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+
+              {/* Images row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-slate-300">Imagen de card</label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setCardImage(e.target.files?.[0] ?? null)}
+                      className="w-full text-sm text-slate-400 file:mr-3 file:py-2 file:px-4
+                                 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80
+                                 file:font-medium file:cursor-pointer hover:file:bg-white/15
+                                 file:transition-all cursor-pointer"
+                    />
+                  </div>
+                  {cardImage && (
+                    <p className="text-xs text-emerald-400 truncate">{cardImage.name}</p>
+                  )}
+                  {editingId && !cardImage && (
+                    <p className="text-xs text-slate-500">Imagen actual se mantiene si no seleccionas otra</p>
+                  )}
+                </div>
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-slate-300">Imagen de fondo</label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setBgImage(e.target.files?.[0] ?? null)}
+                      className="w-full text-sm text-slate-400 file:mr-3 file:py-2 file:px-4
+                                 file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80
+                                 file:font-medium file:cursor-pointer hover:file:bg-white/15
+                                 file:transition-all cursor-pointer"
+                    />
+                  </div>
+                  {bgImage && (
+                    <p className="text-xs text-emerald-400 truncate">{bgImage.name}</p>
+                  )}
+                  {editingId && !bgImage && (
+                    <p className="text-xs text-slate-500">Fondo actual se mantiene si no seleccionas otro</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Order */}
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-slate-300">Orden</label>
+                <input
+                  type="number"
+                  min={0}
+                  value={form.order}
+                  onChange={(e) => setForm((f) => ({ ...f, order: Number(e.target.value) || 0 }))}
+                  className="w-32 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all"
+                />
+              </div>
+
+              {/* Preview */}
+              {form.title && (
+                <div className="space-y-1.5">
+                  <label className="block text-sm font-medium text-slate-300">Vista previa</label>
+                  <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent
+                                  p-6 backdrop-blur-xl h-48 border border-white/10">
+                    {(cardImage || (editingId && list.find((c) => c.id === editingId)?.img)) && (
+                      <img
+                        src={cardImage ? URL.createObjectURL(cardImage) : list.find((c) => c.id === editingId)?.img}
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover opacity-40"
+                      />
+                    )}
+                    <div className="relative z-10 h-full flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <h4 className="text-2xl font-bold text-white drop-shadow-lg">{form.title}</h4>
+                        <p className="text-white/80 text-sm leading-relaxed line-clamp-2">{form.description}</p>
+                      </div>
+                      <span className="w-fit px-4 py-2 rounded-lg bg-white/5 backdrop-blur-lg border border-white/20
+                                       text-white/90 text-sm font-medium">
+                        {form.buttonText || 'Ver más...'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Modal footer */}
+            <div className="sticky bottom-0 flex justify-end gap-3 p-6 pt-4
+                            bg-slate-900/80 backdrop-blur-xl border-t border-white/5">
+              <button
+                onClick={closeModal}
+                className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10
+                           text-slate-300 hover:bg-white/10 hover:text-white transition-all"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500
+                           text-white font-medium hover:from-blue-500 hover:to-blue-400
+                           transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50
+                           disabled:cursor-not-allowed active:scale-95 flex items-center gap-2"
+              >
+                {saving && (
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                )}
+                {saving ? 'Guardando...' : editingId ? 'Actualizar' : 'Crear proyecto'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

@@ -12,6 +12,10 @@ export interface CardRow {
   description: string;
   button_text: string;
   image_path: string;
+  code_url: string;
+  demo_url: string;
+  bg_image_path: string;
+  order: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -40,6 +44,17 @@ export interface ContactSubmissionRow {
   phone: string | null;
   message: string;
   created_at: string;
+}
+
+export interface ProjectContentRow {
+  id: string;
+  project_id: string;
+  type: 'text' | 'image' | 'video';
+  content: string;
+  caption: string;
+  order: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export const STORAGE_BUCKET = 'portfolio-assets';
