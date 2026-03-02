@@ -57,4 +57,15 @@ export interface ProjectContentRow {
   updated_at: string;
 }
 
+export interface InfoSectionRow {
+  id: string;
+  section_type: 'skill' | 'knowledge';
+  title: string;
+  color: 'blue' | 'purple' | 'green';
+  items: string[];
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export const STORAGE_BUCKET = 'portfolio-assets';

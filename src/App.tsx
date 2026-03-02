@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useParams, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import GA4 from 'react-ga4';
 import NavMenu from "./components/navbar/navMenu";
 import Home from './pages/home';
-import Information from './pages/information';
 import { Proyects } from './pages/proyects';
-import { Contact } from './pages/contact';
 import BackgroundStars from './components/animations/backgrounds/StarsBackground';
 import ResponsiveMenu from './components/navbar/menuResponsive';
 import CardDetails from './components/cards/proyectPage';
@@ -19,6 +17,7 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminHero } from './pages/admin/sections/AdminHero';
 import { AdminProjects } from './pages/admin/sections/AdminProjects';
 import { AdminContent } from './pages/admin/sections/AdminContent';
+import { AdminInfoSections } from './pages/admin/sections/AdminInfoSections';
 import { AdminMessages } from './pages/admin/sections/AdminMessages';
 
 const GA4_ID = 'G-HL1MY2MS9S';
@@ -83,9 +82,7 @@ const RouterWrapper = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/inicio" element={<Home />} />
-        <Route path="/informacion" element={<Information />} />
         <Route path="/proyectos" element={<Proyects />} />
-        <Route path="/contacto" element={<Contact />} />
         <Route path="/page/:id" element={<CardDetails />} />
         <Route path="/demos/:projectId" element={<Demo />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -94,6 +91,7 @@ const RouterWrapper = () => {
           <Route path="hero" element={<AdminHero />} />
           <Route path="projects" element={<AdminProjects />} />
           <Route path="content" element={<AdminContent />} />
+          <Route path="info" element={<AdminInfoSections />} />
           <Route path="messages" element={<AdminMessages />} />
         </Route>
         <Route path="*" element={<NotFound />} />

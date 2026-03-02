@@ -159,5 +159,5 @@ on conflict (id) do update set
 
 -- Seed content_blocks: nav items (editable from admin)
 insert into public.content_blocks (key, content, type) values
-  ('nav_items', '["Inicio","Informacion","Proyectos","Contacto","Planes"]', 'json')
+  ('nav_items', '["Inicio","Proyectos"]', 'json')
 on conflict (key) do update set content = excluded.content, type = excluded.type, updated_at = now();
