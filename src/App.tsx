@@ -1,16 +1,9 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import GA4 from 'react-ga4';
-import NavMenu from "./components/navbar/navMenu";
-import Home from './pages/home';
-import { Proyects } from './pages/proyects';
-import BackgroundStars from './components/animations/backgrounds/StarsBackground';
-import ResponsiveMenu from './components/navbar/menuResponsive';
-import CardDetails from './components/cards/proyectPage';
-import NotFound from './pages/404';
-import Demo from './pages/demos';
 import { useAnalytics } from './hooks/useAnalytics';
 import { trackPageView, trackSectionNavigation } from './utils/analytics';
+import { PublicLayout } from './components/PublicLayout';
 import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -68,35 +61,19 @@ const RouterWrapper = () => {
     }
   }, [location.pathname, location.search]);
 
-  const isAdmin = location.pathname.startsWith('/admin');
-
   return (
-    <>
-      {!isAdmin && (
-        <>
-          <NavMenu />
-          <BackgroundStars />
-          <ResponsiveMenu />
-        </>
-      )}
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/inicio" element={<Home />} />
-        <Route path="/proyectos" element={<Proyects />} />
-        <Route path="/page/:id" element={<CardDetails />} />
-        <Route path="/demos/:projectId" element={<Demo />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="hero" element={<AdminHero />} />
-          <Route path="projects" element={<AdminProjects />} />
-          <Route path="content" element={<AdminContent />} />
-          <Route path="info" element={<AdminInfoSections />} />
-          <Route path="messages" element={<AdminMessages />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="hero" element={<AdminHero />} />
+        <Route path="projects" element={<AdminProjects />} />
+        <Route path="content" element={<AdminContent />} />
+        <Route path="info" element={<AdminInfoSections />} />
+        <Route path="messages" element={<AdminMessages />} />
+      </Route>
+      <Route path="*" element={<PublicLayout />} />
+    </Routes>
   );
 };
 
