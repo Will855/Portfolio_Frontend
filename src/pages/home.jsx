@@ -17,6 +17,7 @@ const Home = () => {
                     alt={hero.title}
                     size="xl"
                     ring={false}
+                    fallbackSrc="/profile.jpeg"
                 />
                 <Glitch title={hero.title} subtitle={hero.subtitle} />
             </section>

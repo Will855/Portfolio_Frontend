@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 export type CircleProfileSize = "xs" | "sm" | "md" | "lg" | "xl";
 
@@ -13,6 +13,8 @@ export interface CircleProfileProps {
     className?: string;
     /** Muestra un aro (ring) alrededor del avatar */
     ring?: boolean;
+    /** Si la imagen principal falla, se intenta esta URL antes de mostrar iniciales */
+    fallbackSrc?: string;
 }
 
 /**
@@ -27,9 +29,28 @@ const CircleProfile: React.FC<CircleProfileProps> = ({
     alt,
     size = "lg",
     className,
-    ring = true
+    ring = true,
+    fallbackSrc
 }) => {
     const [hasError, setHasError] = useState(false);
+    const [currentSrc, setCurrentSrc] = useState(src);
+    const [triedFallback, setTriedFallback] = useState(false);
+
+    // Al cambiar src desde fuera, resetear estado para intentar de nuevo
+    useEffect(() => {
+        setCurrentSrc(src);
+        setHasError(false);
+        setTriedFallback(false);
+    }, [src]);
+
+    const handleError = () => {
+        if (fallbackSrc && !triedFallback) {
+            setCurrentSrc(fallbackSrc);
+            setTriedFallback(true);
+        } else {
+            setHasError(true);
+        }
+    };
 
     const sizeClasses = useMemo(() => {
         // Tamaños base; añadimos escalado responsivo por defecto
@@ -57,12 +78,12 @@ const CircleProfile: React.FC<CircleProfileProps> = ({
         >
             {!hasError ? (
                 <img
-                    src={src}
+                    src={currentSrc}
                     alt={alt}
                     className="w-full h-full object-cover select-none"
                     loading="lazy"
                     decoding="async"
-                    onError={() => setHasError(true)}
+                    onError={handleError}
                     draggable={false}
                 />
             ) : (
