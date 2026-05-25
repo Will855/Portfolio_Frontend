@@ -1,5 +1,5 @@
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import { STORAGE_BUCKET } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from './supabase';
+import { STORAGE_BUCKET } from '../../../types/supabase';
 
 export function getStoragePublicUrl(path: string): string {
   if (!isSupabaseConfigured || !path) return '';

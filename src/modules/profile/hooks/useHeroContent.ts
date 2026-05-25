@@ -4,9 +4,9 @@
  * desde la tabla hero_content de Supabase. Hay una única fila con id 'default'.
  */
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import { getStoragePublicUrl } from '../utils/supabaseStorage';
-import type { HeroContent } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+import { getStoragePublicUrl } from '../../../shared/services/supabase/supabaseStorage';
+import type { HeroContent } from '../../../types/supabase';
 
 /** Hero por defecto cuando Supabase no está configurado o no hay datos. */
 const DEFAULT_HERO: HeroContent & { profile_image_url: string } = {

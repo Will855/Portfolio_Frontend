@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import GA4 from 'react-ga4';
-import { useAnalytics } from './hooks/useAnalytics';
-import { trackPageView, trackSectionNavigation } from './utils/analytics';
-import { PublicLayout } from './components/PublicLayout';
-import { AdminLogin } from './pages/admin/AdminLogin';
-import { AdminLayout } from './pages/admin/AdminLayout';
-import { AdminDashboard } from './pages/admin/AdminDashboard';
-import { AdminHero } from './pages/admin/sections/AdminHero';
-import { AdminProjects } from './pages/admin/sections/AdminProjects';
-import { AdminContent } from './pages/admin/sections/AdminContent';
-import { AdminInfoSections } from './pages/admin/sections/AdminInfoSections';
-import { AdminMessages } from './pages/admin/sections/AdminMessages';
+import { useAnalytics } from './core/hooks/useAnalytics';
+import { trackPageView, trackSectionNavigation } from './core/utils/analytics';
+import { PublicLayout } from './core/components/PublicLayout';
+import { AdminLogin } from './modules/auth/pages/AdminLogin';
+import { AdminLayout } from './core/components/admin/AdminLayout';
+import { AdminDashboard } from './core/components/admin/AdminDashboard';
+import { AdminHero } from './modules/profile/admin/AdminHero';
+import { AdminProjects } from './modules/projects/admin/AdminProjectsCRUD';
+import { AdminContent } from './modules/projects/admin/AdminContentEditor';
+import { AdminInfoSections } from './modules/projects/admin/AdminInfoSections';
+import { AdminMessages } from './modules/contact/admin/AdminMessages';
 
 const GA4_ID = 'G-HL1MY2MS9S';
 

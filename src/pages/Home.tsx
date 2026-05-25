@@ -1,11 +1,11 @@
-import Glitch from "../components/animations/glitchPresentation";
-import CircleProfile from "../components/CircleProfile";
-import Footer from "../components/footer/footer";
-import WordCloud from "../components/animations/WordCloud";
-import { useHeroContent } from "../hooks/useHeroContent";
+import Glitch from "../modules/profile/components/GlitchPresentation";
+import CircleProfile from "../shared/components/CircleProfile";
+import Footer from "../core/components/footer/Footer";
+import WordCloud from "../modules/profile/components/WordCloud";
+import { useHeroContent } from "../modules/profile/hooks/useHeroContent";
 import { motion } from "framer-motion";
-import { SkillSection, ExpAndTecnologies } from "../components/about/informationContent";
-import ContactForm from "../components/form";
+import { SkillSection, ExpAndTecnologies } from "../modules/projects/components/InformationContent";
+import ContactForm from "../modules/contact/components/ContactForm";
 
 const Home = () => {
     const { hero } = useHeroContent();

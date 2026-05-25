@@ -4,11 +4,12 @@ import { gsap } from 'gsap'; // Librería para animaciones
 
 // Hook personalizado: useGsapAnimation
 // Este hook aplica una animación de borde luminoso a un elemento referenciado.
-const useGsapAnimation = (ref) => {
+const useGsapAnimation = (ref: React.RefObject<HTMLElement | null>) => {
     // Referencia para almacenar la línea de tiempo de GSAP
-    const timelineRef = useRef(null);
+    const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
     useEffect(() => {
+        if (!ref.current) return;
         // Crea una línea de tiempo de GSAP con animación infinita (repetición y efecto yoyo)
         timelineRef.current = gsap.timeline({ repeat: -1, yoyo: true });
 

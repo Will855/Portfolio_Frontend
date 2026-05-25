@@ -5,11 +5,11 @@
  * Usado para mostrar una pantalla de carga hasta que la app pueda renderizar sin parpadeos.
  */
 import { useContentBlock } from './useContentBlock';
-import { useHeroContent } from './useHeroContent';
-import { useCards } from './useCards';
-import { useProjectsMeta } from './useProjectsMeta';
-import { useSkillSections, useKnowledgeSections } from './useInfoSections';
-import { isSupabaseConfigured } from '../config/supabase';
+import { useHeroContent } from '../../modules/profile/hooks/useHeroContent';
+import { useCards } from '../../modules/projects/hooks/useCards';
+import { useProjectsMeta } from '../../modules/projects/hooks/useProjectsMeta';
+import { useSkillSections, useKnowledgeSections } from '../../modules/projects/hooks/useInfoSections';
+import { isSupabaseConfigured } from '../../shared/services/supabase/supabase';
 
 /**
  * Indica si los datos críticos del sitio público están listos.

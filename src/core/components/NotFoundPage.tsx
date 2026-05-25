@@ -1,9 +1,8 @@
-// 404.jsx
+// NotFoundPage.tsx
 import React from "react";
-import Glitch from "../components/animations/glitchPresentation";
+import Glitch from "../../modules/profile/components/GlitchPresentation";
 
-
-const NotFound = () => {
+const NotFound: React.FC = () => {
     return (
         <>
             <div className="min-h-screen flex flex-col justify-center items-center p-8">

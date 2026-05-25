@@ -1,154 +1,142 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import Card from "./components_Card";
-import { useCards } from "../../hooks/useCards";
+import { motion, AnimatePresence } from "framer-motion";
+import Card from "./ProjectCard";
+import { useCards } from "../hooks/useCards";
+import { trackSearchExecution } from "../../../core/utils/analytics";
 
 const Grid: React.FC = () => {
   const { cards } = useCards();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Todos");
+
+  // Debounce de 1000ms para rastrear las búsquedas del usuario en n8n
+  useEffect(() => {
+    if (!searchQuery.trim()) return;
+
+    const timer = setTimeout(() => {
+      trackSearchExecution(searchQuery, selectedCategory);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, selectedCategory]);
+
+  const categories = ["Todos", "Frontend", "Backend", "Automatizaciones AI", "Full Stack"];
+
+  // Filter logic
+  const filteredCards = cards.filter((card) => {
+    const matchesCategory = selectedCategory === "Todos" || card.category === selectedCategory;
+
+    const query = searchQuery.toLowerCase().trim();
+    if (!query) return matchesCategory;
+
+    const matchesTitle = card.title?.toLowerCase().includes(query);
+    const matchesDescription = card.description?.toLowerCase().includes(query);
+    const matchesTags = Array.isArray(card.tags) && card.tags.some(tag => tag.toLowerCase().includes(query));
+
+    return matchesCategory && (matchesTitle || matchesDescription || matchesTags);
+  });
+
   return (
-    <div className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3">
-      {cards.map((card) => (
-        <Link to={`/page/${card.id}`} key={card.id}>
-          <Card
-            id={card.id}
-            title={card.title}
-            description={card.description}
-            img={card.img}
-            buttonText={card.buttonText}
+    <div className="space-y-8 max-w-6xl mx-auto px-4 py-8">
+      {/* Search & Category Filter Controls */}
+      <div className="flex flex-col gap-6 p-6 rounded-3xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl shadow-black/10">
+        
+        {/* Search Input (Glassmorphic) */}
+        <div className="relative">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Buscar por título, descripción o etiquetas..."
+            className="w-full pl-12 pr-4 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-400
+                       focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/10 transition-all duration-300"
           />
-        </Link>
-      ))}
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-white transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
+
+        {/* Categories Toolbar */}
+        <div className="flex flex-wrap items-center gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-6 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all duration-300
+                         active:scale-95 border ${
+                           selectedCategory === cat
+                             ? "bg-gradient-to-r from-blue-600 to-blue-500 border-blue-500 text-white shadow-lg shadow-blue-500/25"
+                             : "bg-white/5 border-white/5 text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/10"
+                         }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Empty State */}
+      <AnimatePresence mode="wait">
+        {filteredCards.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="text-center py-16 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"
+          >
+            <svg className="w-16 h-16 mx-auto text-slate-500 mb-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-slate-400 text-lg font-medium">No se encontraron proyectos</p>
+            <p className="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o selecciona una categoría diferente.</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Grid of Projects */}
+      <motion.div
+        layout
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredCards.map((card) => (
+            <motion.div
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              key={card.id}
+            >
+              <Link to={`/page/${card.id}`}>
+                <Card
+                  id={card.id}
+                  title={card.title}
+                  description={card.description}
+                  img={card.img}
+                  buttonText={card.buttonText}
+                />
+              </Link>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 };
 
 export default Grid;
-
-// ===========================================
-// 📚 EXPLICACIÓN DIDÁCTICA DEL CÓDIGO
-// ===========================================
-// 
-// Este archivo es un COMPONENTE REACT que implementa una grilla de tarjetas
-// usando datos externos y navegación con React Router. Es un ejemplo perfecto
-// de cómo crear layouts responsivos y reutilizables. Te explico paso a paso:
-//
-// 🎯 ¿QUÉ ES ESTE ARCHIVO?
-// Es un componente contenedor que renderiza múltiples tarjetas en una grilla
-// responsiva. Combina datos externos, navegación, y diseño responsivo para
-// crear una galería de proyectos interactiva.
-//
-// 📋 DESGLOSE POR SECCIONES:
-//
-// 1. IMPORTS Y DEPENDENCIAS (líneas 1-4):
-//    - React: Para crear el componente funcional
-//    - Link: Componente de React Router para navegación
-//    - Card: Componente de tarjeta importado localmente
-//    - cards: Array de datos desde config/cards
-//    - ¿Por qué esta estructura? Separación clara de responsabilidades
-//
-// 2. COMPONENTE PRINCIPAL (líneas 6-22):
-//    - Grid: Componente funcional sin props
-//    - return: JSX que renderiza la grilla
-//    - ¿Por qué sin props? Los datos vienen de la configuración externa
-//
-// 3. LAYOUT RESPONSIVO (línea 8):
-//    - grid: Clase base de CSS Grid
-//    - grid-cols-1: 1 columna en móvil
-//    - sm:grid-cols-2: 2 columnas en tablet
-//    - md:grid-cols-3: 3 columnas en desktop
-//    - gap-6: Espaciado entre elementos
-//    - p-6: Padding interno del contenedor
-//    - ¿Por qué responsivo? Funciona en todos los dispositivos
-//
-// 4. RENDERIZADO DINÁMICO (líneas 9-19):
-//    - cards.map(): Itera sobre el array de datos
-//    - Link: Envuelve cada tarjeta para navegación
-//    - to={`/page/${card.id}`}: Ruta dinámica basada en ID
-//    - key={card.id}: Identificador único para React
-//    - Card: Componente de tarjeta con props
-//    - ¿Por qué map? Renderiza dinámicamente basado en datos
-//
-// 5. PROPS DE TARJETA (líneas 12-16):
-//    - id: Identificador único del proyecto
-//    - title: Título del proyecto
-//    - description: Descripción del proyecto
-//    - img: URL de la imagen
-//    - buttonText: Texto del botón
-//    - ¿Por qué estas props? Permiten personalizar cada tarjeta
-//
-// 🎨 CONCEPTOS DE DISEÑO:
-//
-// 1. CSS GRID:
-//    - grid: Sistema de layout bidimensional
-//    - grid-cols-*: Define número de columnas
-//    - gap: Espaciado entre elementos
-//    - ¿Por qué Grid? Mejor control del layout que Flexbox
-//
-// 2. RESPONSIVE BREAKPOINTS:
-//    - sm: 640px y superior (tablet)
-//    - md: 768px y superior (desktop)
-//    - grid-cols-1: Móvil (por defecto)
-//    - ¿Por qué breakpoints? Adapta el layout al dispositivo
-//
-// 3. COMPONENT COMPOSITION:
-//    - Grid: Componente contenedor
-//    - Card: Componente hijo reutilizable
-//    - Link: Componente de navegación
-//    - ¿Por qué composición? Mejor mantenibilidad y reutilización
-//
-// ⚡ OPTIMIZACIONES DE RENDIMIENTO:
-//
-// 1. REACT OPTIMIZATIONS:
-//    - key prop: Identificador único para React
-//    - Component composition: Reutilización de componentes
-//    - Data separation: Datos en archivo externo
-//    - ¿Por qué optimización? Mejor rendimiento y mantenibilidad
-//
-// 2. NAVIGATION OPTIMIZATION:
-//    - Link component: Navegación optimizada de React Router
-//    - Dynamic routes: Rutas basadas en datos
-//    - ¿Por qué Link? Mejor rendimiento que navegación programática
-//
-// 3. LAYOUT OPTIMIZATION:
-//    - CSS Grid: Layout nativo del navegador
-//    - Responsive design: Una sola implementación para todos los dispositivos
-//    - ¿Por qué Grid? Mejor rendimiento que JavaScript para layouts
-//
-// 🎯 PATRONES APLICADOS:
-//
-// 1. CONTAINER PATTERN:
-//    - Grid: Componente contenedor
-//    - Card: Componente presentacional
-//    - Separación: Lógica de layout vs presentación
-//    - ¿Por qué contenedor? Mejor separación de responsabilidades
-//
-// 2. DATA-DRIVEN RENDERING:
-//    - cards.map(): Renderizado basado en datos
-//    - Configuración externa: Datos separados del componente
-//    - ¿Por qué data-driven? Fácil mantenimiento y actualización
-//
-// 3. RESPONSIVE DESIGN:
-//    - Mobile-first: Diseño desde móvil hacia desktop
-//    - Breakpoints: Adaptación a diferentes tamaños
-//    - ¿Por qué responsive? Mejor experiencia en todos los dispositivos
-//
-// 🚀 FLUJO DE EJECUCIÓN:
-// 1. Componente se monta
-// 2. Importa datos desde config/cards
-// 3. Renderiza la grilla con CSS Grid
-// 4. Itera sobre el array de cards
-// 5. Para cada card, crea un Link con Card
-// 6. Usuario puede hacer click para navegar
-//
-// 🎓 CONCEPTOS AVANZADOS APRENDIDOS:
-// - Component composition patterns
-// - CSS Grid para layouts responsivos
-// - Data-driven rendering
-// - React Router navigation
-// - Responsive design principles
-// - Container vs presentational components
-// - Performance optimization
-// - Code organization
-//
-// ¡Es un ejemplo excelente de cómo crear layouts responsivos y mantenibles!
-// ===========================================

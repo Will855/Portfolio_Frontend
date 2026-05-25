@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import type { InfoSectionRow } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+import type { InfoSectionRow } from '../../../types/supabase';
 
 async function fetchInfoSections(sectionType: 'skill' | 'knowledge'): Promise<InfoSectionRow[]> {
   if (!isSupabaseConfigured) return [];

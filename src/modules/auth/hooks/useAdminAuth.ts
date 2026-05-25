@@ -5,13 +5,13 @@
  * Solo usuarios cuyo email está en la tabla `admin_emails` pueden acceder al admin.
  */
 import { useEffect, useState } from 'react';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
 import type { User, Session } from '@supabase/supabase-js';
 
 /**
  * Hook que proporciona estado de autenticación y métodos para iniciar/cerrar sesión en el admin.
  * Suscribe a cambios de sesión con onAuthStateChange y expone user, session y loading.
- * @returns Objeto con user, session, loading, signIn, signUp, signOut e isConfigured
+ * @returns Objeto con user, session, loading, signIn, signOut e isConfigured
  * @example
  * const { user, loading, signIn, signOut, isConfigured } = useAdminAuth();
  * if (!isConfigured) return <SetupMessage />;
@@ -54,22 +54,11 @@ export function useAdminAuth() {
   };
 
   /**
-   * Registra un nuevo usuario. El acceso al admin requiere que el email esté en admin_emails.
-   * @param email - Correo del usuario
-   * @param password - Contraseña (mínimo 6 caracteres según Supabase)
-   * @returns Resultado de signUp de Supabase
-   */
-  const signUp = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    return { data, error };
-  };
-
-  /**
    * Cierra la sesión actual del usuario.
    */
   const signOut = async () => {
     await supabase.auth.signOut();
   };
 
-  return { user, session, loading, signIn, signUp, signOut, isConfigured: isSupabaseConfigured };
+  return { user, session, loading, signIn, signOut, isConfigured: isSupabaseConfigured };
 }

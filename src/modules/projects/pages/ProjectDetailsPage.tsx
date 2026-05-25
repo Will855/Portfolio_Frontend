@@ -1,12 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { showInfo, hideInfo } from "../utils/infoHandler";
-import { useCards } from "../../hooks/useCards";
-import { useProjectContent, type ProjectContentBlock } from "../../hooks/useProjectContent";
-import { getStoragePublicUrl } from "../../utils/supabaseStorage";
+import { showInfo, hideInfo } from "../../../shared/utils/infoHandler";
+import { useCards } from "../hooks/useCards";
+import { useProjectContent, type ProjectContentBlock } from "../hooks/useProjectContent";
+import { getStoragePublicUrl } from "../../../shared/services/supabase/supabaseStorage";
 import DOMPurify from "dompurify";
 
-const ALLOWED_HTML_TAGS = ['p', 'br', 'strong', 'em', 'a', 'ul', 'ol', 'li', 'h2', 'h3', 'span'];
+import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from "../utils/markdown";
 
 const DynamicContent: React.FC<{ blocks: ProjectContentBlock[] }> = ({ blocks }) => (
     <div className="bg-gray-50 p-4 sm:p-6 md:p-12 space-y-6">
@@ -79,7 +79,7 @@ const CardDetails: React.FC = () => {
     if (!id || !card) {
         return (
             <div className="error-message text-red-500 text-center p-8">
-                Proyecto no encontrado
+                Caso de Estudio no encontrado
             </div>
         );
     }
@@ -115,17 +115,57 @@ const CardDetails: React.FC = () => {
                 </div>
             </header>
 
-            <div className="bg-slate-300 md:mx-6">
-                <div className="h-auto max-w-6xl mx-auto">
-                    {contentLoading ? (
+            <div className="bg-slate-300 md:mx-6 pb-12">
+                <div className="max-w-6xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8 pt-8">
+                    {/* Caso de Estudio Fixed Narratives */}
+                    <div className="bg-white rounded-3xl shadow-xl overflow-hidden p-6 sm:p-10 space-y-8">
+                        <section className="space-y-3">
+                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
+                                Contexto
+                            </h2>
+                            <p className="text-slate-600 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">
+                                {card.description}
+                            </p>
+                        </section>
+
+                        <section className="space-y-3">
+                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
+                                El Reto
+                            </h2>
+                            <p className="text-slate-600 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">
+                                {card.problem_solved || "No especificado."}
+                            </p>
+                        </section>
+
+                        <section className="space-y-3">
+                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
+                                Documentación de Arquitectura
+                            </h2>
+                            <div 
+                                className="prose max-w-none text-slate-600 leading-relaxed font-sans"
+                                dangerouslySetInnerHTML={{ 
+                                    __html: DOMPurify.sanitize(
+                                        parseMarkdownToHtml(card.architectural_doc || "No especificada."), 
+                                        { ALLOWED_TAGS: ALLOWED_HTML_TAGS }
+                                    ) 
+                                }}
+                            />
+                        </section>
+                    </div>
+
+                    {/* Dynamic implementation content blocks */}
+                    {hasDynamicContent && (
+                        <div className="bg-white rounded-3xl shadow-xl overflow-hidden p-6 sm:p-10">
+                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-4 border-slate-200 mb-6">
+                                Detalles de la Implementación
+                            </h2>
+                            <DynamicContent blocks={blocks} />
+                        </div>
+                    )}
+
+                    {contentLoading && (
                         <div className="flex items-center justify-center py-16">
                             <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                        </div>
-                    ) : hasDynamicContent ? (
-                        <DynamicContent blocks={blocks} />
-                    ) : (
-                        <div className="p-8 text-center text-gray-500">
-                            Sin contenido para este proyecto. Añade bloques desde Admin → Contenido.
                         </div>
                     )}
                 </div>

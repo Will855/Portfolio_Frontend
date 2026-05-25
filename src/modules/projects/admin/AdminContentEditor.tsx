@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../../config/supabase';
-import { useCards } from '../../../hooks/useCards';
-import { useProjectContent } from '../../../hooks/useProjectContent';
+import { supabase } from '../../../shared/services/supabase/supabase';
+import { useCards } from '../hooks/useCards';
+import { useProjectContent } from '../hooks/useProjectContent';
 import { STORAGE_BUCKET } from '../../../types/supabase';
-import { getStoragePublicUrl } from '../../../utils/supabaseStorage';
+import { getStoragePublicUrl } from '../../../shared/services/supabase/supabaseStorage';
 
 type BlockType = 'text' | 'image' | 'video';
 

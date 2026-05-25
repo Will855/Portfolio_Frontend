@@ -5,9 +5,9 @@
  * Nota: Los datos principales están en cards (useCards); este hook puede usarse como respaldo.
  */
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import { getStoragePublicUrl } from '../utils/supabaseStorage';
-import type { ProjectMetaRow } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+import { getStoragePublicUrl } from '../../../shared/services/supabase/supabaseStorage';
+import type { ProjectMetaRow } from '../../../types/supabase';
 import { projectMetaFallback } from '../config/project';
 
 /**

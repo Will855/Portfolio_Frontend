@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { useAdminAuth } from '../../hooks/useAdminAuth';
-import { testSupabaseConnection, type ConnectionTestResult } from '../../utils/testSupabaseConnection';
+import { useAdminAuth } from '../hooks/useAdminAuth';
+import { testSupabaseConnection, type ConnectionTestResult } from '../../../core/utils/testSupabaseConnection';
 
 export const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const [dbTest, setDbTest] = useState<ConnectionTestResult | null>(null);
-  const [signupSuccess, setSignupSuccess] = useState(false);
-  const { user, loading: authLoading, signIn, signUp, isConfigured } = useAdminAuth();
+  const { user, loading: authLoading, signIn, isConfigured } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,22 +46,6 @@ export const AdminLogin: React.FC = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    if (mode === 'signup') {
-      const { data, error: err } = await signUp(email, password);
-      setLoading(false);
-      if (err) {
-        setError(err.message ?? 'Error al registrarse');
-        return;
-      }
-      if (data?.user && !data.session) {
-        setSignupSuccess(true);
-        return;
-      }
-      if (data?.session) {
-        navigate('/admin', { replace: true });
-      }
-      return;
-    }
     const { error: err } = await signIn(email, password);
     setLoading(false);
     if (err) {
@@ -73,35 +55,6 @@ export const AdminLogin: React.FC = () => {
     navigate('/admin', { replace: true });
   };
 
-  if (signupSuccess) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
-        <div className="w-full max-w-sm space-y-4 rounded-2xl bg-white/5 backdrop-blur-xl p-6 border border-white/10">
-          <h2 className="text-lg font-bold text-emerald-400">Cuenta creada</h2>
-          <p className="text-sm text-slate-300">
-            Revisa tu correo y confirma el enlace si Supabase tiene confirmación activada.
-          </p>
-          <p className="text-sm text-slate-300">
-            Para poder editar contenido, añade tu email como admin en Supabase:
-          </p>
-          <pre className="text-xs bg-white/5 border border-white/10 p-3 rounded-xl overflow-x-auto text-slate-300">
-            {`insert into public.admin_emails (email)\nvalues ('${email}');`}
-          </pre>
-          <p className="text-xs text-slate-500">
-            Ejecuta ese SQL en el proyecto Supabase → SQL Editor. Luego inicia sesión aquí.
-          </p>
-          <button
-            type="button"
-            onClick={() => { setSignupSuccess(false); setMode('login'); }}
-            className="w-full py-2.5 rounded-xl bg-white/5 border border-white/10 text-white/80
-                       hover:bg-white/10 hover:text-white transition-all text-sm font-medium"
-          >
-            Ir a iniciar sesión
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
@@ -120,32 +73,6 @@ export const AdminLogin: React.FC = () => {
           className="space-y-5 rounded-2xl bg-white/5 backdrop-blur-xl p-6 sm:p-8 border border-white/10"
         >
           <h1 className="text-xl font-bold text-center text-white">Admin</h1>
-
-          {/* Mode toggle */}
-          <div className="flex gap-2 justify-center">
-            <button
-              type="button"
-              onClick={() => { setMode('login'); setError(''); }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                mode === 'login'
-                  ? 'bg-white/10 text-white border border-white/10'
-                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              Entrar
-            </button>
-            <button
-              type="button"
-              onClick={() => { setMode('signup'); setError(''); }}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                mode === 'signup'
-                  ? 'bg-white/10 text-white border border-white/10'
-                  : 'text-slate-400 hover:bg-white/5 hover:text-white'
-              }`}
-            >
-              Registrarse
-            </button>
-          </div>
 
           {/* Email */}
           <div className="space-y-1.5">
@@ -178,7 +105,6 @@ export const AdminLogin: React.FC = () => {
                          focus:ring-1 focus:ring-blue-500/20 transition-all"
               placeholder="••••••"
             />
-            {mode === 'signup' && <p className="text-xs text-slate-500 mt-1">Mínimo 6 caracteres</p>}
           </div>
 
           {error && (
@@ -198,10 +124,7 @@ export const AdminLogin: React.FC = () => {
             {loading && (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             )}
-            {loading
-              ? (mode === 'signup' ? 'Creando cuenta...' : 'Entrando...')
-              : mode === 'signup' ? 'Registrarse' : 'Entrar'
-            }
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../../../config/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
 import type { ContactSubmissionRow } from '../../../types/supabase';
 
 export const AdminMessages: React.FC = () => {

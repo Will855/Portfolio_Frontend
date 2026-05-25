@@ -1,50 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CONTAINERCARDS, CARDS, INLINECARDS } from "../animations/variants";
-import { useSkillSections, useKnowledgeSections } from "../../hooks/useInfoSections";
+import { CONTAINERCARDS, CARDS, INLINECARDS } from "../../../shared/utils/variants";
+import { useSkillSections, useKnowledgeSections } from "../hooks/useInfoSections";
 
 interface SkillGroup {
+    readonly id: string;
     readonly title: string;
     readonly color: "blue" | "purple" | "green";
     readonly items: readonly string[];
 }
 
-interface KnowledgeGroup {
+interface CareerItem {
     readonly title: string;
-    readonly color: "blue" | "purple" | "green";
-    readonly items: readonly string[];
+    readonly body: string;
 }
 
-const FALLBACK_SKILLS: SkillGroup[] = [
-    { title: "Información", color: "blue", items: ["Wilmer Lynch - Programador Full Stack"] },
-    { title: "Lenguajes", color: "purple", items: ["JavaScript", "Python"] },
-    { title: "Frameworks", color: "green", items: ["React", "Django", "PHP", "Next.js"] },
-    { title: "MERN de React", color: "blue", items: ["MongoDB", "Express.js", "React", "Node.js"] },
-    { title: "MERN de Django", color: "blue", items: ["MongoDB + Express + React + Node.js", "Alternativa con Django: PostgreSQL + Django + React"] },
-];
-
-const FALLBACK_KNOWLEDGES: KnowledgeGroup[] = [
-    { title: "📚 Librerías para React (4 años) — Estado y Gestión", color: "blue", items: ["Redux — Gestión de estado predecible", "Zustand — Gestión de estado minimalista", "React Query / TanStack Query — Estado del servidor"] },
-    { title: "🧭 Ruteo", color: "purple", items: ["React Router — Ruteo para SPA", "Next.js Router — Ruteo por file-system"] },
-    { title: "🎨 UI Components y Styling", color: "blue", items: ["Material-UI (MUI)", "Ant Design", "Chakra UI", "Tailwind CSS", "Styled Components"] },
-    { title: "📝 Formularios", color: "purple", items: ["React Hook Form", "Formik"] },
-    { title: "🧪 Testing", color: "blue", items: ["Jest", "React Testing Library"] },
-    { title: "🧰 Utilidades", color: "purple", items: ["Axios", "React Spring / Framer Motion", "React Icons", "date-fns"] },
-    { title: "⚙️ Librerías Django (4 años) — APIs REST", color: "blue", items: ["Django REST Framework (DRF)"] },
-    { title: "🔐 Autenticación y Autorización", color: "purple", items: ["Django Allauth", "DRF Simple JWT", "Django Cors Headers"] },
-    { title: "🗄️ Bases de Datos y ORM", color: "blue", items: ["Django Debug Toolbar", "Django Extensions", "Django Filter"] },
-    { title: "📋 Formularios y UI", color: "purple", items: ["Django Crispy Forms"] },
-    { title: "🛡️ Seguridad", color: "blue", items: ["Django Guardian"] },
-    { title: "🚀 Desarrollo y Deployment", color: "purple", items: ["Django Environ", "WhiteNoise", "Django Storages"] },
-    { title: "🧪 Testing (Django)", color: "blue", items: ["pytest-django"] },
-    { title: "🔧 Otras Utilidades (Django)", color: "purple", items: ["Celery", "Django Redis"] },
-    { title: "💼 ¿A qué me dedico?", color: "purple", items: ["Creación de páginas web", "Administrador de servidores", "Creación de bots de Telegram", "Automatización de procesos (n8n)", "Integraciones: web + automatización + feedback por Telegram"] },
-    { title: "📖 ¿Cómo aprendí?", color: "blue", items: ["Autodidacta: videos, libros y práctica", "Canales: HolaMundoDev, mouredev, ProgramadorX, soydalto, Platzi, FaztTech"] },
-    { title: "📚 Libros", color: "purple", items: ["Patterns of Enterprise Application Architecture — Martin Fowler", "JavaScript: The Good Parts — Douglas Crockford", "Clean Architecture — Robert C. Martin", "The Clean Coder — Robert C. Martin", "Atomic Habits — James Clear", "The Linux Programming Interface — Michael Kerrisk", "Clean Code — Robert C. Martin"] },
-    { title: "✍️ ¿Cómo me gusta escribir el código?", color: "blue", items: ["Entender primero el problema", "Definir los requisitos", "Planificar la solución", "Aplicar Principios SOLID y Clean Code", "Practicar patrones de diseño", "Manejo de errores robusto"] },
-    { title: "🎯 ¿A dónde quiero llegar? (Especialización)", color: "purple", items: ["Creación de E-commerce", "Frameworks: React (conocimientos), Next.js (conocimientos)", "Frameworks: Vue.js + Nuxt.js (sin conocimientos)", "Frameworks: Angular (sin conocimientos)", "Frameworks: Svelte + SvelteKit (sin conocimientos)"] },
-    { title: "🛒 Librerías específicas e-commerce", color: "blue", items: ["Shopify Storefront API (para React) — con conocimientos", "Commerce.js — sin conocimientos"] },
-];
+interface CareerGroup {
+    readonly id: string;
+    readonly title: string;
+    readonly color: "blue" | "purple" | "green";
+    readonly items: readonly CareerItem[];
+}
 
 const COLOR_CONFIG = {
     blue: {
@@ -107,7 +83,7 @@ const SkillGroupCard: React.FC<{ readonly group: SkillGroup; readonly index: num
     );
 };
 
-const KnowledgeTimelineItem: React.FC<{ readonly item: KnowledgeGroup; readonly index: number }> = ({ item, index }) => {
+const KnowledgeTimelineItem: React.FC<{ readonly item: CareerGroup; readonly index: number }> = ({ item, index }) => {
     const currentColor = COLOR_CONFIG[item.color] ?? COLOR_CONFIG.blue;
     const containerRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(false);
@@ -131,13 +107,13 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: KnowledgeGroup; readonly 
     }, [isOpen]);
 
     return (
-        <motion.li className="group relative" variants={INLINECARDS} custom={index}>
+        <motion.li className="group relative animate-gpu" variants={INLINECARDS} custom={index}>
             <motion.div
                 ref={containerRef}
                 tabIndex={0}
                 aria-expanded={isOpen}
                 onClick={() => setIsOpen(true)}
-                className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] focus:outline-none focus:ring-2 focus:ring-blue-400/60"
+                className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer"
                 whileHover={{ y: -2, scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 300 }}
             >
@@ -158,18 +134,27 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: KnowledgeGroup; readonly 
                                 animate={{ opacity: 1, height: 'auto' }}
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.25, ease: 'easeOut' }}
-                                className="space-y-1.5"
+                                className="space-y-3 mt-3 border-t border-white/5 pt-3"
                                 aria-hidden={!isOpen}
                             >
                                 {item.items.map((detail, idx) => (
                                     <motion.li
                                         key={idx}
-                                        className="flex items-start gap-2 text-xs sm:text-sm text-slate-300 group/item"
+                                        className="flex flex-col gap-1 text-xs sm:text-sm text-slate-300 group/item border-l-2 border-blue-500/30 pl-3 pb-3 last:pb-0"
                                         whileHover={{ x: 2 }}
                                         transition={{ type: 'spring', stiffness: 400 }}
                                     >
-                                        <span className="text-blue-400 mt-0.5 flex-shrink-0 group-hover/item:text-blue-300 transition-colors">▸</span>
-                                        <span className="group-hover/item:text-white transition-colors">{detail}</span>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-blue-400 group-hover/item:text-blue-300 transition-colors">▸</span>
+                                            <strong className="text-white group-hover/item:text-blue-300 transition-colors font-semibold">
+                                                {detail.title}
+                                            </strong>
+                                        </div>
+                                        {detail.body && (
+                                            <p className="text-slate-400 text-xs sm:text-sm pl-4 leading-relaxed whitespace-pre-wrap">
+                                                {detail.body}
+                                            </p>
+                                        )}
                                     </motion.li>
                                 ))}
                             </motion.ul>
@@ -183,9 +168,14 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: KnowledgeGroup; readonly 
 
 export const SkillSection: React.FC = () => {
     const { skills, isLoading } = useSkillSections();
-    const data: SkillGroup[] = skills.length > 0
-        ? skills.map(s => ({ title: s.title, color: s.color, items: s.items }))
-        : FALLBACK_SKILLS;
+    
+    // Direct mapping to type SkillGroup
+    const data: SkillGroup[] = skills.map(s => ({
+        id: s.id,
+        title: s.title,
+        color: s.color,
+        items: s.items
+    }));
 
     return (
         <motion.article
@@ -225,7 +215,7 @@ export const SkillSection: React.FC = () => {
                         variants={CONTAINERCARDS}
                     >
                         {data.map((group, index) => (
-                            <SkillGroupCard key={index} group={group} index={index} />
+                            <SkillGroupCard key={group.id} group={group} index={index} />
                         ))}
                     </motion.div>
                 )}
@@ -236,9 +226,14 @@ export const SkillSection: React.FC = () => {
 
 export const ExpAndTecnologies: React.FC = () => {
     const { knowledges, isLoading } = useKnowledgeSections();
-    const data: KnowledgeGroup[] = knowledges.length > 0
-        ? knowledges.map(k => ({ title: k.title, color: k.color, items: k.items }))
-        : FALLBACK_KNOWLEDGES;
+    
+    // Direct mapping to type CareerGroup
+    const data: CareerGroup[] = knowledges.map(k => ({
+        id: k.id,
+        title: k.title,
+        color: k.color,
+        items: k.items as CareerItem[]
+    }));
 
     return (
         <motion.article
@@ -254,7 +249,7 @@ export const ExpAndTecnologies: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
             >
-                Tecnologías y Experiencia
+                Carrera y Experiencia
             </motion.h2>
             {isLoading ? (
                 <div className="flex items-center gap-2 text-slate-400 text-sm py-4">
@@ -267,7 +262,7 @@ export const ExpAndTecnologies: React.FC = () => {
                     variants={CONTAINERCARDS}
                 >
                     {data.map((item, index) => (
-                        <KnowledgeTimelineItem key={index} item={item} index={index} />
+                        <KnowledgeTimelineItem key={item.id} item={item} index={index} />
                     ))}
                 </motion.ul>
             )}

@@ -1,11 +1,35 @@
 import GA4 from 'react-ga4';
 
+const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+
+async function sendToN8n(eventType: string, payload: object) {
+  if (!N8N_WEBHOOK_URL) return;
+  try {
+    await fetch(N8N_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        eventType,
+        ...payload,
+      }),
+    });
+  } catch (error) {
+    // Fallar silenciosamente para no romper la navegación o experiencia
+    console.warn('Analytics webhook failed to send:', error);
+  }
+}
+
+
 // Eventos de navegación
 export const trackPageView = (path: string) => {
   GA4.send({
     hitType: 'pageview',
     page: path
   });
+  sendToN8n('page_view', { path, timestamp: new Date().toISOString() });
 };
 
 // Eventos de interacción
@@ -60,6 +84,7 @@ export const trackContactAttempt = (method: string) => {
     action: 'Contact Attempt',
     label: method
   });
+  sendToN8n('contact_click', { method });
 };
 
 // Eventos de navegación entre secciones
@@ -69,4 +94,10 @@ export const trackSectionNavigation = (fromSection: string, toSection: string) =
     action: 'Section Change',
     label: `${fromSection} to ${toSection}`
   });
+  sendToN8n('section_navigation', { from: fromSection, to: toSection });
+};
+
+// Eventos de búsqueda de proyectos
+export const trackSearchExecution = (query: string, category: string) => {
+  sendToN8n('project_search', { query, category, timestamp: new Date().toISOString() });
 }; 

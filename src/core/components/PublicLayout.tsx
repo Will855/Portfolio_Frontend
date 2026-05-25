@@ -3,13 +3,13 @@ import { Routes, Route } from 'react-router-dom';
 import { useAppDataReady } from '../hooks/useAppDataReady';
 import { LoadingScreen } from './LoadingScreen';
 import NavMenu from './navbar/navMenu';
-import BackgroundStars from './animations/backgrounds/StarsBackground';
+import BackgroundStars from './StarsBackground';
 import ResponsiveMenu from './navbar/menuResponsive';
-import Home from '../pages/home';
-import { Proyects } from '../pages/proyects';
-import CardDetails from './cards/proyectPage';
-import NotFound from '../pages/404';
-import Demo from '../pages/demos';
+import Home from '../../pages/Home';
+import { Proyects } from '../../modules/projects/pages/ProjectsPage';
+import CardDetails from '../../modules/projects/pages/ProjectDetailsPage';
+import NotFound from './NotFoundPage';
+import Demo from '../../modules/projects/pages/DemosRedirectPage';
 
 /**
  * Layout del sitio público. Muestra pantalla de carga hasta que hero, nav, cards,

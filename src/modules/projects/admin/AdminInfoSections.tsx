@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../../config/supabase';
-import { useSkillSections, useKnowledgeSections } from '../../../hooks/useInfoSections';
+import { supabase } from '../../../shared/services/supabase/supabase';
+import { useSkillSections, useKnowledgeSections } from '../hooks/useInfoSections';
 import type { InfoSectionRow } from '../../../types/supabase';
 
 type SectionType = 'skill' | 'knowledge';
 type ColorOption = 'blue' | 'purple' | 'green';
 
+type EditableSectionItem = string | { title: string; body: string };
+
 interface EditableSection {
   id: string | null;
   title: string;
   color: ColorOption;
-  items: string[];
+  items: EditableSectionItem[];
   order: number;
 }
 
@@ -32,7 +34,7 @@ export const AdminInfoSections: React.FC = () => {
           <p className="text-sm text-blue-300">
             <strong>Habilidades:</strong> Tarjetas compactas que se muestran en la sección "Información" del home.
             <br />
-            <strong>Conocimientos:</strong> Tarjetas expandibles que se muestran en "Tecnologías y Experiencia".
+            <strong>Carrera y Experiencia:</strong> Trayectorias o hitos de tu carrera profesional en "Carrera y Experiencia".
           </p>
         </div>
       </div>
@@ -56,7 +58,7 @@ export const AdminInfoSections: React.FC = () => {
               : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
           }`}
         >
-          Conocimientos
+          Carrera y Experiencia
         </button>
       </div>
 
@@ -97,7 +99,7 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
         id: null,
         title: '',
         color: sectionType === 'skill' ? 'blue' : 'purple',
-        items: [''],
+        items: sectionType === 'skill' ? [''] : [{ title: '', body: '' }],
         order: prev.length,
       },
     ]);
@@ -123,11 +125,21 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
 
   const addItem = useCallback((sectionIdx: number) => {
     setSections(prev =>
-      prev.map((s, i) => (i === sectionIdx ? { ...s, items: [...s.items, ''] } : s))
+      prev.map((s, i) =>
+        i === sectionIdx
+          ? {
+              ...s,
+              items:
+                sectionType === 'skill'
+                  ? [...s.items, '']
+                  : [...s.items, { title: '', body: '' }],
+            }
+          : s
+      )
     );
-  }, []);
+  }, [sectionType]);
 
-  const updateItem = useCallback((sectionIdx: number, itemIdx: number, value: string) => {
+  const updateItem = useCallback((sectionIdx: number, itemIdx: number, value: EditableSectionItem) => {
     setSections(prev =>
       prev.map((s, i) =>
         i === sectionIdx
@@ -164,7 +176,15 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
 
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
-        const filteredItems = section.items.filter(it => it.trim() !== '');
+        
+        // Filter empty items based on sectionType
+        const filteredItems = section.items.filter(it => {
+          if (typeof it === 'string') {
+            return it.trim() !== '';
+          }
+          return it.title.trim() !== '' || it.body.trim() !== '';
+        });
+
         if (!section.title.trim()) continue;
 
         if (section.id) {
@@ -310,39 +330,84 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
               </div>
 
               {/* Items list */}
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <label className="block text-xs font-medium text-slate-400">
-                  {sectionType === 'skill' ? 'Elementos' : 'Detalles'}
+                  {sectionType === 'skill' ? 'Habilidades (Elementos)' : 'Carrera y Experiencia (Hitos)'}
                 </label>
-                {section.items.map((item, itemIdx) => (
-                  <div key={itemIdx} className="flex gap-2 items-center">
-                    <span className="text-xs text-slate-500 w-5 text-right shrink-0">{itemIdx + 1}.</span>
-                    <input
-                      value={item}
-                      onChange={(e) => updateItem(idx, itemIdx, e.target.value)}
-                      className="flex-1 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
-                      placeholder={`Elemento ${itemIdx + 1}`}
-                    />
-                    <button
-                      onClick={() => removeItem(idx, itemIdx)}
-                      disabled={section.items.length <= 1}
-                      className="p-1 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0"
-                      title="Eliminar elemento"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+                
+                {sectionType === 'skill' ? (
+                  <div className="space-y-2">
+                    {section.items.map((item, itemIdx) => (
+                      <div key={itemIdx} className="flex gap-2 items-center">
+                        <span className="text-xs text-slate-500 w-5 text-right shrink-0">{itemIdx + 1}.</span>
+                        <input
+                          value={item as string}
+                          onChange={(e) => updateItem(idx, itemIdx, e.target.value)}
+                          className="flex-1 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
+                          placeholder={`Habilidad ${itemIdx + 1}`}
+                        />
+                        <button
+                          onClick={() => removeItem(idx, itemIdx)}
+                          disabled={section.items.length <= 1}
+                          className="p-1 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0"
+                          title="Eliminar elemento"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <div className="space-y-4">
+                    {(section.items as { title: string; body: string }[]).map((item, itemIdx) => (
+                      <div key={itemIdx} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3 relative group/item">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xs text-slate-400 font-semibold">Hito / Puesto #{itemIdx + 1}</span>
+                          <button
+                            onClick={() => removeItem(idx, itemIdx)}
+                            disabled={section.items.length <= 1}
+                            className="p-1 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0"
+                            title="Eliminar elemento"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block text-xs font-medium text-slate-400">Puesto / Título *</label>
+                          <input
+                            value={(item as { title: string; body: string }).title || ''}
+                            onChange={(e) => updateItem(idx, itemIdx, { ...item, title: e.target.value })}
+                            className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
+                            placeholder="Ej: Programador Senior, Certificación AWS, etc."
+                          />
+                        </div>
+                        <div className="space-y-1.5">
+                          <label className="block text-xs font-medium text-slate-400">Cuerpo / Descripción de Logros *</label>
+                          <textarea
+                            value={(item as { title: string; body: string }).body || ''}
+                            onChange={(e) => updateItem(idx, itemIdx, { ...item, body: e.target.value })}
+                            rows={3}
+                            className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm resize-none"
+                            placeholder="Logros clave, tecnologías usadas, responsabilidades..."
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
                 <button
                   onClick={() => addItem(idx)}
-                  className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors mt-1"
+                  className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors mt-2"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                   </svg>
-                  Agregar elemento
+                  {sectionType === 'skill' ? 'Agregar habilidad' : 'Agregar experiencia'}
                 </button>
               </div>
             </div>

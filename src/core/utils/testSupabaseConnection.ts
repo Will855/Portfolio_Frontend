@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabase';
+import { supabase } from '../../shared/services/supabase/supabase';
 
 export type ConnectionTestResult =
   | { ok: true }

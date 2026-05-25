@@ -5,8 +5,8 @@
  * Usado para ítems de navegación, secciones about, footer, etc.
  */
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import type { ContentBlockRow } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from '../../shared/services/supabase/supabase';
+import type { ContentBlockRow } from '../../types/supabase';
 
 /**
  * Obtiene un único bloque de contenido por su clave desde la tabla content_blocks.

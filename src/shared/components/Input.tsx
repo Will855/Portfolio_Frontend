@@ -1,9 +1,17 @@
 // Importación de React
 import React from 'react';
 
+interface InputProps {
+  label: string;
+  name: string;
+  type: string;
+  placeholder?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 // Componente Input
 // Este componente es reutilizable y se utiliza para crear campos de entrada con etiquetas asociadas.
-const Input = ({ label, name, type, placeholder, onChange }) => (
+const Input: React.FC<InputProps> = ({ label, name, type, placeholder, onChange }) => (
     <div className="relative">
         {/* Etiqueta para el campo de entrada */}
         <label htmlFor={name} className="text-[#f0f8ff] block mb-2">

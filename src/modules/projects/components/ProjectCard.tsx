@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
-import { CardProps } from "../../types/types";
-import { handleMouseMove, resetCardPosition } from "./../utils/cardAnimations";
+import { CardProps } from "../../../types/types";
+import { handleMouseMove, resetCardPosition } from "../../../shared/utils/cardAnimations";
 import { useNavigate } from "react-router-dom";
 
 /**

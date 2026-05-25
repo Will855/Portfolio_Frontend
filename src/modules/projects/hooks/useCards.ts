@@ -5,10 +5,10 @@
  * a configuración local cuando Supabase no está disponible o no devuelve datos.
  */
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import { getStoragePublicUrl } from '../utils/supabaseStorage';
-import type { CardRow } from '../types/supabase';
-import type { CardProps } from '../types/types';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+import { getStoragePublicUrl } from '../../../shared/services/supabase/supabaseStorage';
+import type { CardRow } from '../../../types/supabase';
+import type { CardProps } from '../../../types/types';
 import { cards as fallbackCards } from '../config/cards';
 
 /**
@@ -23,6 +23,10 @@ function mapFallback(c: (typeof fallbackCards)[number]): CardProps {
     title: c.title,
     description: c.description,
     img: c.img.startsWith('http') ? c.img : `/${c.img}`,
+    problem_solved: '',
+    architectural_doc: '',
+    category: 'Full Stack',
+    tags: [],
     buttonText: c.buttonText,
     codeUrl: c.codeUrl ?? '',
     demoUrl: c.demoUrl ?? '',
@@ -55,6 +59,10 @@ async function fetchCards(): Promise<CardProps[]> {
     demoUrl: row.demo_url,
     bgImage: getStoragePublicUrl(row.bg_image_path) || row.bg_image_path || '/images/bg-proyecto2.jpg',
     order: row.order,
+    problem_solved: row.problem_solved,
+    architectural_doc: row.architectural_doc,
+    category: row.category || 'Full Stack',
+    tags: Array.isArray(row.tags) ? row.tags : [],
   }));
 }
 

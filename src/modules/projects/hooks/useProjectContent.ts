@@ -5,8 +5,8 @@
  * y en la página pública de detalle del proyecto.
  */
 import { useQuery } from '@tanstack/react-query';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import type { ProjectContentRow } from '../types/supabase';
+import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+import type { ProjectContentRow } from '../../../types/supabase';
 
 /**
  * Representa un bloque de contenido editable de un proyecto.

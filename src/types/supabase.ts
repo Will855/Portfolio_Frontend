@@ -16,6 +16,10 @@ export interface CardRow {
   demo_url: string;
   bg_image_path: string;
   order: number;
+  problem_solved: string;
+  architectural_doc: string;
+  category: string;
+  tags: string[];
   created_at?: string;
   updated_at?: string;
 }
@@ -62,7 +66,7 @@ export interface InfoSectionRow {
   section_type: 'skill' | 'knowledge';
   title: string;
   color: 'blue' | 'purple' | 'green';
-  items: string[];
+  items: any[];
   order: number;
   created_at: string;
   updated_at: string;

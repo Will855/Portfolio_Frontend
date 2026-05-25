@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../../config/supabase';
-import { useHeroContent } from '../../../hooks/useHeroContent';
+import { supabase } from '../../../shared/services/supabase/supabase';
+import { useHeroContent } from '../hooks/useHeroContent';
 import { STORAGE_BUCKET } from '../../../types/supabase';
 
 const DEFAULT_TITLE = 'Wilmer Lynch';
