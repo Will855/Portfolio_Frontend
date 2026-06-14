@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import IonIcon from '@reacticons/ionicons';
-import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import { isValidEmail } from './utils/validation';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { trackContactAttempt } from '../utils/analytics';
 
-// Tipos
 interface FormData {
   name: string;
   email: string;
@@ -25,7 +25,6 @@ interface SocialLink {
   ariaLabel: string;
 }
 
-// Configuración de redes sociales con tipado
 const SOCIAL_LINKS = {
   whatsapp: 'https://wa.me/+584265940917',
   instagram: 'https://www.instagram.com/techno__monster/',
@@ -38,40 +37,6 @@ const SOCIAL_ITEMS: SocialLink[] = [
   { name: 'github', icon: 'logo-github', url: SOCIAL_LINKS.github, hoverColor: 'hover:text-gray-400', ariaLabel: 'Ver perfil de GitHub' }
 ];
 
-// Variantes de animación
-const containerVariants = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      when: "beforeChildren",
-      staggerChildren: 0.1
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
-};
-
-const buttonVariants = {
-  idle: { scale: 1 },
-  hover: { scale: 1.02, boxShadow: "0 10px 30px rgba(96, 165, 250, 0.3)" },
-  tap: { scale: 0.98 }
-};
-
-const messageVariants = {
-  hidden: { opacity: 0, y: -10, scale: 0.9 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 300 } },
-  exit: { opacity: 0, y: 10, scale: 0.9, transition: { duration: 0.2 } }
-};
-
-/**
- * Componente de campo de entrada animado con validación visual
- */
 const AnimatedInput: React.FC<{
   label: string;
   name: FormField;
@@ -82,22 +47,35 @@ const AnimatedInput: React.FC<{
   error?: boolean;
 }> = ({ label, name, type, placeholder, value, onChange, error }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null);
+  const underlineRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (isFocused) {
+      gsap.to(labelRef.current, { scale: 1.02, duration: 0.3 });
+      gsap.to(inputRef.current, { scale: 1.01, duration: 0.3 });
+      gsap.to(underlineRef.current, { width: '100%', duration: 0.3 });
+    } else {
+      gsap.to(labelRef.current, { scale: 1, duration: 0.3 });
+      gsap.to(inputRef.current, { scale: 1, duration: 0.3 });
+      gsap.to(underlineRef.current, { width: 0, duration: 0.3 });
+    }
+  }, [isFocused]);
 
   return (
-    <motion.div variants={itemVariants} className="relative">
-      <motion.label
+    <div ref={containerRef} className="form-item opacity-0 translate-y-5 relative">
+      <label
+        ref={labelRef}
         htmlFor={name}
-        className={`block mb-2 font-medium transition-colors duration-300 ${
+        className={`block mb-2 font-medium transition-colors duration-300 origin-left ${
           isFocused ? 'text-blue-400' : 'text-slate-200'
         }`}
-        animate={{ scale: isFocused ? 1.02 : 1 }}
       >
         {label}
-      </motion.label>
-      <motion.div
-        className="relative"
-        whileFocus={{ scale: 1.01 }}
-      >
+      </label>
+      <div ref={inputRef} className="relative transform-gpu">
         <input
           type={type}
           id={name}
@@ -115,20 +93,15 @@ const AnimatedInput: React.FC<{
           }`}
           placeholder={placeholder}
         />
-        <motion.div
-          className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400`}
-          initial={{ width: 0 }}
-          animate={{ width: isFocused ? '100%' : 0 }}
-          transition={{ duration: 0.3 }}
+        <div
+          ref={underlineRef}
+          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 w-0"
         />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
-/**
- * Componente de textarea animado
- */
 const AnimatedTextarea: React.FC<{
   label: string;
   name: FormField;
@@ -138,18 +111,28 @@ const AnimatedTextarea: React.FC<{
   error?: boolean;
 }> = ({ label, name, placeholder, value, onChange, error }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLLabelElement>(null);
+
+  useGSAP(() => {
+    if (isFocused) {
+      gsap.to(labelRef.current, { scale: 1.02, duration: 0.3 });
+    } else {
+      gsap.to(labelRef.current, { scale: 1, duration: 0.3 });
+    }
+  }, [isFocused]);
 
   return (
-    <motion.div variants={itemVariants} className="relative">
-      <motion.label
+    <div ref={containerRef} className="form-item opacity-0 translate-y-5 relative">
+      <label
+        ref={labelRef}
         htmlFor={name}
-        className={`block mb-2 font-medium transition-colors duration-300 ${
+        className={`block mb-2 font-medium transition-colors duration-300 origin-left ${
           isFocused ? 'text-blue-400' : 'text-slate-200'
         }`}
-        animate={{ scale: isFocused ? 1.02 : 1 }}
       >
         {label}
-      </motion.label>
+      </label>
       <textarea
         id={name}
         name={name}
@@ -167,13 +150,10 @@ const AnimatedTextarea: React.FC<{
         }`}
         placeholder={placeholder}
       />
-    </motion.div>
+    </div>
   );
 };
 
-/**
- * Componente principal del formulario de contacto con animaciones avanzadas
- */
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -187,13 +167,47 @@ const ContactForm: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FormField, boolean>>>({});
 
+  const formRef = useRef<HTMLFormElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const spinnerRef = useRef<HTMLDivElement>(null);
+  const responseRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLDivElement>(null);
+  const socialRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const tl = gsap.timeline();
+    tl.fromTo(formRef.current, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.5 })
+      .fromTo(titleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 })
+      .fromTo(".form-item", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, stagger: 0.1 }, "-=0.2")
+      .fromTo(buttonRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, "-=0.2")
+      .fromTo(socialRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4 }, "-=0.2");
+  }, []);
+
+  useGSAP(() => {
+    if (responseMessage && responseRef.current) {
+      gsap.fromTo(responseRef.current, { opacity: 0, y: -10, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(1.7)" });
+    }
+  }, [responseMessage]);
+
+  useGSAP(() => {
+    if (error && errorRef.current) {
+      gsap.fromTo(errorRef.current, { opacity: 0, y: -10, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.4, ease: "back.out(1.7)" });
+    }
+  }, [error]);
+
+  useGSAP(() => {
+    if (isSubmitting && spinnerRef.current) {
+      gsap.to(spinnerRef.current, { rotation: 360, repeat: -1, duration: 1, ease: "linear" });
+    }
+  }, [isSubmitting]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value
     });
-    // Limpiar error del campo al escribir
     if (fieldErrors[name as FormField]) {
       setFieldErrors({ ...fieldErrors, [name]: false });
     }
@@ -264,24 +278,19 @@ const ContactForm: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-transparent flex items-center justify-center p-4 overflow-hidden mt-12">
-      <motion.form
+      <form
+        ref={formRef}
         onSubmit={handleSubmit}
-        className="w-full max-w-lg relative z-10"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        className="w-full max-w-lg relative z-10 opacity-0"
       >
-        {/* Contenedor con glassmorphism */}
         <div className="bg-gradient-to-br from-white/10 to-white/5 p-8 rounded-3xl shadow-2xl backdrop-blur-xl border border-white/20">
-          {/* Título animado */}
-          <motion.h2
-            className="text-4xl sm:text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
-            variants={itemVariants}
+          <h2
+            ref={titleRef}
+            className="text-4xl sm:text-5xl font-bold mb-8 text-center bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent opacity-0"
           >
             Contáctame
-          </motion.h2>
+          </h2>
 
-          {/* Campos del formulario */}
           <div className="space-y-5">
             <AnimatedInput
               label="Nombre"
@@ -319,95 +328,79 @@ const ContactForm: React.FC = () => {
               error={fieldErrors.message}
             />
 
-            {/* Botón de envío animado */}
-            <motion.button
+            <button
+              ref={buttonRef}
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
-              variants={buttonVariants}
-              initial="idle"
-              whileHover={!isSubmitting ? "hover" : "idle"}
-              whileTap={!isSubmitting ? "tap" : "idle"}
+              className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden opacity-0 transform-gpu"
+              onMouseEnter={(e) => {
+                if (!isSubmitting) gsap.to(e.currentTarget, { scale: 1.02, boxShadow: "0 10px 30px rgba(96, 165, 250, 0.3)", duration: 0.3 });
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmitting) gsap.to(e.currentTarget, { scale: 1, boxShadow: "0 4px 6px rgba(0,0,0,0.1)", duration: 0.3 });
+              }}
+              onMouseDown={(e) => {
+                if (!isSubmitting) gsap.to(e.currentTarget, { scale: 0.98, duration: 0.1 });
+              }}
+              onMouseUp={(e) => {
+                if (!isSubmitting) gsap.to(e.currentTarget, { scale: 1.02, duration: 0.1 });
+              }}
             >
-              <AnimatePresence mode="wait">
-                {isSubmitting ? (
-                  <motion.div
-                    key="loading"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex items-center justify-center gap-2"
-                  >
-                    <motion.div
-                      className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    />
-                    <span>Enviando...</span>
-                  </motion.div>
-                ) : (
-                  <motion.span
-                    key="submit"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                  >
-                    Enviar Mensaje
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </motion.button>
+              {isSubmitting ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div
+                    ref={spinnerRef}
+                    className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full"
+                  />
+                  <span>Enviando...</span>
+                </div>
+              ) : (
+                <span>Enviar Mensaje</span>
+              )}
+            </button>
           </div>
 
-          {/* Mensajes de respuesta con animación */}
-          <AnimatePresence>
-            {responseMessage && (
-              <motion.div
-                variants={messageVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-center text-green-400"
-              >
-                {responseMessage}
-              </motion.div>
-            )}
-            {error && (
-              <motion.div
-                variants={messageVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center text-red-400"
-              >
-                {error}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {responseMessage && (
+            <div
+              ref={responseRef}
+              className="mt-4 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-center text-green-400 opacity-0"
+            >
+              {responseMessage}
+            </div>
+          )}
+          {error && (
+            <div
+              ref={errorRef}
+              className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-center text-red-400 opacity-0"
+            >
+              {error}
+            </div>
+          )}
 
-          {/* Iconos de redes sociales con animaciones */}
-          <motion.div
-            className="flex justify-center space-x-6 mt-8"
-            variants={itemVariants}
+          <div
+            ref={socialRef}
+            className="flex justify-center space-x-6 mt-8 opacity-0"
           >
             {SOCIAL_ITEMS.map((social) => (
-              <motion.a
+              <a
                 key={social.name}
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackContactAttempt(social.name)}
-                className={`text-white transition-colors duration-300 ${social.hoverColor}`}
+                className={`text-white transition-colors duration-300 ${social.hoverColor} block`}
                 aria-label={social.ariaLabel}
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
+                onMouseEnter={(e) => gsap.to(e.currentTarget, { scale: 1.2, rotate: 5, duration: 0.3, ease: "back.out(1.7)" })}
+                onMouseLeave={(e) => gsap.to(e.currentTarget, { scale: 1, rotate: 0, duration: 0.3, ease: "back.out(1.7)" })}
+                onMouseDown={(e) => gsap.to(e.currentTarget, { scale: 0.9, duration: 0.1 })}
+                onMouseUp={(e) => gsap.to(e.currentTarget, { scale: 1.2, duration: 0.1 })}
               >
                 <IonIcon name={social.icon} className="text-3xl cursor-pointer" />
-              </motion.a>
+              </a>
             ))}
-          </motion.div>
+          </div>
         </div>
-      </motion.form>
+      </form>
     </div>
   );
 };

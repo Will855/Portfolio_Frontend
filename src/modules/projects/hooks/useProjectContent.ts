@@ -8,22 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
 import type { ProjectContentRow } from '../../../types/supabase';
 
-/**
- * Representa un bloque de contenido editable de un proyecto.
- * @property id - UUID del bloque
- * @property projectId - ID del proyecto (FK a cards.id)
- * @property type - Tipo: 'text' | 'image' | 'video'
- * @property content - Contenido: HTML para texto, path en Storage para imagen/video
- * @property caption - Pie de imagen o video (opcional)
- * @property order - Orden de visualización
- */
-export interface ProjectContentBlock {
-  id: string;
+export interface ProjectContentBlock extends Omit<ProjectContentRow, 'project_id' | 'created_at' | 'updated_at'> {
   projectId: string;
-  type: 'text' | 'image' | 'video';
-  content: string;
-  caption: string;
-  order: number;
 }
 
 /**

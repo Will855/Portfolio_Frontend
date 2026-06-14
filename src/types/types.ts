@@ -1,15 +1,22 @@
-export interface CardProps {
-  id: string;
-  title: string;
-  description: string;
+import type { CardRow, InfoSectionRow } from './supabase';
+
+export interface CardProps extends Omit<CardRow, 'image_path' | 'button_text' | 'code_url' | 'demo_url' | 'bg_image_path' | 'created_at' | 'updated_at'> {
   img: string;
-  problem_solved: string;
-  architectural_doc: string;
-  category: string;
-  tags: string[];
   buttonText?: string;
   codeUrl?: string;
   demoUrl?: string;
   bgImage?: string;
-  order?: number;
+}
+
+export interface SkillGroup extends Omit<InfoSectionRow, 'section_type' | 'order' | 'created_at' | 'updated_at'> {
+  items: string[];
+}
+
+export interface CareerItem {
+  title: string;
+  body: string;
+}
+
+export interface CareerGroup extends Omit<InfoSectionRow, 'section_type' | 'order' | 'created_at' | 'updated_at'> {
+  items: CareerItem[];
 }

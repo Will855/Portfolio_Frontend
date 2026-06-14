@@ -23,6 +23,8 @@ export function parseMarkdownToHtml(markdown: string): string {
     // Bullet points
     .replace(/^\* (.*$)/gim, '<li>$1</li>')
     .replace(/^- (.*$)/gim, '<li>$1</li>')
+    // Links [text](url)
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>')
     // Line breaks
     .replace(/\n/g, '<br />');
 

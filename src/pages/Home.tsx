@@ -3,12 +3,25 @@ import CircleProfile from "../shared/components/CircleProfile";
 import Footer from "../core/components/footer/Footer";
 import WordCloud from "../modules/profile/components/WordCloud";
 import { useHeroContent } from "../modules/profile/hooks/useHeroContent";
-import { motion } from "framer-motion";
 import { SkillSection, ExpAndTecnologies } from "../modules/projects/components/InformationContent";
-import ContactForm from "../modules/contact/components/ContactForm";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const Home = () => {
     const { hero } = useHeroContent();
+    const infoRef = useRef<HTMLDivElement>(null);
+
+    useGSAP(() => {
+        if (infoRef.current) {
+            gsap.fromTo(
+                infoRef.current,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.2 }
+            );
+        }
+    }, []);
+
     return (
         <div className="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10 sm:space-y-14 lg:space-y-16 mt-16 sm:mt-20">
             <section className="text-center space-y-4 sm:space-y-10 md:space-y-8 w-full max-w-md sm:max-w-lg md:max-w-2xl">
@@ -23,16 +36,15 @@ const Home = () => {
             </section>
             <WordCloud />
 
-            <motion.section
-                className="mx-auto w-full max-w-4xl"
-                initial="hidden"
-                animate="visible"
+            <section
+                ref={infoRef}
+                className="mx-auto w-full max-w-4xl opacity-0"
             >
-                <motion.div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 backdrop-blur-lg bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 backdrop-blur-lg bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <SkillSection />
                     <ExpAndTecnologies />
-                </motion.div>
-            </motion.section>
+                </div>
+            </section>
             <Footer />
         </div>
     );

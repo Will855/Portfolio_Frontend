@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import Card from "./ProjectCard";
 import { useCards } from "../hooks/useCards";
 import { trackSearchExecution } from "../../../core/utils/analytics";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const Grid: React.FC = () => {
   const { cards } = useCards();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Debounce de 1000ms para rastrear las búsquedas del usuario en n8n
   useEffect(() => {
@@ -36,6 +38,16 @@ const Grid: React.FC = () => {
 
     return matchesCategory && (matchesTitle || matchesDescription || matchesTags);
   });
+
+  useGSAP(() => {
+    if (containerRef.current) {
+      gsap.fromTo(
+        containerRef.current.children,
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 0.4, stagger: 0.05, ease: "back.out(1.5)", clearProps: "all" }
+      );
+    }
+  }, [filteredCards]);
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto px-4 py-8">
@@ -89,52 +101,35 @@ const Grid: React.FC = () => {
       </div>
 
       {/* Empty State */}
-      <AnimatePresence mode="wait">
-        {filteredCards.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
-            className="text-center py-16 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl"
-          >
-            <svg className="w-16 h-16 mx-auto text-slate-500 mb-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-slate-400 text-lg font-medium">No se encontraron proyectos</p>
-            <p className="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o selecciona una categoría diferente.</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {filteredCards.length === 0 && (
+        <div className="text-center py-16 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl transition-all">
+          <svg className="w-16 h-16 mx-auto text-slate-500 mb-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <p className="text-slate-400 text-lg font-medium">No se encontraron proyectos</p>
+          <p className="text-slate-500 text-sm mt-1">Prueba con otra búsqueda o selecciona una categoría diferente.</p>
+        </div>
+      )}
 
       {/* Grid of Projects */}
-      <motion.div
-        layout
+      <div
+        ref={containerRef}
         className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3"
       >
-        <AnimatePresence mode="popLayout">
-          {filteredCards.map((card) => (
-            <motion.div
-              layout
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ type: "spring", stiffness: 350, damping: 28 }}
-              key={card.id}
-            >
-              <Link to={`/page/${card.id}`}>
-                <Card
-                  id={card.id}
-                  title={card.title}
-                  description={card.description}
-                  img={card.img}
-                  buttonText={card.buttonText}
-                />
-              </Link>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
+        {filteredCards.map((card) => (
+          <div key={card.id}>
+            <Link to={`/page/${card.id}`}>
+              <Card
+                id={card.id}
+                title={card.title}
+                description={card.description}
+                img={card.img}
+                buttonText={card.buttonText}
+              />
+            </Link>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

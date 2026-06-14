@@ -10,20 +10,10 @@ import { getStoragePublicUrl } from '../../../shared/services/supabase/supabaseS
 import type { ProjectMetaRow } from '../../../types/supabase';
 import { projectMetaFallback } from '../config/project';
 
-/**
- * Metadata de un proyecto: fondo, URLs y orden.
- * @property id - ID del proyecto
- * @property bgProyect - URL de la imagen de fondo
- * @property codeUrl - URL del repositorio (ej: GitHub)
- * @property demoUrl - URL del demo en vivo
- * @property order - Orden de visualización
- */
-export interface ProjectMeta {
-  id: string;
+export interface ProjectMeta extends Omit<ProjectMetaRow, 'bg_image_path' | 'code_url' | 'demo_url' | 'updated_at'> {
   bgProyect: string;
   codeUrl: string;
   demoUrl: string;
-  order: number;
 }
 
 /**
