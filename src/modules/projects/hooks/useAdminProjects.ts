@@ -15,6 +15,8 @@ export interface ProjectForm {
   architecturalDoc: string;
   category: string;
   tags: string;
+  imagePath: string;
+  bgImagePath: string;
 }
 
 export const emptyForm: ProjectForm = {
@@ -28,6 +30,8 @@ export const emptyForm: ProjectForm = {
   architecturalDoc: '',
   category: 'Full Stack',
   tags: '',
+  imagePath: '',
+  bgImagePath: '',
 };
 
 export function useAdminProjects() {
@@ -81,6 +85,8 @@ export function useAdminProjects() {
           architectural_doc: form.architecturalDoc.trim(),
           category: form.category,
           tags: processedTags,
+          image_path: form.imagePath.trim(),
+          bg_image_path: form.bgImagePath.trim(),
           updated_at: new Date().toISOString(),
         };
 
@@ -101,8 +107,8 @@ export function useAdminProjects() {
           Math.max(0, ...list.map((c) => Number(c.id) || 0)) + 1
         );
 
-        let imagePath = '';
-        let bgImagePath = '';
+        let imagePath = form.imagePath.trim();
+        let bgImagePath = form.bgImagePath.trim();
 
         if (cardImage) {
           imagePath = await uploadFile(cardImage, 'cards', nextId);

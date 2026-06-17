@@ -82,15 +82,29 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
 
   useEffect(() => {
     setSections(
-      sourceData.map((s: InfoSectionRow) => ({
-        id: s.id,
-        title: s.title,
-        color: s.color,
-        items: [...s.items],
-        order: s.order,
-      }))
+      sourceData.map((s: InfoSectionRow) => {
+        const mappedItems = s.items.map(it => {
+          if (sectionType === 'knowledge') {
+            if (typeof it === 'string') {
+              return { title: it, body: '' };
+            }
+            return {
+              title: (it as any)?.title || '',
+              body: (it as any)?.body || '',
+            };
+          }
+          return typeof it === 'string' ? it : (it as any)?.title || '';
+        });
+        return {
+          id: s.id,
+          title: s.title,
+          color: s.color,
+          items: mappedItems,
+          order: s.order,
+        };
+      })
     );
-  }, [sourceData]);
+  }, [sourceData, sectionType]);
 
   const addSection = useCallback(() => {
     setSections(prev => [
@@ -182,7 +196,7 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
           if (typeof it === 'string') {
             return it.trim() !== '';
           }
-          return it.title.trim() !== '' || it.body.trim() !== '';
+          return (it?.title || '').trim() !== '' || (it?.body || '').trim() !== '';
         });
 
         if (!section.title.trim()) continue;

@@ -42,6 +42,8 @@ export const AdminProjects: React.FC = () => {
       architecturalDoc: card.architectural_doc ?? '',
       category: card.category ?? 'Full Stack',
       tags: Array.isArray(card.tags) ? card.tags.join(', ') : '',
+      imagePath: card.img ?? '',
+      bgImagePath: card.bgImage ?? '',
     });
     setError(null);
     setModalOpen(true);

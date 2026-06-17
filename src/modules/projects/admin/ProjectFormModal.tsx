@@ -214,14 +214,26 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
 
           {/* Images row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5">
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
               <label className="block text-sm font-medium text-slate-300">Imagen de card</label>
-              <div className="relative">
+              <div className="space-y-1.5">
+                <label className="block text-xs text-slate-400">Ruta o URL de imagen</label>
+                <input
+                  value={form.imagePath}
+                  onChange={(e) => setForm((f) => ({ ...f, imagePath: e.target.value }))}
+                  className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
+                  placeholder="Ej: cards/proyecto.webp o https://..."
+                />
+              </div>
+              <div className="space-y-1.5 pt-1.5">
+                <label className="block text-xs text-slate-400">O subir nuevo archivo</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setCardImage(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-slate-400 file:mr-3 file:py-2 file:px-4
+                  className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3
                              file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80
                              file:font-medium file:cursor-pointer hover:file:bg-white/15
                              file:transition-all cursor-pointer"
@@ -230,18 +242,27 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               {cardImage && (
                 <p className="text-xs text-emerald-400 truncate">{cardImage.name}</p>
               )}
-              {editingId && !cardImage && (
-                <p className="text-xs text-slate-500">Imagen actual se mantiene si no seleccionas otra</p>
-              )}
             </div>
-            <div className="space-y-1.5">
+            <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3">
               <label className="block text-sm font-medium text-slate-300">Imagen de fondo</label>
-              <div className="relative">
+              <div className="space-y-1.5">
+                <label className="block text-xs text-slate-400">Ruta o URL de fondo</label>
+                <input
+                  value={form.bgImagePath}
+                  onChange={(e) => setForm((f) => ({ ...f, bgImagePath: e.target.value }))}
+                  className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10
+                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                             focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
+                  placeholder="Ej: projects-bg/fondo.jpg o https://..."
+                />
+              </div>
+              <div className="space-y-1.5 pt-1.5">
+                <label className="block text-xs text-slate-400">O subir nuevo archivo</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setBgImage(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-slate-400 file:mr-3 file:py-2 file:px-4
+                  className="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3
                              file:rounded-lg file:border-0 file:bg-white/10 file:text-white/80
                              file:font-medium file:cursor-pointer hover:file:bg-white/15
                              file:transition-all cursor-pointer"
@@ -249,9 +270,6 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               </div>
               {bgImage && (
                 <p className="text-xs text-emerald-400 truncate">{bgImage.name}</p>
-              )}
-              {editingId && !bgImage && (
-                <p className="text-xs text-slate-500">Fondo actual se mantiene si no seleccionas otro</p>
               )}
             </div>
           </div>
@@ -276,9 +294,9 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
               <label className="block text-sm font-medium text-slate-300">Vista previa</label>
               <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent
                               p-6 backdrop-blur-xl h-48 border border-white/10">
-                {(cardImage || (editingId && cards.find((c) => c.id === editingId)?.img)) && (
+                {(cardImage || form.imagePath) && (
                   <img
-                    src={cardImage ? URL.createObjectURL(cardImage) : cards.find((c) => c.id === editingId)?.img}
+                    src={cardImage ? URL.createObjectURL(cardImage) : form.imagePath}
                     alt=""
                     className="absolute inset-0 w-full h-full object-cover opacity-40"
                   />
