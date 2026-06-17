@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { trackContactAttempt } from '../../utils/analytics';
 
 // Configuración reutilizable
@@ -110,14 +111,31 @@ const Footer: React.FC = () => {
           <hr className="border-t border-white/10 my-8" />
 
           {/* Copyright */}
-          <div className="text-center opacity-75">
-            <p className="text-sm">
+          <div className="text-center">
+            <p className="text-sm opacity-75">
               &copy; {new Date().getFullYear()} Wilmer Lynch. Todos los derechos reservados.
             </p>
-            <p className="mt-2 text-xs">
+            <p className="mt-2 text-xs opacity-75">
               Desarrollado con <span className="text-blue-300">React</span> y{' '}
               <span className="text-purple-300">Tailwind CSS</span>
             </p>
+            
+            {/* Admin Link (Premium Glassmorphic with ping animation) */}
+            <div className="mt-6 flex justify-center">
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider text-white bg-gradient-to-br from-white/10 to-white/[0.02] hover:from-white/15 hover:to-white/5 border border-white/10 hover:border-blue-400/50 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] transition-all duration-300 backdrop-blur-md group hover:scale-[1.03] active:scale-95 cursor-pointer"
+              >
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+                </span>
+                <span className="bg-gradient-to-r from-blue-400 via-purple-300 to-pink-400 bg-clip-text text-transparent group-hover:from-blue-300 group-hover:to-pink-300 transition-colors">
+                  Acceso Administrador
+                </span>
+                <span className="opacity-80 group-hover:translate-x-0.5 transition-transform">🔑</span>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
