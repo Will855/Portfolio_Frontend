@@ -55,16 +55,6 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: CareerGroup; readonly ind
             yoyo: true,
             ease: "sine.inOut"
         });
-
-        // Hover animation
-        if (containerRef.current) {
-            containerRef.current.addEventListener('mouseenter', () => {
-                gsap.to(containerRef.current, { y: -2, scale: 1.01, duration: 0.3, ease: "power2.out" });
-            });
-            containerRef.current.addEventListener('mouseleave', () => {
-                gsap.to(containerRef.current, { y: 0, scale: 1, duration: 0.3, ease: "power2.out" });
-            });
-        }
     }, { scope: containerRef });
 
     useGSAP(() => {
@@ -78,6 +68,14 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: CareerGroup; readonly ind
         }
     }, [isOpen]);
 
+    const handleMouseEnter = () => {
+        gsap.to(containerRef.current, { y: -2, scale: 1.01, duration: 0.3, ease: "power2.out" });
+    };
+
+    const handleMouseLeave = () => {
+        gsap.to(containerRef.current, { y: 0, scale: 1, duration: 0.3, ease: "power2.out" });
+    };
+
     return (
         <li className="knowledge-card opacity-0 translate-y-5 group relative animate-gpu">
             <div
@@ -85,6 +83,8 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: CareerGroup; readonly ind
                 tabIndex={0}
                 aria-expanded={isOpen}
                 onClick={() => setIsOpen(!isOpen)}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 className="bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] focus:outline-none focus:ring-2 focus:ring-blue-400/60 cursor-pointer"
             >
                 <div className={`absolute -top-2 -left-2 w-3 h-3 rounded-full ${currentColor.bg} shadow-lg ${currentColor.shadow}`} />

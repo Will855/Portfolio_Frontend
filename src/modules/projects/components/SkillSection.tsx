@@ -42,21 +42,21 @@ const SkillGroupCard: React.FC<{ readonly group: SkillGroup; readonly index: num
             yoyo: true,
             ease: "sine.inOut"
         });
-
-        // Hover animation
-        if (cardRef.current) {
-            cardRef.current.addEventListener('mouseenter', () => {
-                gsap.to(cardRef.current, { y: -3, scale: 1.02, duration: 0.3, ease: "power2.out" });
-            });
-            cardRef.current.addEventListener('mouseleave', () => {
-                gsap.to(cardRef.current, { y: 0, scale: 1, duration: 0.3, ease: "power2.out" });
-            });
-        }
     }, { scope: cardRef });
+
+    const handleMouseEnter = () => {
+        gsap.to(cardRef.current, { y: -3, scale: 1.02, duration: 0.3, ease: "power2.out" });
+    };
+
+    const handleMouseLeave = () => {
+        gsap.to(cardRef.current, { y: 0, scale: 1, duration: 0.3, ease: "power2.out" });
+    };
 
     return (
         <div
             ref={cardRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className="skill-card relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] min-w-0 break-words overflow-hidden opacity-0 translate-y-5"
         >
             <div className={`absolute -top-2 -right-2 w-3 h-3 rounded-full ${currentColor.bg} shadow-lg ${currentColor.shadow}`} />

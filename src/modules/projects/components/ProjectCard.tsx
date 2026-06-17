@@ -36,27 +36,18 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
    * - Salida del mouse: Restablece posición
    * - Limpieza automática al desmontar el componente
    */
-  useEffect(() => {
-    const card = cardRef.current;
-    const content = contentRef.current;
+  const handleMouseMoveEvent = (e: React.MouseEvent<HTMLDivElement>) => {
+    // ponytail: usamos e.nativeEvent porque handleMouseMove espera MouseEvent nativo
+    if (cardRef.current && contentRef.current) {
+      handleMouseMove(e.nativeEvent, cardRef.current, contentRef.current, 1.15);
+    }
+  };
 
-    if (!card || !content) return;
-
-    // Configurar sensibilidad del efecto
-    const sensitivity = 1.15;
-
-    const optimizedMouseMove = (e: MouseEvent) => {
-      handleMouseMove(e, card, content, sensitivity);
-    };
-
-    card.addEventListener("mousemove", optimizedMouseMove);
-    card.addEventListener("mouseleave", () => resetCardPosition(card, content));
-
-    return () => {
-      card.removeEventListener("mousemove", optimizedMouseMove);
-      card.removeEventListener("mouseleave", () => resetCardPosition(card, content));
-    };
-  }, []);
+  const handleMouseLeave = () => {
+    if (cardRef.current && contentRef.current) {
+      resetCardPosition(cardRef.current, contentRef.current);
+    }
+  };
 
   /**
    * Maneja la navegación a la página de demo
@@ -74,6 +65,8 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
   return (
     <div
       ref={cardRef}
+      onMouseMove={handleMouseMoveEvent}
+      onMouseLeave={handleMouseLeave}
       className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-xl transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
       role="article"
       aria-label={`Tarjeta del proyecto: ${title}`}

@@ -32,9 +32,10 @@ export const handleMouseMove = (
     const heightRatio = movementStrength / card.offsetHeight;
     const widthRatio = movementStrength / card.offsetWidth;
 
-    // Posición relativa del mouse
-    const mouseX = e.pageX - card.offsetLeft - card.offsetWidth / 2;
-    const mouseY = e.pageY - card.offsetTop - card.offsetHeight / 2;
+    // ponytail: clientX/Y y getBoundingClientRect previene desajustes de scroll/posicionamiento
+    const rect = card.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left - rect.width / 2;
+    const mouseY = e.clientY - rect.top - rect.height / 2;
 
     // Cálculo de valores transform
     const rotateX = (heightRatio * mouseY * -5) / (50 / normalizedSensitivity);
