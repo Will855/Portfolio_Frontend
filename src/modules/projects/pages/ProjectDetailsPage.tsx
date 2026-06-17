@@ -92,7 +92,7 @@ const CardDetails: React.FC = () => {
     return (
         <>
             <header
-                className="header h-[80vh] bg-opacity-85 flex justify-center items-center relative text-white bg-cover bg-center brightness-75"
+                className="header h-[80vh] bg-slate-950 bg-opacity-85 flex justify-center items-center relative text-white bg-cover bg-center brightness-75"
                 style={{ backgroundImage: `url(${bgImage})` }}
             >
                 <div className="button flex gap-4">

@@ -76,13 +76,16 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
       }}
     >
       {/* Imagen con efecto de profundidad */}
-      <img
-        src={img}
-        alt={`Visualización del proyecto ${title}`}
-        className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
-        loading="lazy" 
-        decoding="async" 
-      />
+      {img && (
+        <img
+          src={img}
+          alt={`Visualización del proyecto ${title}`}
+          className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-50 transition-opacity duration-300"
+          loading="lazy" 
+          decoding="async" 
+          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+        />
+      )}
 
       {/* Contenido con efecto de flotación */}
       <div
