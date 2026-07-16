@@ -3,6 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../shared/services/supabase/supabase';
 import { useSkillSections, useKnowledgeSections } from '../hooks/useInfoSections';
 import type { InfoSectionRow } from '../../../types/supabase';
+import DOMPurify from 'dompurify';
+import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from '../utils/markdown';
 
 type SectionType = 'skill' | 'knowledge';
 type ColorOption = 'blue' | 'purple' | 'green';
@@ -76,35 +78,43 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
   const isLoading = sectionType === 'skill' ? skillsLoading : knowledgesLoading;
 
   const [sections, setSections] = useState<EditableSection[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
-    setSections(
-      sourceData.map((s: InfoSectionRow) => {
-        const mappedItems = s.items.map(it => {
-          if (sectionType === 'knowledge') {
-            if (typeof it === 'string') {
-              return { title: it, body: '' };
+    setIsInitialized(false);
+  }, [sectionType]);
+
+  useEffect(() => {
+    if (!isLoading && !isInitialized) {
+      setSections(
+        sourceData.map((s: InfoSectionRow) => {
+          const mappedItems = s.items.map(it => {
+            if (sectionType === 'knowledge') {
+              if (typeof it === 'string') {
+                return { title: it, body: '' };
+              }
+              return {
+                title: (it as any)?.title || '',
+                body: (it as any)?.body || '',
+              };
             }
-            return {
-              title: (it as any)?.title || '',
-              body: (it as any)?.body || '',
-            };
-          }
-          return typeof it === 'string' ? it : (it as any)?.title || '';
-        });
-        return {
-          id: s.id,
-          title: s.title,
-          color: s.color,
-          items: mappedItems,
-          order: s.order,
-        };
-      })
-    );
-  }, [sourceData, sectionType]);
+            return typeof it === 'string' ? it : (it as any)?.title || '';
+          });
+          return {
+            id: s.id,
+            title: s.title,
+            color: s.color,
+            items: mappedItems,
+            order: s.order,
+          };
+        })
+      );
+      setIsInitialized(true);
+    }
+  }, [sourceData, isLoading, isInitialized, sectionType]);
 
   const addSection = useCallback(() => {
     setSections(prev => [
@@ -230,6 +240,7 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
       queryClient.invalidateQueries({ queryKey: ['info_sections', sectionType] });
       if (sectionType === 'skill') refetchSkills();
       else refetchKnowledges();
+      setIsInitialized(false);
       setSuccess('Guardado correctamente');
       setTimeout(() => setSuccess(null), 3000);
     } catch (err: unknown) {
@@ -408,6 +419,20 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
                             className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm resize-none"
                             placeholder="Logros clave, tecnologías usadas, responsabilidades..."
                           />
+                          {(item as { title: string; body: string }).body && (
+                            <div className="mt-1.5 p-2.5 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300">
+                              <span className="block text-[10px] uppercase font-bold text-slate-500 mb-1">Vista Previa (Markdown)</span>
+                              <div
+                                className="prose prose-invert prose-xs max-w-none font-sans"
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(
+                                    parseMarkdownToHtml((item as { title: string; body: string }).body),
+                                    { ALLOWED_TAGS: ALLOWED_HTML_TAGS }
+                                  )
+                                }}
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}

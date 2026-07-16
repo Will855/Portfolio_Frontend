@@ -6,7 +6,7 @@ import './App.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { retry: 1, refetchOnWindowFocus: false },
+    queries: { retry: false, refetchOnWindowFocus: false },
   },
 });
 

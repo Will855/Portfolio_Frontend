@@ -15,17 +15,33 @@ import { isSupabaseConfigured } from '../../shared/services/supabase/supabase';
  * Indica si los datos críticos del sitio público están listos.
  * Cuando Supabase no está configurado, devuelve true para no bloquear la app.
  */
-export function useAppDataReady(): boolean {
-  const { isLoading: navLoading } = useContentBlock('nav_items');
-  const { isLoading: heroLoading } = useHeroContent();
-  const { isLoading: cardsLoading } = useCards();
-  const { isLoading: metaLoading } = useProjectsMeta();
-  const { isLoading: skillsLoading } = useSkillSections();
-  const { isLoading: knowledgesLoading } = useKnowledgeSections();
+export interface AppDataReadyStatus {
+  isReady: boolean;
+  hasError: boolean;
+}
 
-  if (!isSupabaseConfigured) return true;
+export function useAppDataReady(): AppDataReadyStatus {
+  const { isLoading: navLoading, error: navError } = useContentBlock('nav_items');
+  const { isLoading: heroLoading, error: heroError } = useHeroContent();
+  const { isLoading: cardsLoading, error: cardsError } = useCards();
+  const { isLoading: metaLoading, error: metaError } = useProjectsMeta();
+  const { isLoading: skillsLoading, error: skillsError } = useSkillSections();
+  const { isLoading: knowledgesLoading, error: knowledgesError } = useKnowledgeSections();
 
-  return !(
+  if (!isSupabaseConfigured) {
+    return { isReady: true, hasError: false };
+  }
+
+  const hasError = Boolean(
+    navError ||
+    heroError ||
+    cardsError ||
+    metaError ||
+    skillsError ||
+    knowledgesError
+  );
+
+  const isReady = !(
     navLoading ||
     heroLoading ||
     cardsLoading ||
@@ -33,4 +49,6 @@ export function useAppDataReady(): boolean {
     skillsLoading ||
     knowledgesLoading
   );
+
+  return { isReady, hasError };
 }

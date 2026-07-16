@@ -27,7 +27,8 @@ async function fetchProjectsMeta(): Promise<ProjectMeta[] | null> {
     .from('projects_meta')
     .select('*')
     .order('order');
-  if (error || !data?.length) return null;
+  if (error) throw error;
+  if (!data?.length) return null;
   return (data as ProjectMetaRow[]).map((row) => ({
     id: row.id,
     bgProyect: getStoragePublicUrl(row.bg_image_path) || `/images/bg-proyecto2.jpg`,

@@ -21,7 +21,8 @@ async function fetchContentBlock(key: string): Promise<ContentBlockRow | null> {
     .select('*')
     .eq('key', key)
     .single();
-  if (error || !data) return null;
+  if (error) throw error;
+  if (!data) return null;
   return data as ContentBlockRow;
 }
 

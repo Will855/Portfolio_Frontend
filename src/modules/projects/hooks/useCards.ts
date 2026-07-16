@@ -46,7 +46,10 @@ async function fetchCards(): Promise<CardProps[]> {
     return fallbackCards.map(mapFallback);
   }
   const { data, error } = await supabase.from('cards').select('*').order('order').order('id');
-  if (error || !data?.length) {
+  if (error) {
+    throw error;
+  }
+  if (!data?.length) {
     return fallbackCards.map(mapFallback);
   }
   return (data as CardRow[]).map((row) => ({

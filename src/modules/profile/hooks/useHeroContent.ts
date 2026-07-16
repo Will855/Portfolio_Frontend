@@ -30,7 +30,8 @@ async function fetchHero(): Promise<HeroContent & { profile_image_url: string }>
     .select('*')
     .eq('id', 'default')
     .single();
-  if (error || !data) return DEFAULT_HERO;
+  if (error) throw error;
+  if (!data) return DEFAULT_HERO;
   const row = data as HeroContent;
   return {
     ...row,

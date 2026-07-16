@@ -11,7 +11,8 @@ async function fetchInfoSections(sectionType: 'skill' | 'knowledge'): Promise<In
     .select('*')
     .eq('section_type', sectionType)
     .order('order', { ascending: true });
-  if (error || !data) return null;
+  if (error) throw error;
+  if (!data) return null;
   return data.map((row: Record<string, unknown>) => ({
     ...row,
     items: Array.isArray(row.items) ? row.items : JSON.parse(String(row.items || '[]')),

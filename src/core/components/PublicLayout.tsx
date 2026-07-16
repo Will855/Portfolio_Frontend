@@ -16,9 +16,11 @@ import Demo from '../../modules/projects/pages/DemosRedirectPage';
  * projects_meta y secciones de información estén cargados desde Supabase.
  */
 export const PublicLayout: React.FC = () => {
-  const ready = useAppDataReady();
+  const { isReady, hasError } = useAppDataReady();
 
-  if (!ready) return <LoadingScreen />;
+  if (hasError) return <NotFound />;
+
+  if (!isReady) return <LoadingScreen />;
 
   return (
     <>

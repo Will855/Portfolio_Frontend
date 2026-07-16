@@ -1,0 +1,627 @@
+{
+  "/home/parz7val/Documents/Proyectos/portfolio/eslint.config.js": {
+    "mtime": 1779692027.2981184,
+    "ast_hash": "bfe13b9e25d0af7959d0396aa103d88c",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/firebase.json": {
+    "mtime": 1779692027.2981184,
+    "ast_hash": "646a279d69e23e4164c4b01f6fa2c3c9",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/postcss.config.js": {
+    "mtime": 1779692027.2991183,
+    "ast_hash": "ef3ba2a81ba19f8ea5ddf625521e96f0",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/vite.config.js": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "208c2193506b23ab4f64b5c95c164570",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/tailwind.config.js": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "ed0b5d986536707c21baed351379bf36",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/package.json": {
+    "mtime": 1783747739.5242922,
+    "ast_hash": "cc6628d12c8fac89a24a3bbd8f1347f6",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/main.tsx": {
+    "mtime": 1783755727.7153306,
+    "ast_hash": "8c81fb089fe2d6f5fc46d6315bcd1cdf",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/vite-env.d.ts": {
+    "mtime": 1779698194.507772,
+    "ast_hash": "d4f69e0595936d68ea1d09b8cca58620",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/App.tsx": {
+    "mtime": 1783756076.3094249,
+    "ast_hash": "bc66b4d325c0967caddfd251550cc2c9",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/hooks/useAnalytics.ts": {
+    "mtime": 1779692027.3311176,
+    "ast_hash": "32ad01b796427f343d3d63a9377a71e2",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/hooks/useContentBlock.ts": {
+    "mtime": 1783755714.0972886,
+    "ast_hash": "a6d9b7b1cfa4f7f9fca5dc0745f450c2",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/hooks/useGsapAnimation.ts": {
+    "mtime": 1779693857.8699033,
+    "ast_hash": "3ccdf935e8d12ec463080223a7d03034",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/hooks/useNavItems.ts": {
+    "mtime": 1779692027.3311176,
+    "ast_hash": "3378c8f11f36345eff7f9ea0349eb388",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/hooks/useAppDataReady.ts": {
+    "mtime": 1783755722.9583158,
+    "ast_hash": "a4f5ddf1dc432c18382a02f76d43992b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/StarsBackground.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "e55f3172c8f40b91c7551293cfabe99e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/PublicLayout.tsx": {
+    "mtime": 1783755725.3863235,
+    "ast_hash": "552df921dddc3177c2a6eb3583015996",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/NotFoundPage.tsx": {
+    "mtime": 1779693839.3451302,
+    "ast_hash": "d25300dd21b2c6888e2e2d8a79fa2db7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/LoadingScreen.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "71881546c898da6f4c2e892f8ade9714",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/footer/Footer.tsx": {
+    "mtime": 1781667878.1211348,
+    "ast_hash": "4a96335cff27378ae0b3ece7a652383f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/navbar/navMenu.tsx": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "2106cbb53f18a1ad7104a45832829743",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/navbar/menuResponsive.tsx": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "709282acd890b4ae2f133b302fd0eb31",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/admin/AdminDashboard.tsx": {
+    "mtime": 1779692027.3311176,
+    "ast_hash": "01062e0eb85c91250d12d7d536d8aeb6",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/components/admin/AdminLayout.tsx": {
+    "mtime": 1779693880.813838,
+    "ast_hash": "acd245dba56b987faef1b65054a38d71",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/utils/testSupabaseConnection.ts": {
+    "mtime": 1779694040.7488022,
+    "ast_hash": "e8963bb560f4710a6b907710abe38d75",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/core/utils/analytics.ts": {
+    "mtime": 1779698208.8961923,
+    "ast_hash": "289333466be37dd81e1a8decbc1ba18f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/config/webPlans.ts": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "121f6f02e418700c8a274c04c65e6c7b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/components/Input.tsx": {
+    "mtime": 1779693845.5683918,
+    "ast_hash": "a53a59df2f00dcd3a460b7d5b4ca2f9e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/components/SafeHtml.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "6eaeaecfe8e9165638a01cef1cff97a1",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/components/MagneticBtn.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "69fd0d6eb33afb2283e55d3a99c52119",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/components/CircleProfile.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "b7fbce922e75b6d4ab2cf0aa82039161",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/utils/validation.ts": {
+    "mtime": 1779693851.348633,
+    "ast_hash": "2f0ba6d353ff5981abd2b30feacb3124",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/utils/cardAnimations.ts": {
+    "mtime": 1781666791.8370786,
+    "ast_hash": "6059fd34922ec5ae32ded8d2fad4f3b7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/utils/infoHandler.ts": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "78c361c4bb2d7263287ade9b86d3f621",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/services/supabase/supabase.ts": {
+    "mtime": 1783756571.329485,
+    "ast_hash": "5fb11446cf5bc833129334e8cb1f25f4",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/shared/services/supabase/supabaseStorage.ts": {
+    "mtime": 1779694062.3524208,
+    "ast_hash": "467c7750085d54a004168ca5494fd7ac",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/types/supabase.ts": {
+    "mtime": 1779697841.3222811,
+    "ast_hash": "c8461396bc471a1986a6c58148688311",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/types/types.ts": {
+    "mtime": 1779700301.2286274,
+    "ast_hash": "5244977aa7d3f1572b1b7394e347ebb3",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/config/fallbacks.ts": {
+    "mtime": 1781475424.3752553,
+    "ast_hash": "acb1586187f70aa448b30f1b04418bb8",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/config/cards.ts": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "3aaeba403810dd9bc6c632a279846be1",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/config/project.ts": {
+    "mtime": 1779692027.3301177,
+    "ast_hash": "f9251465766c79b764c5d181be154f39",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useProjectsMeta.ts": {
+    "mtime": 1783755716.1232948,
+    "ast_hash": "6c1b2ca5c062baae4280f5604dbbccf7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useCards.ts": {
+    "mtime": 1783755708.0532699,
+    "ast_hash": "d4409992fd608606f3a2e34e5e094fdf",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useAdminProjectContent.ts": {
+    "mtime": 1779700121.7218785,
+    "ast_hash": "de6192f05d6b5888d6703f0a23ec3c12",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useProjectContent.ts": {
+    "mtime": 1779700377.5693371,
+    "ast_hash": "c085508c6d52b63cd79049cf4f4c613e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useAdminProjects.ts": {
+    "mtime": 1781668417.9129045,
+    "ast_hash": "c52dcf6c0cdfc5ad93ce52ad455810d5",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/hooks/useInfoSections.ts": {
+    "mtime": 1783755720.6583087,
+    "ast_hash": "713d6f8addf13cc8b2f96aba4e16ec65",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/admin/AdminProjectsCRUD.tsx": {
+    "mtime": 1781668421.7449,
+    "ast_hash": "15a588404d4940ac863acba7bc926ab5",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/admin/ProjectFormModal.tsx": {
+    "mtime": 1781668428.9028912,
+    "ast_hash": "7a1a9792fc1f16a4b127dc36211a61fe",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/admin/AdminInfoSections.tsx": {
+    "mtime": 1781669154.1778688,
+    "ast_hash": "464229968c8d00770ef17b30155c4990",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/admin/MarkdownEditor.tsx": {
+    "mtime": 1779700197.291662,
+    "ast_hash": "c8bcd8b630f93575338c871d5a7db034",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/admin/AdminContentEditor.tsx": {
+    "mtime": 1779700169.4738524,
+    "ast_hash": "7215cfa0853a6a1b7b346d705883baab",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/components/InformationContent.tsx": {
+    "mtime": 1779700538.3930728,
+    "ast_hash": "99d9823ded58ccdcd4ba8b4c5275e2a5",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/components/ProjectGrid.tsx": {
+    "mtime": 1779700781.2325137,
+    "ast_hash": "8613bfeea588b5bdda5ca4e18ea64bf2",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/components/ExpAndTecnologies.tsx": {
+    "mtime": 1781666941.3650124,
+    "ast_hash": "5bebfcfddc8ff99d3cf8422cd0a8ae1f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/components/ProjectCard.tsx": {
+    "mtime": 1781667306.3253722,
+    "ast_hash": "d15ba3761ac13e373875c7cc76132da9",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/components/SkillSection.tsx": {
+    "mtime": 1781666913.5562115,
+    "ast_hash": "ec56e69bd0eb79e3f98d3d337c7cd288",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/pages/ProjectsPage.tsx": {
+    "mtime": 1779693833.7828946,
+    "ast_hash": "491da12eeb50ce13987953d0b5362926",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/pages/DemosRedirectPage.tsx": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "ced8b42a632c76c205dfafd2749c4fec",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/pages/ProjectDetailsPage.tsx": {
+    "mtime": 1781667310.9593384,
+    "ast_hash": "e83fe16858bd537386d9753795edb34e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/projects/utils/markdown.ts": {
+    "mtime": 1781475415.0103502,
+    "ast_hash": "f221bcfb757092e3b27c7a8fbb79f082",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/profile/hooks/useHeroContent.ts": {
+    "mtime": 1783755711.4632804,
+    "ast_hash": "b3adce5acd7fffa8204858b89ba46fb5",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/profile/admin/AdminHero.tsx": {
+    "mtime": 1779693914.6411738,
+    "ast_hash": "e229c28181d272c5eda9e4a29bf8776a",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/profile/components/WordCloud.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "e872f1a51cc0554baa74b88c1fb0d248",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/profile/components/GlitchPresentation.tsx": {
+    "mtime": 1779692027.3291178,
+    "ast_hash": "a68b3448882d3ef62ba5b56fd7fa504a",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/auth/hooks/useAdminAuth.ts": {
+    "mtime": 1783755734.339351,
+    "ast_hash": "8569f42426cb835fa0c8dd2a7f4eafff",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/auth/pages/AdminLogin.tsx": {
+    "mtime": 1779696889.0374835,
+    "ast_hash": "b754c4d56ded4d6e2b2e2854c8034b33",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/contact/admin/AdminMessages.tsx": {
+    "mtime": 1779693925.526594,
+    "ast_hash": "014b6737d75e0851a0424bdefd3eb414",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/modules/contact/components/ContactForm.tsx": {
+    "mtime": 1779700579.7995727,
+    "ast_hash": "9d9d94f4a9d67ec3a6fa660e08255fad",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/src/pages/Home.tsx": {
+    "mtime": 1779700758.8647158,
+    "ast_hash": "6187b1df08c625f5fd5cc1fa5a157a9d",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/ejemplo_contenido.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "dadede64660895b2b78453ae1766ca79",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20260617000002_add_missing_project_columns.sql": {
+    "mtime": 1781668439.3418777,
+    "ast_hash": "d793f25c8312b56ff0c0cf8c6e4fcc10",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20250228000001_initial_schema.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "4073f826adefb805f780a5bd2c9c44e1",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20250228000005_info_sections.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "014ffd419ed585f1fc8ef0fded81e4f7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20250228000004_project_content.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "d4758e26069d212bf3b794b2ea73a5cb",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20260614000001_seed_cv_data.sql": {
+    "mtime": 1781475427.2472265,
+    "ast_hash": "97ff3c69ad2fb6ac16da203a91f3d3af",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20250228000003_unify_projects.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "d3f87fd58d3dbe9ff0cd7d60ff322656",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/migrations/20250228000002_storage.sql": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "64ee2b16891808af07d11ce5475e9b2a",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/README_SISTEMA_ADMIN.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "4c0c433be55fd83213540e8b55c27e89",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/index.html": {
+    "mtime": 1779693800.3934443,
+    "ast_hash": "e4e46f372c4d6e0c09688c43587bff32",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/README.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "92493df5ff5f141afd33b4d66ca297cc",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/DOCUMENTATION.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "99f95939b9d9f838749fcc4e542fda13",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/INSTRUCCIONES_ADMIN_CONTENIDO.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "e6eb2193b011b684cd03153c24043a48",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/workflows/graphify.md": {
+    "mtime": 1782880659.314061,
+    "ast_hash": "afa1ffc01aa56ac681c7335686f44767",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/rules/graphify.md": {
+    "mtime": 1782880659.3130608,
+    "ast_hash": "f1e53ecc9194573d3c28fc116c743a2e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/skills/ponytail-debt/SKILL.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "9636a949a869960090060495f892bbf0",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/skills/ponytail/SKILL.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "e11fe63cf484d5d0af25292f32891893",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/skills/ponytail-review/SKILL.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "09a8783e6d5010ed966a1cdba575b33c",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/skills/ponytail-audit/SKILL.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "4d318b17b9126a10ce489c0bb2809f7f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.agents/skills/ponytail-help/SKILL.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "ab2575fbffd7d1a14d5933a69ab9e9d5",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.cursor/rules/AGENTS.md": {
+    "mtime": 1781535896.0,
+    "ast_hash": "55a8fd11f6cce9e117ef84ad5aab8164",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.cursor/rules/SKILL.md": {
+    "mtime": 1781591627.0165012,
+    "ast_hash": "e11fe63cf484d5d0af25292f32891893",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.github/workflows/firebase-hosting-pull-request.yml": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "d479148873937aee956956cc11a87754",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/.github/workflows/firebase-hosting-merge.yml": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "b63b03b5fcb9f70b10aa21a30f35564d",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/repomix-supabase.md": {
+    "mtime": 1783748884.5819175,
+    "ast_hash": "c740c3e5b00606c903e7f5f63ca09b30",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/repomix-core-config.md": {
+    "mtime": 1783748821.2728233,
+    "ast_hash": "cdbdf8bf7bda2900c47e3b1745b958fe",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/repomix-projects.md": {
+    "mtime": 1783748828.9638345,
+    "ast_hash": "7768cc7387bc572b26d99baaf3a21dad",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/repomix-shared-types.md": {
+    "mtime": 1783748879.0889091,
+    "ast_hash": "2a540628a05f5a94601602a5fdaae01b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/repomix-auth-profile.md": {
+    "mtime": 1783748873.2779005,
+    "ast_hash": "b821ced2833da7cd6226c9703fcde8ad",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/navbar.md": {
+    "mtime": 1779692027.2981184,
+    "ast_hash": "dbe915ef1844e09d1b5fdf6e807fd9ad",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/circle-profile.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "32cd130b10bf07c2c48c56e28c171bcf",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/utils.md": {
+    "mtime": 1779692027.2981184,
+    "ast_hash": "47cb688e438661c0315ae71843460d93",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/magnetic-btn.md": {
+    "mtime": 1779692027.2981184,
+    "ast_hash": "313bce0ca2b3ec013c53c3f90e380c73",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/footer.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "521dd58440ab3a2d0c5d6e607c211653",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/cards.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "1b45fa3686c27b2678d2384b37f8958b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/form.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "c8c7a44274aa51f69e6565c8e90cebf7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/README.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "918f0224638c06c5b289cca663c5a38c",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/demos.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "6e434853eb6c5c2080cc7a512b86b09c",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/about.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "72d1d36855122c7e110611655e2f9c5b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/animations.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "20ada157b30fa9d04f5c6ff19c675c0b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/input.md": {
+    "mtime": 1779692027.2971184,
+    "ast_hash": "cce6cb6706118d61099d156404457d02",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/supabase/README.md": {
+    "mtime": 1779692027.3321176,
+    "ast_hash": "1e12b7caed8081aa3dd8e45849d3c2bb",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/docs/componentes/Wilmer_Lynch_CV_SemiSenior_ES.pdf": {
+    "mtime": 1781473993.255583,
+    "ast_hash": "807efa168ff4b082d724ad215a79b1cc",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/profile.jpeg": {
+    "mtime": 1779692027.3281176,
+    "ast_hash": "d0dae94752ee0df0c9325ea7d3e07731",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web2.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "a9897656f692c0ee9302a6c8c7e2670c",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web3.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "617b642ee901ce64f8dc20239ca18859",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web5.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "7f15613c176a759ebe414af0cdd5d8b7",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/qrWhatsapp.webp": {
+    "mtime": 1779692027.3001182,
+    "ast_hash": "3f5b125e4d26a75bd8bff01020e90865",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web1.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "5a53823997b5302c551e2f9a6d6b6a4b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web4.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "b391c596d61b8b3ab3b47dcfd84af2e4",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web6.webp": {
+    "mtime": 1779692027.3271177,
+    "ast_hash": "bd9d5ff9d1e954a9387da43ba02ca86f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/video.gif": {
+    "mtime": 1779692027.3061182,
+    "ast_hash": "1b470af151d1b354e6a0ba1e2c94d621",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/video2.gif": {
+    "mtime": 1779692027.3181179,
+    "ast_hash": "a712a45436817aa6f5cbdd6374021eab",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/Certificado_GCP_1.png": {
+    "mtime": 1781474270.4193883,
+    "ast_hash": "71a7a2ea3045c0a003fbd31ce5e28a5d",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/video3.gif": {
+    "mtime": 1779692027.3261178,
+    "ast_hash": "fc60606ee0935686c84f24bc011b87db",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/Proyectos/portfolio/public/assets/web7.webp": {
+    "mtime": 1779692027.3281176,
+    "ast_hash": "83a4d0cfd79b2d9013e8ce757333fac6",
+    "semantic_hash": ""
+  }
+}

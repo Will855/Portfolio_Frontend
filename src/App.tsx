@@ -5,6 +5,7 @@ import { useAnalytics } from './core/hooks/useAnalytics';
 import { trackPageView, trackSectionNavigation } from './core/utils/analytics';
 import { PublicLayout } from './core/components/PublicLayout';
 import { AdminLogin } from './modules/auth/pages/AdminLogin';
+import { UpdatePassword } from './modules/auth/pages/UpdatePassword';
 import { AdminLayout } from './core/components/admin/AdminLayout';
 import { AdminDashboard } from './core/components/admin/AdminDashboard';
 import { AdminHero } from './modules/profile/admin/AdminHero';
@@ -64,6 +65,7 @@ const RouterWrapper = () => {
   return (
     <Routes>
       <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/admin/update-password" element={<UpdatePassword />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
         <Route path="hero" element={<AdminHero />} />
@@ -84,7 +86,7 @@ const RouterWrapper = () => {
  */
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <RouterWrapper /> {/* Todos los componentes con hooks de routing están dentro de Router */}
     </Router>
   );

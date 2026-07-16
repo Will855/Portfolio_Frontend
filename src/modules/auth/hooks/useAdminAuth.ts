@@ -32,6 +32,8 @@ export function useAdminAuth() {
       setSession(s);
       setUser(s?.user ?? null);
       setLoading(false);
+    }).catch(() => {
+      setLoading(false);
     });
     const {
       data: { subscription },
@@ -60,5 +62,34 @@ export function useAdminAuth() {
     await supabase.auth.signOut();
   };
 
-  return { user, session, loading, signIn, signOut, isConfigured: isSupabaseConfigured };
+  /**
+   * Envía un correo de recuperación de contraseña con código OTP.
+   */
+  const resetPassword = async (email: string) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+    return { data, error };
+  };
+
+  /**
+   * Verifica el código OTP de recuperación.
+   * Si es exitoso, Supabase inicia una sesión automáticamente.
+   */
+  const verifyRecoveryOtp = async (email: string, token: string) => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'recovery',
+    });
+    return { data, error };
+  };
+
+  /**
+   * Actualiza la contraseña del usuario (se debe llamar después de haber recuperado la sesión vía OTP).
+   */
+  const updatePassword = async (newPassword: string) => {
+    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+    return { data, error };
+  };
+
+  return { user, session, loading, signIn, signOut, resetPassword, verifyRecoveryOtp, updatePassword, isConfigured: isSupabaseConfigured };
 }
