@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useKnowledgeSections } from "../hooks/useInfoSections";
+import { useCertificates } from "../hooks/useCertificates";
 import type { CareerGroup, CareerItem } from "../../../types/types";
 import DOMPurify from "dompurify";
 import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from "../utils/markdown";
@@ -26,21 +27,17 @@ const KnowledgeTimelineItem: React.FC<{ readonly item: CareerGroup; readonly ind
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const detailsRef = useRef<HTMLUListElement>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const storageKey = `portfolio_career_${item.id}_open`;
+    const [isOpen, setIsOpen] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem(storageKey) === 'true';
+        }
+        return false;
+    });
 
     useEffect(() => {
-        const handlePointerDown = (event: MouseEvent | TouchEvent) => {
-            const target = event.target as Node | null;
-            if (!containerRef.current || !target) return;
-            if (!containerRef.current.contains(target)) setIsOpen(false);
-        };
-        document.addEventListener('mousedown', handlePointerDown);
-        document.addEventListener('touchstart', handlePointerDown);
-        return () => {
-            document.removeEventListener('mousedown', handlePointerDown);
-            document.removeEventListener('touchstart', handlePointerDown);
-        };
-    }, []);
+        localStorage.setItem(storageKey, String(isOpen));
+    }, [isOpen, storageKey]);
 
     useEffect(() => {
         if (isOpen) containerRef.current?.focus();
@@ -226,7 +223,7 @@ const LightboxModal: React.FC<LightboxModalProps> = ({ src, onClose }) => {
     );
 };
 
-const GcpCertificateWidget: React.FC = () => {
+const CertificateWidget: React.FC<{ certificate: any }> = ({ certificate }) => {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const widgetRef = useRef<HTMLDivElement>(null);
 
@@ -243,69 +240,77 @@ const GcpCertificateWidget: React.FC = () => {
                 {/* Certificate info */}
                 <div className="flex-1 space-y-4 text-left w-full">
                     <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-blue-300 bg-blue-500/10 border border-blue-500/20 rounded-full uppercase tracking-wider">
-                            Certificación
-                        </span>
-                        <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 rounded-full uppercase tracking-wider">
-                            En Preparación
-                        </span>
+                        {certificate.type_badge && (
+                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-blue-300 bg-blue-500/10 border border-blue-500/20 rounded-full uppercase tracking-wider">
+                                {certificate.type_badge}
+                            </span>
+                        )}
+                        {certificate.status_badge && (
+                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 rounded-full uppercase tracking-wider">
+                                {certificate.status_badge}
+                            </span>
+                        )}
                     </div>
 
                     <div className="space-y-1">
                         <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug group-hover:text-blue-300 transition-colors">
-                            Google Cloud Associate Cloud Engineer
+                            {certificate.title}
                         </h3>
                         <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                            Avalado por <span className="text-white">Google Cloud</span> • Distribuido por <span className="text-white">Coursera</span>
+                            Avalado por <span className="text-white">{certificate.issuer}</span> • Distribuido por <span className="text-white">{certificate.provider}</span>
                         </p>
                     </div>
 
                     <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                        Programa de preparación oficial centrado en la implementación, diseño, planificación y configuración de soluciones de infraestructura y servicios de almacenamiento, computación y red en Google Cloud Platform (GCP).
+                        {certificate.description}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 pt-1">
-                        {["GCP", "Cloud Infrastructure", "Kubernetes", "IAM", "VPC Networks", "Compute Engine"].map((badge, idx) => (
-                            <span 
-                                key={idx} 
-                                className="text-[10px] sm:text-xs text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5 hover:border-white/10 hover:bg-white/10 transition-colors"
-                            >
-                                {badge}
-                            </span>
-                        ))}
-                    </div>
+                    {certificate.tags && certificate.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                            {certificate.tags.map((badge: string, idx: number) => (
+                                <span 
+                                    key={idx} 
+                                    className="text-[10px] sm:text-xs text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5 hover:border-white/10 hover:bg-white/10 transition-colors"
+                                >
+                                    {badge}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Certificate Image Frame */}
-                <div className="w-full max-w-sm md:max-w-none md:w-64 flex-shrink-0 mx-auto md:mx-0">
-                    <button
-                        onClick={() => setIsLightboxOpen(true)}
-                        className="relative w-full rounded-xl border border-white/10 overflow-hidden shadow-lg group/img focus:outline-none focus:ring-2 focus:ring-blue-400/60 block cursor-zoom-in"
-                        aria-label="Ampliar certificado de Google Cloud"
-                    >
-                        {/* Overlay hover effect */}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
-                            <div className="bg-white/10 backdrop-blur-md rounded-full p-2.5 border border-white/20 transform translate-y-2 group-hover/img:translate-y-0 transition-transform duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637zM10.5 7.5v6m3-3h-6" />
-                                </svg>
+                {certificate.img && (
+                    <div className="w-full max-w-sm md:max-w-none md:w-64 flex-shrink-0 mx-auto md:mx-0">
+                        <button
+                            onClick={() => setIsLightboxOpen(true)}
+                            className="relative w-full rounded-xl border border-white/10 overflow-hidden shadow-lg group/img focus:outline-none focus:ring-2 focus:ring-blue-400/60 block cursor-zoom-in"
+                            aria-label={`Ampliar certificado de ${certificate.issuer}`}
+                        >
+                            {/* Overlay hover effect */}
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
+                                <div className="bg-white/10 backdrop-blur-md rounded-full p-2.5 border border-white/20 transform translate-y-2 group-hover/img:translate-y-0 transition-transform duration-300">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637zM10.5 7.5v6m3-3h-6" />
+                                    </svg>
+                                </div>
                             </div>
-                        </div>
 
-                        <img 
-                            src="/assets/Certificado_GCP_1.png" 
-                            alt="Certificado Google Cloud Associate Cloud Engineer" 
-                            className="w-full aspect-[4/3] object-cover object-top transform group-hover/img:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                        />
-                    </button>
-                </div>
+                            <img 
+                                src={certificate.img} 
+                                alt={certificate.title} 
+                                className="w-full aspect-[4/3] object-cover object-top transform group-hover/img:scale-105 transition-transform duration-500"
+                                loading="lazy"
+                            />
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Lightbox Modal */}
-            {isLightboxOpen && (
+            {isLightboxOpen && certificate.img && (
                 <LightboxModal 
-                    src="/assets/Certificado_GCP_1.png" 
+                    src={certificate.img} 
                     onClose={() => setIsLightboxOpen(false)} 
                 />
             )}
@@ -314,7 +319,9 @@ const GcpCertificateWidget: React.FC = () => {
 };
 
 export const ExpAndTecnologies: React.FC = () => {
-    const { knowledges, isLoading } = useKnowledgeSections();
+    const { knowledges, isLoading: isLoadingKnowledges } = useKnowledgeSections();
+    const { certificates, isLoading: isLoadingCertificates } = useCertificates();
+    const isLoading = isLoadingKnowledges || isLoadingCertificates;
     const containerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
@@ -350,7 +357,9 @@ export const ExpAndTecnologies: React.FC = () => {
                             <KnowledgeTimelineItem key={item.id} item={item} index={index} />
                         ))}
                     </ul>
-                    <GcpCertificateWidget />
+                    {certificates.map(cert => (
+                        <CertificateWidget key={cert.id} certificate={cert} />
+                    ))}
                 </>
             )}
         </article>

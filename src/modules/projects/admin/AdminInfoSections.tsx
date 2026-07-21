@@ -238,8 +238,11 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
       }
 
       queryClient.invalidateQueries({ queryKey: ['info_sections', sectionType] });
-      if (sectionType === 'skill') refetchSkills();
-      else refetchKnowledges();
+      if (sectionType === 'skill') {
+        await refetchSkills();
+      } else {
+        await refetchKnowledges();
+      }
       setIsInitialized(false);
       setSuccess('Guardado correctamente');
       setTimeout(() => setSuccess(null), 3000);

@@ -5,17 +5,18 @@ import { testSupabaseConnection, type ConnectionTestResult } from '../../../core
 
 export const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [isRecovering, setIsRecovering] = useState(false);
-  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [step, setStep] = useState<'email' | 'otp'>('email');
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Rate Limiting & Cooldowns
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  
   const [dbTest, setDbTest] = useState<ConnectionTestResult | null>(null);
-  const { user, loading: authLoading, signIn, resetPassword, verifyRecoveryOtp, isConfigured } = useAdminAuth();
+  const { user, loading: authLoading, sendOtpLogin, verifyOtpLogin, isConfigured } = useAdminAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +24,19 @@ export const AdminLogin: React.FC = () => {
     testSupabaseConnection().then(setDbTest);
   }, [isConfigured]);
 
+  // Recuperar cooldown del localStorage
+  useEffect(() => {
+    const savedCooldown = localStorage.getItem('admin_login_cooldown');
+    if (savedCooldown) {
+      const expiration = parseInt(savedCooldown, 10);
+      const remaining = Math.max(0, Math.floor((expiration - Date.now()) / 1000));
+      if (remaining > 0) {
+        setResendCooldown(remaining);
+      }
+    }
+  }, []);
+
+  // Manejador del timer
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (resendCooldown > 0) {
@@ -31,18 +45,68 @@ export const AdminLogin: React.FC = () => {
     return () => clearTimeout(timer);
   }, [resendCooldown]);
 
-  const handleResendCode = async () => {
+  const startCooldown = (seconds: number) => {
+    setResendCooldown(seconds);
+    localStorage.setItem('admin_login_cooldown', (Date.now() + seconds * 1000).toString());
+  };
+
+  const handleRequestOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (resendCooldown > 0) return;
+
     setError('');
     setMessage('');
     setLoading(true);
-    const { error: err } = await resetPassword(email);
+
+    const { error: err } = await sendOtpLogin(email);
     setLoading(false);
+
     if (err) {
-      setError(err.message ?? 'Error al reenviar el correo');
+      // Manejo de código 429 Too Many Requests
+      if (err.status === 429 || err.message.toLowerCase().includes('rate limit')) {
+        setError('Has solicitado demasiados códigos. Por favor, espera 1 minuto e inténtalo de nuevo.');
+        startCooldown(60);
+      } else {
+        setError(err.message ?? 'Error al enviar el correo');
+      }
     } else {
-      setMessage('Nuevo código enviado a tu correo.');
-      setResendCooldown(60);
+      setMessage('Revisa tu bandeja de entrada (y Spam). Escribe el código que recibiste.');
+      setStep('otp');
+      setOtp('');
+      setFailedAttempts(0);
+      startCooldown(60); // 60 segundos de espera obligatoria entre envíos
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+
+    const cleanOtp = otp.trim();
+    if (cleanOtp.length < 6) {
+      setError('El código debe tener al menos 6 dígitos.');
+      return;
+    }
+
+    setLoading(true);
+    const { error: err } = await verifyOtpLogin(email.trim(), cleanOtp);
+    setLoading(false);
+
+    if (err) {
+      const newFails = failedAttempts + 1;
+      setFailedAttempts(newFails);
+      
+      if (newFails >= 3) {
+        setError('Demasiados intentos fallidos. Por favor, solicita un nuevo código.');
+        setStep('email');
+        setOtp('');
+      } else {
+        setError(`Código incorrecto o expirado. (Intento ${newFails}/3)`);
+      }
+    } else {
+      // Éxito absoluto, vamos al panel
+      navigate('/admin', { replace: true });
     }
   };
 
@@ -71,45 +135,6 @@ export const AdminLogin: React.FC = () => {
     return <Navigate to="/admin" replace />;
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setMessage('');
-    setLoading(true);
-
-    if (isVerifyingOtp) {
-      const { error: err } = await verifyRecoveryOtp(email.trim(), otp.trim());
-      setLoading(false);
-      if (err) {
-        setError(err.message ?? 'Código incorrecto o expirado.');
-      } else {
-        // Al verificar exitosamente, Supabase inicia la sesión.
-        navigate('/admin/update-password', { replace: true });
-      }
-      return;
-    }
-
-    if (isRecovering) {
-      const { error: err } = await resetPassword(email);
-      setLoading(false);
-      if (err) {
-        setError(err.message ?? 'Error al enviar el correo');
-      } else {
-        setMessage('Revisa tu bandeja de entrada y escribe el código de 6 dígitos.');
-        setIsVerifyingOtp(true);
-      }
-      return;
-    }
-
-    const { error: err } = await signIn(email, password);
-    setLoading(false);
-    if (err) {
-      setError(err.message ?? 'Error al iniciar sesión');
-      return;
-    }
-    navigate('/admin', { replace: true });
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200 p-4">
       <div className="w-full max-w-sm space-y-3">
@@ -123,12 +148,18 @@ export const AdminLogin: React.FC = () => {
           <p className="text-center text-xs text-emerald-400">Conexión a la base de datos correcta</p>
         )}
         <form
-          onSubmit={handleSubmit}
+          onSubmit={step === 'email' ? handleRequestOtp : handleVerifyOtp}
           className="space-y-5 rounded-2xl bg-white/5 backdrop-blur-xl p-6 sm:p-8 border border-white/10 relative overflow-hidden"
         >
           <h1 className="text-xl font-bold text-center text-white">
-            {isVerifyingOtp ? 'Ingresar Código' : isRecovering ? 'Recuperar contraseña' : 'Admin'}
+            {step === 'otp' ? 'Ingresar Código' : 'Acceso Admin'}
           </h1>
+          
+          {step === 'email' && (
+            <p className="text-sm text-slate-400 text-center">
+              Ingresa tu correo autorizado para recibir un código de acceso de un solo uso.
+            </p>
+          )}
 
           {/* Email */}
           <div className="space-y-1.5">
@@ -139,9 +170,9 @@ export const AdminLogin: React.FC = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              readOnly={isVerifyingOtp}
+              readOnly={step === 'otp'}
               className={`w-full px-4 py-2.5 rounded-xl border transition-all ${
-                isVerifyingOtp 
+                step === 'otp'
                   ? 'bg-white/5 border-transparent text-slate-400 cursor-not-allowed'
                   : 'bg-white/5 border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20'
               }`}
@@ -150,60 +181,26 @@ export const AdminLogin: React.FC = () => {
           </div>
 
           {/* OTP Code Input */}
-          {isVerifyingOtp && (
+          {step === 'otp' && (
             <div className="space-y-1.5">
-              <label htmlFor="otp" className="block text-sm font-medium text-slate-300">Código de 6 dígitos</label>
+              <label htmlFor="otp" className="block text-sm font-medium text-slate-300">Código de verificación</label>
               <input
                 id="otp"
                 type="text"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 6))}
+                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, '').slice(0, 8))}
                 required
-                maxLength={6}
+                maxLength={8}
                 minLength={6}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                autoFocus
                 className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10
-                           text-white text-center tracking-[0.5em] font-mono text-lg placeholder-slate-500 focus:outline-none focus:border-blue-500/50
+                           text-white text-center tracking-[0.4em] font-mono text-lg placeholder-slate-500 focus:outline-none focus:border-blue-500/50
                            focus:ring-1 focus:ring-blue-500/20 transition-all"
-                placeholder="000000"
+                placeholder="••••••••"
               />
-            </div>
-          )}
-
-          {/* Password (only if not recovering and not verifying) */}
-          {!isRecovering && !isVerifyingOtp && (
-            <div className="space-y-1.5">
-              <label htmlFor="password" className="block text-sm font-medium text-slate-300">Contraseña</label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  className="w-full pl-4 pr-12 py-2.5 rounded-xl bg-white/5 border border-white/10
-                             text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50
-                             focus:ring-1 focus:ring-blue-500/20 transition-all"
-                  placeholder="••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors p-1"
-                  aria-label="Alternar visibilidad"
-                >
-                  {showPassword ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )}
-                </button>
-              </div>
+              <p className="text-xs text-slate-500 text-center">Ingresa el código exactamente como aparece en el correo</p>
             </div>
           )}
 
@@ -221,7 +218,7 @@ export const AdminLogin: React.FC = () => {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || (step === 'email' && resendCooldown > 0)}
             className="w-full py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500
                        text-white font-medium hover:from-blue-500 hover:to-blue-400
                        transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50
@@ -230,34 +227,39 @@ export const AdminLogin: React.FC = () => {
             {loading && (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             )}
-            {loading ? 'Procesando...' : isVerifyingOtp ? 'Validar Código' : isRecovering ? 'Enviar Código' : 'Entrar'}
+            {loading 
+              ? 'Procesando...' 
+              : step === 'otp' 
+                ? 'Validar Código' 
+                : resendCooldown > 0 
+                  ? `Reenviar en ${resendCooldown}s` 
+                  : 'Enviar Código OTP'}
           </button>
           
-          <div className="text-center mt-4 space-y-2 flex flex-col">
-            {isVerifyingOtp && (
+          {step === 'otp' && (
+            <div className="text-center mt-4 space-y-2 flex flex-col">
               <button
                 type="button"
                 disabled={resendCooldown > 0 || loading}
-                onClick={handleResendCode}
+                onClick={() => handleRequestOtp()}
                 className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : 'Reenviar código'}
               </button>
-            )}
-            
-            <button
-              type="button"
-              onClick={() => { 
-                setIsRecovering(!isRecovering); 
-                setIsVerifyingOtp(false);
-                setError(''); 
-                setMessage(''); 
-              }}
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              {isRecovering ? 'Volver a Iniciar Sesión' : '¿Olvidaste tu contraseña?'}
-            </button>
-          </div>
+              
+              <button
+                type="button"
+                onClick={() => { 
+                  setStep('email');
+                  setError(''); 
+                  setMessage(''); 
+                }}
+                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Ingresar otro correo
+              </button>
+            </div>
+          )}
         </form>
       </div>
     </div>

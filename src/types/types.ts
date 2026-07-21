@@ -1,4 +1,8 @@
-import type { CardRow, InfoSectionRow } from './supabase';
+import type { CardRow, InfoSectionRow, CertificateRow } from './supabase';
+
+export interface CertificateProps extends Omit<CertificateRow, 'image_path' | 'created_at' | 'updated_at'> {
+  img: string;
+}
 
 export interface CardProps extends Omit<CardRow, 'image_path' | 'button_text' | 'code_url' | 'demo_url' | 'bg_image_path' | 'created_at' | 'updated_at'> {
   img: string;

@@ -61,6 +61,21 @@ export interface ProjectContentRow {
   updated_at: string;
 }
 
+export interface CertificateRow {
+  id: string;
+  title: string;
+  issuer: string;
+  provider: string;
+  description: string;
+  status_badge: string;
+  type_badge: string;
+  tags: string[];
+  image_path: string;
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface InfoSectionRow {
   id: string;
   section_type: 'skill' | 'knowledge';

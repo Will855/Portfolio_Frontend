@@ -45,17 +45,6 @@ export function useAdminAuth() {
   }, []);
 
   /**
-   * Inicia sesión con email y contraseña.
-   * @param email - Correo del usuario
-   * @param password - Contraseña
-   * @returns Resultado de signInWithPassword de Supabase
-   */
-  const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    return { data, error };
-  };
-
-  /**
    * Cierra la sesión actual del usuario.
    */
   const signOut = async () => {
@@ -63,33 +52,33 @@ export function useAdminAuth() {
   };
 
   /**
-   * Envía un correo de recuperación de contraseña con código OTP.
+   * Inicia el flujo de acceso (login) usando OTP numérico.
+   * Usa signInWithOtp (sin shouldCreateUser para que no cree cuentas nuevas).
+   * El template del correo debe usar {{ .Token }} para recibir el código numérico.
    */
-  const resetPassword = async (email: string) => {
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email);
-    return { data, error };
-  };
-
-  /**
-   * Verifica el código OTP de recuperación.
-   * Si es exitoso, Supabase inicia una sesión automáticamente.
-   */
-  const verifyRecoveryOtp = async (email: string, token: string) => {
-    const { data, error } = await supabase.auth.verifyOtp({
+  const sendOtpLogin = async (email: string) => {
+    const { data, error } = await supabase.auth.signInWithOtp({
       email,
-      token,
-      type: 'recovery',
+      options: {
+        shouldCreateUser: false,
+      },
     });
     return { data, error };
   };
 
   /**
-   * Actualiza la contraseña del usuario (se debe llamar después de haber recuperado la sesión vía OTP).
+   * Verifica el código OTP numérico recibido por correo.
+   * Usa type: 'email' porque proviene de signInWithOtp.
+   * Si es exitoso, Supabase inicia una sesión automáticamente.
    */
-  const updatePassword = async (newPassword: string) => {
-    const { data, error } = await supabase.auth.updateUser({ password: newPassword });
+  const verifyOtpLogin = async (email: string, token: string) => {
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: 'email',
+    });
     return { data, error };
   };
 
-  return { user, session, loading, signIn, signOut, resetPassword, verifyRecoveryOtp, updatePassword, isConfigured: isSupabaseConfigured };
+  return { user, session, loading, signOut, sendOtpLogin, verifyOtpLogin, isConfigured: isSupabaseConfigured };
 }

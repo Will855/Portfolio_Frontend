@@ -5,13 +5,13 @@ import { useAnalytics } from './core/hooks/useAnalytics';
 import { trackPageView, trackSectionNavigation } from './core/utils/analytics';
 import { PublicLayout } from './core/components/PublicLayout';
 import { AdminLogin } from './modules/auth/pages/AdminLogin';
-import { UpdatePassword } from './modules/auth/pages/UpdatePassword';
 import { AdminLayout } from './core/components/admin/AdminLayout';
 import { AdminDashboard } from './core/components/admin/AdminDashboard';
 import { AdminHero } from './modules/profile/admin/AdminHero';
 import { AdminProjects } from './modules/projects/admin/AdminProjectsCRUD';
 import { AdminContent } from './modules/projects/admin/AdminContentEditor';
 import { AdminInfoSections } from './modules/projects/admin/AdminInfoSections';
+import { AdminCertificates } from './modules/projects/admin/AdminCertificates';
 import { AdminMessages } from './modules/contact/admin/AdminMessages';
 
 const GA4_ID = 'G-HL1MY2MS9S';
@@ -65,13 +65,13 @@ const RouterWrapper = () => {
   return (
     <Routes>
       <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin/update-password" element={<UpdatePassword />} />
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
         <Route path="hero" element={<AdminHero />} />
         <Route path="projects" element={<AdminProjects />} />
         <Route path="content" element={<AdminContent />} />
         <Route path="info" element={<AdminInfoSections />} />
+        <Route path="certificates" element={<AdminCertificates />} />
         <Route path="messages" element={<AdminMessages />} />
       </Route>
       <Route path="*" element={<PublicLayout />} />
