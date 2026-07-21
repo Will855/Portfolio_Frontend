@@ -54,6 +54,11 @@ export const AdminLogin: React.FC = () => {
     if (e) e.preventDefault();
     if (resendCooldown > 0) return;
 
+    if (email.trim().toLowerCase() !== 'lynchwilmer@gmail.com') {
+      setError('Acceso denegado: Correo no autorizado.');
+      return;
+    }
+
     setError('');
     setMessage('');
     setLoading(true);
@@ -82,6 +87,12 @@ export const AdminLogin: React.FC = () => {
     e.preventDefault();
     setError('');
     setMessage('');
+
+    if (email.trim().toLowerCase() !== 'lynchwilmer@gmail.com') {
+      setError('Acceso denegado: Correo no autorizado.');
+      setStep('email');
+      return;
+    }
 
     const cleanOtp = otp.trim();
     if (cleanOtp.length < 6) {
