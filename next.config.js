@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: 'export',
   images: {
-    unoptimized: true, // We might need this depending on deployment (e.g. static export) or if domains are external
+    unoptimized: true,
   },
-  // If they were using Vite SPA, they probably want simple static routing or standard SSR
 };
 
 export default nextConfig;
