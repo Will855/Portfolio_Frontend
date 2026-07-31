@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { Navigate, Outlet, Link, useLocation } from 'react-router-dom';
+"use client";
+
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAdminAuth } from '../../../modules/auth/hooks/useAdminAuth';
 
 const NAV = [
@@ -11,13 +14,27 @@ const NAV = [
   { to: '/admin/messages', label: 'Mensajes', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
 ];
 
-export const AdminLayout: React.FC = () => {
+export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading, signOut, isConfigured } = useAdminAuth();
-  const location = useLocation();
+  const pathname = usePathname();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  if (!isConfigured) return <Navigate to="/admin/login" replace />;
-  if (loading) {
+  const isLoginPage = pathname === '/admin/login';
+
+  useEffect(() => {
+    if (isLoginPage) return;
+
+    if (!loading && (!isConfigured || !user)) {
+      router.replace('/admin/login');
+    }
+  }, [loading, isConfigured, user, router, isLoginPage]);
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
+
+  if (loading || !isConfigured || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-900 text-slate-200">
         <div className="flex items-center gap-3">
@@ -27,21 +44,20 @@ export const AdminLayout: React.FC = () => {
       </div>
     );
   }
-  if (!user) return <Navigate to="/admin/login" replace />;
 
   const sidebarContent = (
     <>
-      <Link to="/admin" className="font-bold text-lg text-white mb-6 block" onClick={() => setSidebarOpen(false)}>
+      <Link href="/admin" className="font-bold text-lg text-white mb-6 block" onClick={() => setSidebarOpen(false)}>
         Admin
       </Link>
       <nav className="flex flex-col gap-1">
         {NAV.map(({ to, label, icon }) => (
           <Link
             key={to}
-            to={to}
+            href={to}
             onClick={() => setSidebarOpen(false)}
             className={`px-3 py-2.5 rounded-xl flex items-center gap-3 text-sm font-medium transition-all duration-200 ${
-              location.pathname === to
+              pathname === to
                 ? 'bg-white/10 text-white border border-white/10'
                 : 'text-slate-400 hover:bg-white/5 hover:text-white'
             }`}
@@ -55,7 +71,7 @@ export const AdminLayout: React.FC = () => {
       </nav>
       <div className="mt-auto pt-4 border-t border-white/5 space-y-1">
         <Link
-          to="/"
+          href="/"
           onClick={() => setSidebarOpen(false)}
           className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-all"
         >
@@ -123,7 +139,7 @@ export const AdminLayout: React.FC = () => {
         {/* Main content */}
         <main className="flex-1 md:ml-56 lg:ml-60 min-h-screen">
           <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
-            <Outlet />
+            {children}
           </div>
         </main>
       </div>

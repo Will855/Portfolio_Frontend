@@ -1,5 +1,7 @@
+'use client';
+
 import React from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams, redirect } from "next/navigation";
 import { projectIds } from "../config/project";
 
 /**
@@ -7,11 +9,13 @@ import { projectIds } from "../config/project";
  * Los proyectos ya no tienen contenido embebido; el contenido viene de Supabase (project_content).
  */
 const Demo: React.FC = () => {
-  const { projectId } = useParams<{ projectId: string }>();
+  const params = useParams();
+  const projectId = params?.projectId as string;
   if (projectId && projectIds.includes(projectId)) {
-    return <Navigate to={`/page/${projectId}`} replace />;
+    redirect(`/page/${projectId}`);
   }
-  return <Navigate to="/proyectos" replace />;
+  redirect("/proyectos");
+  return null;
 };
 
 export default Demo;

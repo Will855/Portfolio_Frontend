@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 
 export const AdminDashboard: React.FC = () => {
-  return <Navigate to="/admin/hero" replace />;
+  redirect('/admin/hero');
 };

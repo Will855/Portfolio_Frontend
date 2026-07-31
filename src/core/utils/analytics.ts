@@ -1,6 +1,4 @@
-import GA4 from 'react-ga4';
-
-const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+const N8N_WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL || '';
 
 async function sendToN8n(eventType: string, payload: object) {
   if (!N8N_WEBHOOK_URL) return;
@@ -22,78 +20,43 @@ async function sendToN8n(eventType: string, payload: object) {
   }
 }
 
-
 // Eventos de navegación
 export const trackPageView = (path: string) => {
-  GA4.send({
-    hitType: 'pageview',
-    page: path
-  });
   sendToN8n('page_view', { path, timestamp: new Date().toISOString() });
 };
 
 // Eventos de interacción
 export const trackButtonClick = (buttonName: string, buttonLocation: string) => {
-  GA4.event({
-    category: 'Button Click',
-    action: buttonName,
-    label: buttonLocation
-  });
+  sendToN8n('button_click', { buttonName, buttonLocation });
 };
 
 // Eventos de tiempo
 export const trackTimeOnPage = (timeInSeconds: number) => {
-  GA4.event({
-    category: 'Time',
-    action: 'Time on Page',
-    value: timeInSeconds
-  });
+  sendToN8n('time_on_page', { timeInSeconds });
 };
 
 // Eventos de scroll
 export const trackScrollDepth = (depth: number) => {
-  GA4.event({
-    category: 'Scroll',
-    action: 'Scroll Depth',
-    value: depth
-  });
+  sendToN8n('scroll_depth', { depth });
 };
 
 // Eventos de conversión
 export const trackConversion = (conversionType: string, value?: number) => {
-  GA4.event({
-    category: 'Conversion',
-    action: conversionType,
-    value: value
-  });
+  sendToN8n('conversion', { conversionType, value });
 };
 
 // Eventos de interacción con planes
 export const trackPlanInteraction = (planName: string, action: string) => {
-  GA4.event({
-    category: 'Plan Interaction',
-    action: action,
-    label: planName
-  });
+  sendToN8n('plan_interaction', { planName, action });
 };
 
 // Eventos de contacto
 export const trackContactAttempt = (method: string) => {
-  GA4.event({
-    category: 'Contact',
-    action: 'Contact Attempt',
-    label: method
-  });
   sendToN8n('contact_click', { method });
 };
 
 // Eventos de navegación entre secciones
 export const trackSectionNavigation = (fromSection: string, toSection: string) => {
-  GA4.event({
-    category: 'Navigation',
-    action: 'Section Change',
-    label: `${fromSection} to ${toSection}`
-  });
   sendToN8n('section_navigation', { from: fromSection, to: toSection });
 };
 

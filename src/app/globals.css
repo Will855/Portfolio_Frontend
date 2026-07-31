@@ -107,6 +107,79 @@ ion-icon {
 }
 
 /* Estilos para documentación técnica y bloques de código markdown */
+.prose {
+  color: #334155;
+}
+
+.prose p:not(.mermaid-wrapper *),
+.prose li:not(.mermaid-wrapper *),
+.prose span:not(.mermaid-wrapper *),
+.prose div:not(.mermaid-wrapper *) {
+  color: #334155;
+}
+
+/* Custom high-contrast overrides for Mermaid diagrams */
+.mermaid-wrapper,
+.mermaid-wrapper * {
+  color: #ffffff !important;
+}
+
+.mermaid-wrapper text,
+.mermaid-wrapper span,
+.mermaid-wrapper div,
+.mermaid-wrapper p,
+.mermaid-wrapper tspan {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.mermaid-wrapper .node rect,
+.mermaid-wrapper .node circle,
+.mermaid-wrapper .node polygon,
+.mermaid-wrapper .node path {
+  fill: #1e3a8a !important;
+  stroke: #60a5fa !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid-wrapper .edgeLabel,
+.mermaid-wrapper .edgeLabel span,
+.mermaid-wrapper .edgeLabel p,
+.mermaid-wrapper .edgeLabel div {
+  background-color: #0f172a !important;
+  color: #7dd3fc !important;
+  fill: #7dd3fc !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+.mermaid-wrapper .edgeLabel rect {
+  fill: #0f172a !important;
+  opacity: 0.95 !important;
+}
+
+.mermaid-wrapper .edgePath path {
+  stroke: #38bdf8 !important;
+  stroke-width: 2px !important;
+}
+
+.mermaid-wrapper .cluster rect {
+  fill: #090d16 !important;
+  stroke: #3b82f6 !important;
+  stroke-width: 1.5px !important;
+}
+
+.prose strong,
+.prose b {
+  color: #0f172a;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
 .prose pre {
   background-color: #0f172a;
   border-radius: 12px;
@@ -118,8 +191,8 @@ ion-icon {
 }
 
 .prose code {
-  background-color: rgba(15, 23, 42, 0.05);
-  color: #c084fc;
+  background-color: rgba(15, 23, 42, 0.08);
+  color: #7e22ce;
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.9em;

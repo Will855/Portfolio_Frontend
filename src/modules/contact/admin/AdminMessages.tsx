@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';

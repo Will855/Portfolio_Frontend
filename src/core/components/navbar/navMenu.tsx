@@ -1,10 +1,14 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useNavItems } from '../../hooks/useNavItems';
 
 // Componente funcional NavMenu
 function NavMenu() {
   const [isScrolled, setIsScrolled] = useState(false); // Estado para verificar si se ha desplazado la página
+  const pathname = usePathname();
 
   useEffect(() => {
     // Función para manejar el evento de desplazamiento
@@ -30,23 +34,27 @@ function NavMenu() {
       ${isScrolled ? 'bg-gray-200/90 backdrop-blur-sm' : 'bg-transparent'}
     `}>
       <ul className="flex justify-between items-center py-2">
-        {navItems.map((item) => (
-          <li key={item}>
-            <NavLink 
-              to={`/${item.toLowerCase()}`} // Enlace a la ruta correspondiente
-              className={({ isActive }) => `
-                px-4 py-2 mx-2 rounded-full
-                text-md md:text-lg font-medium
-                transition-colors duration-200
-                hover:bg-gray-300/50
-                ${isScrolled ? 'text-gray-800' : 'text-white'}
-                ${isActive ? 'bg-gray-300/50' : ''}
-              `}
-            >
-              {item} {/* Renderizar el nombre del elemento */}
-            </NavLink>
-          </li>
-        ))}
+        {navItems.map((item) => {
+          const href = `/${item.toLowerCase()}`;
+          const isActive = pathname === href || (pathname === '/' && href === '/inicio');
+          return (
+            <li key={item}>
+              <Link 
+                href={href} // Enlace a la ruta correspondiente
+                className={`
+                  px-4 py-2 mx-2 rounded-full
+                  text-md md:text-lg font-medium
+                  transition-colors duration-200
+                  hover:bg-gray-300/50
+                  ${isScrolled ? 'text-gray-800' : 'text-white'}
+                  ${isActive ? 'bg-gray-300/50' : ''}
+                `}
+              >
+                {item} {/* Renderizar el nombre del elemento */}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );

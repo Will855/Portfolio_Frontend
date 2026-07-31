@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef } from 'react'; // Importamos React y useRef
 import { gsap } from 'gsap'; // Importamos GSAP para animaciones
 import IonIcon from '@reacticons/ionicons'; // Importamos Ionicons para iconos
@@ -106,7 +108,7 @@ const WordCloud = () => {
       {words.map((word, index) => (
         <div
           key={index}
-          ref={el => wordsRef.current[index] = el} // Asignamos la referencia
+          ref={el => { wordsRef.current[index] = el; }} // Asignamos la referencia
           style={{
             fontSize: `${getRandomSize()}px`, // Tamaño aleatorio inicial
             margin: '20px',

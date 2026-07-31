@@ -38,6 +38,8 @@ async function fetchProjectContent(projectId: string): Promise<ProjectContentBlo
   }));
 }
 
+const EMPTY_BLOCKS: ProjectContentBlock[] = [];
+
 /**
  * Hook que expone los bloques de contenido de un proyecto para edición (admin) o visualización (página pública).
  * La query solo se ejecuta cuando projectId está definido y Supabase está configurado.
@@ -56,7 +58,7 @@ export function useProjectContent(projectId: string | undefined) {
     staleTime: 5 * 60 * 1000,
   });
   return {
-    blocks: q.data ?? [],
+    blocks: q.data ?? EMPTY_BLOCKS,
     isLoading: q.isLoading,
     error: q.error,
     refetch: q.refetch,

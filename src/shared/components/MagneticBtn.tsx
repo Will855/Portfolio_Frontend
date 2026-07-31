@@ -1,8 +1,10 @@
+'use client';
+
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import IonIcon from '@reacticons/ionicons';
-import { trackButtonClick } from '../../utils/analytics';
+import { trackButtonClick } from '../../core/utils/analytics';
 
 /**
  * Propiedades para el componente MagneticBtn.
@@ -27,7 +29,7 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
     const lastPosition = useRef({ x: 0, y: 0 });
     const touchStartTime = useRef(0);
     const touchStartPos = useRef({ x: 0, y: 0 });
-    const navigate = useNavigate();
+    const router = useRouter();
 
     /**
      * Restablece la posición del botón y su texto usando animación elástica
@@ -93,7 +95,7 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
      */
     const handleRedirect = () => {
         trackButtonClick('Magnetic Button', 'Home Section');
-        navigate('/informacion');
+        router.push('/informacion');
     };
 
     /**
@@ -189,7 +191,7 @@ export default MagneticBtn;
 // 1. IMPORTS Y DEPENDENCIAS (líneas 1-5):
 //    - React: useEffect, useRef para manejo de estado y referencias
 //    - GSAP: Biblioteca de animaciones de alto rendimiento
-//    - useNavigate: Hook de React Router para navegación
+//    - useRouter: Hook de Next.js para navegación
 //    - IonIcon: Iconos de Ionicons
 //    - trackButtonClick: Función de analytics personalizada
 //    - ¿Por qué esta combinación? Cada herramienta tiene su propósito específico
@@ -207,7 +209,7 @@ export default MagneticBtn;
 //    - lastPosition: Posición anterior para interpolación suave
 //    - touchStartTime: Tiempo de inicio del touch para detección de tap
 //    - touchStartPos: Posición inicial del touch
-//    - navigate: Hook de React Router
+//    - router: Hook de Next.js router
 //    - ¿Por qué múltiples refs? Permite animar elementos independientemente
 //
 // 4. FUNCIÓN RESET (líneas 36-43):
@@ -229,7 +231,7 @@ export default MagneticBtn;
 // 6. MANEJO DE REDIRECCIÓN (líneas 94-97):
 //    - handleRedirect: Función de navegación
 //    - trackButtonClick: Registra el evento en analytics
-//    - navigate('/informacion'): Redirige a la página de información
+//    - router.push('/informacion'): Redirige a la página de información
 //    - ¿Por qué analytics? Permite medir la efectividad del botón
 //
 // 7. EVENT HANDLING (líneas 103-146):

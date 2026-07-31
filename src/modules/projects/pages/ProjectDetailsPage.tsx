@@ -1,24 +1,21 @@
+'use client';
+
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "next/navigation";
 import { showInfo, hideInfo } from "../../../shared/utils/infoHandler";
 import { useCards } from "../hooks/useCards";
 import { useProjectContent, type ProjectContentBlock } from "../hooks/useProjectContent";
 import { getStoragePublicUrl } from "../../../shared/services/supabase/supabaseStorage";
-import DOMPurify from "dompurify";
-
-import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from "../utils/markdown";
+import { MarkdownRenderer } from "../../../shared/components/MarkdownRenderer";
 
 const DynamicContent: React.FC<{ blocks: ProjectContentBlock[] }> = ({ blocks }) => (
     <div className="bg-gray-50 p-4 sm:p-6 md:p-12 space-y-6">
         {blocks.map((block) => {
             if (block.type === 'text' && block.content) {
-                const sanitized = DOMPurify.sanitize(block.content, { ALLOWED_TAGS: ALLOWED_HTML_TAGS });
                 return (
-                    <div
-                        key={block.id}
-                        className="prose max-w-none text-gray-700 leading-relaxed"
-                        dangerouslySetInnerHTML={{ __html: sanitized }}
-                    />
+                    <div key={block.id} className="prose max-w-none text-gray-700 leading-relaxed">
+                        <MarkdownRenderer markdown={block.content} />
+                    </div>
                 );
             }
             if (block.type === 'image') {
@@ -71,7 +68,8 @@ const DynamicContent: React.FC<{ blocks: ProjectContentBlock[] }> = ({ blocks })
 );
 
 const CardDetails: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const params = useParams();
+    const id = params?.id as string;
     const { cards } = useCards();
     const { blocks, isLoading: contentLoading } = useProjectContent(id);
     const card = cards.find((c) => c.id === id);
@@ -84,7 +82,6 @@ const CardDetails: React.FC = () => {
         );
     }
 
-    const bgImage = card.bgImage || '/images/bg-proyecto2.jpg';
     const codeUrl = card.codeUrl ?? '';
     const demoUrl = card.demoUrl ?? '';
     const hasDynamicContent = blocks.length > 0;
@@ -92,8 +89,7 @@ const CardDetails: React.FC = () => {
     return (
         <>
             <header
-                className="header h-[80vh] bg-slate-950 bg-opacity-85 flex justify-center items-center relative text-white bg-cover bg-center brightness-75"
-                style={{ backgroundImage: `url(${bgImage})` }}
+                className="header h-[60vh] bg-transparent flex justify-center items-center relative text-white"
             >
                 <div className="button flex gap-4">
                     <button
@@ -128,29 +124,27 @@ const CardDetails: React.FC = () => {
                             </p>
                         </section>
 
-                        <section className="space-y-3">
-                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
-                                El Reto
-                            </h2>
-                            <p className="text-slate-600 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">
-                                {card.problem_solved || "No especificado."}
-                            </p>
-                        </section>
+                        {card.problem_solved && card.problem_solved.trim().length > 0 && (
+                            <section className="space-y-3">
+                                <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
+                                    El Reto
+                                </h2>
+                                <p className="text-slate-600 text-base sm:text-lg leading-relaxed whitespace-pre-wrap">
+                                    {card.problem_solved}
+                                </p>
+                            </section>
+                        )}
 
-                        <section className="space-y-3">
-                            <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
-                                Documentación de Arquitectura
-                            </h2>
-                            <div 
-                                className="prose max-w-none text-slate-600 leading-relaxed font-sans"
-                                dangerouslySetInnerHTML={{ 
-                                    __html: DOMPurify.sanitize(
-                                        parseMarkdownToHtml(card.architectural_doc || "No especificada."), 
-                                        { ALLOWED_TAGS: ALLOWED_HTML_TAGS }
-                                    ) 
-                                }}
-                            />
-                        </section>
+                        {card.architectural_doc && card.architectural_doc.trim().length > 0 && (
+                            <section className="space-y-3">
+                                <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
+                                    Documentación de Arquitectura
+                                </h2>
+                                <div className="prose max-w-none text-slate-800">
+                                    <MarkdownRenderer markdown={card.architectural_doc} />
+                                </div>
+                            </section>
+                        )}
                     </div>
 
                     {/* Dynamic implementation content blocks */}

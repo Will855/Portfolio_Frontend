@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useAdminAuth } from '../hooks/useAdminAuth';
 import { testSupabaseConnection, type ConnectionTestResult } from '../../../core/utils/testSupabaseConnection';
 
 export const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('lynchwilmer@gmail.com');
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('');
@@ -17,7 +19,7 @@ export const AdminLogin: React.FC = () => {
   
   const [dbTest, setDbTest] = useState<ConnectionTestResult | null>(null);
   const { user, loading: authLoading, sendOtpLogin, verifyOtpLogin, isConfigured } = useAdminAuth();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isConfigured) return;
@@ -44,6 +46,13 @@ export const AdminLogin: React.FC = () => {
     }
     return () => clearTimeout(timer);
   }, [resendCooldown]);
+
+  // Redirigir al panel si ya está autenticado
+  useEffect(() => {
+    if (user) {
+      router.replace('/admin');
+    }
+  }, [user, router]);
 
   const startCooldown = (seconds: number) => {
     setResendCooldown(seconds);
@@ -117,7 +126,7 @@ export const AdminLogin: React.FC = () => {
       }
     } else {
       // Éxito absoluto, vamos al panel
-      navigate('/admin', { replace: true });
+      router.replace('/admin');
     }
   };
 
@@ -143,7 +152,7 @@ export const AdminLogin: React.FC = () => {
   }
 
   if (user) {
-    return <Navigate to="/admin" replace />;
+    return null;
   }
 
   return (
@@ -179,15 +188,8 @@ export const AdminLogin: React.FC = () => {
               id="email"
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              readOnly={step === 'otp'}
-              className={`w-full px-4 py-2.5 rounded-xl border transition-all ${
-                step === 'otp'
-                  ? 'bg-white/5 border-transparent text-slate-400 cursor-not-allowed'
-                  : 'bg-white/5 border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20'
-              }`}
-              placeholder="tu@email.com"
+              readOnly={true}
+              className="w-full px-4 py-2.5 rounded-xl border transition-all bg-white/5 border-transparent text-slate-400 cursor-not-allowed"
             />
           </div>
 
@@ -258,17 +260,6 @@ export const AdminLogin: React.FC = () => {
                 {resendCooldown > 0 ? `Reenviar código en ${resendCooldown}s` : 'Reenviar código'}
               </button>
               
-              <button
-                type="button"
-                onClick={() => { 
-                  setStep('email');
-                  setError(''); 
-                  setMessage(''); 
-                }}
-                className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                Ingresar otro correo
-              </button>
             </div>
           )}
         </form>

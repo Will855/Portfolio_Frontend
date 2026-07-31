@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useRef, useEffect } from "react";
 import { CardProps } from "../../../types/types";
 import { handleMouseMove, resetCardPosition } from "../../../shared/utils/cardAnimations";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 /**
  * Componente de tarjeta interactiva con efectos de movimiento y navegación
@@ -23,10 +25,18 @@ import { useNavigate } from "react-router-dom";
  *   buttonText="Ver demo"
  * />
  */
-const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) => {
+export interface ProjectCardProps {
+  id: string;
+  img: string;
+  title: string;
+  description: string;
+  buttonText?: string;
+}
+
+const Card: React.FC<ProjectCardProps> = ({ id, img, title, description, buttonText }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   /**
    * Efecto para configurar interacciones de movimiento
@@ -55,7 +65,7 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
    * @description Navega a la ruta del proyecto y hace scroll suave al inicio
    */
   const handleNavigation = () => {
-    navigate(`/page/${id}`);
+    router.push(`/page/${id}`);
     window.scrollTo({ 
       top: -80, // Scroll al inicio de la página
       behavior: "smooth" // Efecto de scroll suave
@@ -67,7 +77,7 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
       ref={cardRef}
       onMouseMove={handleMouseMoveEvent}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-xl transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-xl border border-white/10 hover:border-white/25 transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
       role="article"
       aria-label={`Tarjeta del proyecto: ${title}`}
       style={{
@@ -93,10 +103,10 @@ const Card: React.FC<CardProps> = ({ id, img, title, description, buttonText }) 
         className="relative z-10 h-full flex flex-col justify-between transform-gpu"
       >
         <div className="space-y-4">
-          <h2 className="text-3xl font-bold text-white drop-shadow-lg">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg line-clamp-2" title={title}>
             {title}
           </h2>
-          <p className="text-white/80 text-lg leading-relaxed">
+          <p className="text-white/80 text-base sm:text-lg leading-relaxed line-clamp-3" title={description}>
             {description}
           </p>
         </div>
@@ -139,7 +149,7 @@ export default Card;
 //    - React: useRef, useEffect para manejo de estado y referencias
 //    - CardProps: Interface TypeScript importada desde types
 //    - cardAnimations: Funciones utilitarias para animaciones
-//    - useNavigate: Hook de React Router para navegación
+//    - useRouter: Hook de Next.js para navegación
 //    - ¿Por qué esta estructura? Separación clara de responsabilidades
 //
 // 2. DOCUMENTACIÓN JSDOC (líneas 6-25):
@@ -153,7 +163,7 @@ export default Card;
 //    - Card: Componente funcional tipado con CardProps
 //    - Destructuring: Extrae todas las props necesarias
 //    - Refs: cardRef y contentRef para animaciones
-//    - navigate: Hook para navegación programática
+//    - router: Hook para navegación programática
 //    - ¿Por qué destructuring? Código más limpio y legible
 //
 // 4. CONFIGURACIÓN DE ANIMACIONES (líneas 39-59):
@@ -167,7 +177,7 @@ export default Card;
 //
 // 5. FUNCIÓN DE NAVEGACIÓN (líneas 66-69):
 //    - handleNavigation: Función para navegar a la página del proyecto
-//    - navigate(`/page/${id}`): Navegación a la página del proyecto
+//    - router.push(`/page/${id}`): Navegación a la página del proyecto
 //    - window.scrollTo(): Scroll suave al inicio de la página
 //    - ¿Por qué scroll? Mejora la experiencia de usuario
 //

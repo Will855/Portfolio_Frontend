@@ -1,3 +1,5 @@
+'use client';
+
 import Glitch from "../modules/profile/components/GlitchPresentation";
 import CircleProfile from "../shared/components/CircleProfile";
 import Footer from "../core/components/footer/Footer";

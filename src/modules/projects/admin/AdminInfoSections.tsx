@@ -1,23 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { supabase } from '../../../shared/services/supabase/supabase';
+"use client";
+
+import React, { useState } from 'react';
 import { useSkillSections, useKnowledgeSections } from '../hooks/useInfoSections';
-import type { InfoSectionRow } from '../../../types/supabase';
-import DOMPurify from 'dompurify';
-import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from '../utils/markdown';
-
-type SectionType = 'skill' | 'knowledge';
-type ColorOption = 'blue' | 'purple' | 'green';
-
-type EditableSectionItem = string | { title: string; body: string };
-
-interface EditableSection {
-  id: string | null;
-  title: string;
-  color: ColorOption;
-  items: EditableSectionItem[];
-  order: number;
-}
+import { MarkdownRenderer } from '../../../shared/components/MarkdownRenderer';
+import { Input } from '../../../shared/components/Input';
+import { Textarea } from '../../../shared/components/Textarea';
+import { useAdminSectionsEditor, SectionType, ColorOption } from './hooks/useAdminSectionsEditor';
 
 const COLOR_OPTIONS: { value: ColorOption; label: string; cls: string }[] = [
   { value: 'blue', label: 'Azul', cls: 'bg-blue-400' },
@@ -72,186 +60,25 @@ export const AdminInfoSections: React.FC = () => {
 const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) => {
   const { skills, isLoading: skillsLoading, refetch: refetchSkills } = useSkillSections();
   const { knowledges, isLoading: knowledgesLoading, refetch: refetchKnowledges } = useKnowledgeSections();
-  const queryClient = useQueryClient();
 
   const sourceData = sectionType === 'skill' ? skills : knowledges;
   const isLoading = sectionType === 'skill' ? skillsLoading : knowledgesLoading;
+  const refetch = sectionType === 'skill' ? refetchSkills : refetchKnowledges;
 
-  const [sections, setSections] = useState<EditableSection[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
-  useEffect(() => {
-    setIsInitialized(false);
-  }, [sectionType]);
-
-  useEffect(() => {
-    if (!isLoading && !isInitialized) {
-      setSections(
-        sourceData.map((s: InfoSectionRow) => {
-          const mappedItems = s.items.map(it => {
-            if (sectionType === 'knowledge') {
-              if (typeof it === 'string') {
-                return { title: it, body: '' };
-              }
-              return {
-                title: (it as any)?.title || '',
-                body: (it as any)?.body || '',
-              };
-            }
-            return typeof it === 'string' ? it : (it as any)?.title || '';
-          });
-          return {
-            id: s.id,
-            title: s.title,
-            color: s.color,
-            items: mappedItems,
-            order: s.order,
-          };
-        })
-      );
-      setIsInitialized(true);
-    }
-  }, [sourceData, isLoading, isInitialized, sectionType]);
-
-  const addSection = useCallback(() => {
-    setSections(prev => [
-      ...prev,
-      {
-        id: null,
-        title: '',
-        color: sectionType === 'skill' ? 'blue' : 'purple',
-        items: sectionType === 'skill' ? [''] : [{ title: '', body: '' }],
-        order: prev.length,
-      },
-    ]);
-  }, [sectionType]);
-
-  const removeSection = useCallback((idx: number) => {
-    setSections(prev => prev.filter((_, i) => i !== idx).map((s, i) => ({ ...s, order: i })));
-  }, []);
-
-  const moveSection = useCallback((idx: number, direction: 'up' | 'down') => {
-    setSections(prev => {
-      const arr = [...prev];
-      const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-      if (swapIdx < 0 || swapIdx >= arr.length) return prev;
-      [arr[idx], arr[swapIdx]] = [arr[swapIdx], arr[idx]];
-      return arr.map((s, i) => ({ ...s, order: i }));
-    });
-  }, []);
-
-  const updateSection = useCallback((idx: number, updates: Partial<EditableSection>) => {
-    setSections(prev => prev.map((s, i) => (i === idx ? { ...s, ...updates } : s)));
-  }, []);
-
-  const addItem = useCallback((sectionIdx: number) => {
-    setSections(prev =>
-      prev.map((s, i) =>
-        i === sectionIdx
-          ? {
-              ...s,
-              items:
-                sectionType === 'skill'
-                  ? [...s.items, '']
-                  : [...s.items, { title: '', body: '' }],
-            }
-          : s
-      )
-    );
-  }, [sectionType]);
-
-  const updateItem = useCallback((sectionIdx: number, itemIdx: number, value: EditableSectionItem) => {
-    setSections(prev =>
-      prev.map((s, i) =>
-        i === sectionIdx
-          ? { ...s, items: s.items.map((it, j) => (j === itemIdx ? value : it)) }
-          : s
-      )
-    );
-  }, []);
-
-  const removeItem = useCallback((sectionIdx: number, itemIdx: number) => {
-    setSections(prev =>
-      prev.map((s, i) =>
-        i === sectionIdx ? { ...s, items: s.items.filter((_, j) => j !== itemIdx) } : s
-      )
-    );
-  }, []);
-
-  const saveAll = async () => {
-    setSaving(true);
-    setError(null);
-    setSuccess(null);
-    try {
-      const existingIds = sourceData.map((s: InfoSectionRow) => s.id);
-      const localIds = sections.filter(s => s.id).map(s => s.id!);
-      const toDelete = existingIds.filter(id => !localIds.includes(id));
-
-      if (toDelete.length > 0) {
-        const { error: delErr } = await supabase
-          .from('info_sections')
-          .delete()
-          .in('id', toDelete);
-        if (delErr) throw delErr;
-      }
-
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        
-        // Filter empty items based on sectionType
-        const filteredItems = section.items.filter(it => {
-          if (typeof it === 'string') {
-            return it.trim() !== '';
-          }
-          return (it?.title || '').trim() !== '' || (it?.body || '').trim() !== '';
-        });
-
-        if (!section.title.trim()) continue;
-
-        if (section.id) {
-          const { error: updErr } = await supabase
-            .from('info_sections')
-            .update({
-              title: section.title,
-              color: section.color,
-              items: filteredItems,
-              order: i,
-              updated_at: new Date().toISOString(),
-            })
-            .eq('id', section.id);
-          if (updErr) throw updErr;
-        } else {
-          const { error: insErr } = await supabase
-            .from('info_sections')
-            .insert({
-              section_type: sectionType,
-              title: section.title,
-              color: section.color,
-              items: filteredItems,
-              order: i,
-            });
-          if (insErr) throw insErr;
-        }
-      }
-
-      queryClient.invalidateQueries({ queryKey: ['info_sections', sectionType] });
-      if (sectionType === 'skill') {
-        await refetchSkills();
-      } else {
-        await refetchKnowledges();
-      }
-      setIsInitialized(false);
-      setSuccess('Guardado correctamente');
-      setTimeout(() => setSuccess(null), 3000);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error al guardar');
-    } finally {
-      setSaving(false);
-    }
-  };
+  const {
+    sections,
+    saving,
+    error,
+    success,
+    addSection,
+    removeSection,
+    moveSection,
+    updateSection,
+    addItem,
+    updateItem,
+    removeItem,
+    saveAll
+  } = useAdminSectionsEditor(sectionType, sourceData as any, isLoading, refetch);
 
   if (isLoading) {
     return (
@@ -326,18 +153,17 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
 
             {/* Section body */}
             <div className="p-4 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-slate-400">Título</label>
-                  <input
-                    value={section.title}
-                    onChange={(e) => updateSection(idx, { title: e.target.value })}
-                    className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
-                    placeholder="Título de la sección"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-medium text-slate-400">Color</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+                <Input
+                  label="Título de la sección"
+                  name={`title-${idx}`}
+                  value={section.title}
+                  onChange={(e) => updateSection(idx, { title: e.target.value })}
+                  placeholder="Título de la sección"
+                  animate={false}
+                />
+                <div className="space-y-1.5 mb-[1.4rem]">
+                  <label className="block text-slate-200 font-medium mb-2">Color</label>
                   <div className="flex gap-2">
                     {COLOR_OPTIONS.map((opt) => (
                       <button
@@ -359,7 +185,7 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
 
               {/* Items list */}
               <div className="space-y-3">
-                <label className="block text-xs font-medium text-slate-400">
+                <label className="block text-slate-200 font-medium">
                   {sectionType === 'skill' ? 'Habilidades (Elementos)' : 'Carrera y Experiencia (Hitos)'}
                 </label>
                 
@@ -368,16 +194,20 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
                     {section.items.map((item, itemIdx) => (
                       <div key={itemIdx} className="flex gap-2 items-center">
                         <span className="text-xs text-slate-500 w-5 text-right shrink-0">{itemIdx + 1}.</span>
-                        <input
-                          value={item as string}
-                          onChange={(e) => updateItem(idx, itemIdx, e.target.value)}
-                          className="flex-1 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
-                          placeholder={`Habilidad ${itemIdx + 1}`}
-                        />
+                        <div className="flex-1">
+                          <Input
+                            label=""
+                            name={`item-${idx}-${itemIdx}`}
+                            value={item as string}
+                            onChange={(e) => updateItem(idx, itemIdx, e.target.value)}
+                            placeholder={`Habilidad ${itemIdx + 1}`}
+                            animate={false}
+                          />
+                        </div>
                         <button
                           onClick={() => removeItem(idx, itemIdx)}
                           disabled={section.items.length <= 1}
-                          className="p-1 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0"
+                          className="p-1 rounded-lg text-red-400/50 hover:text-red-400 hover:bg-red-500/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0 -mt-2"
                           title="Eliminar elemento"
                         >
                           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -391,7 +221,7 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
                   <div className="space-y-4">
                     {(section.items as { title: string; body: string }[]).map((item, itemIdx) => (
                       <div key={itemIdx} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 space-y-3 relative group/item">
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center mb-2">
                           <span className="text-xs text-slate-400 font-semibold">Hito / Puesto #{itemIdx + 1}</span>
                           <button
                             onClick={() => removeItem(idx, itemIdx)}
@@ -404,39 +234,34 @@ const SectionEditor: React.FC<{ sectionType: SectionType }> = ({ sectionType }) 
                             </svg>
                           </button>
                         </div>
-                        <div className="space-y-1.5">
-                          <label className="block text-xs font-medium text-slate-400">Puesto / Título *</label>
-                          <input
-                            value={(item as { title: string; body: string }).title || ''}
-                            onChange={(e) => updateItem(idx, itemIdx, { ...item, title: e.target.value })}
-                            className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm"
-                            placeholder="Ej: Programador Senior, Certificación AWS, etc."
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <label className="block text-xs font-medium text-slate-400">Cuerpo / Descripción de Logros *</label>
-                          <textarea
-                            value={(item as { title: string; body: string }).body || ''}
-                            onChange={(e) => updateItem(idx, itemIdx, { ...item, body: e.target.value })}
-                            rows={3}
-                            className="w-full px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/20 transition-all text-sm resize-none"
-                            placeholder="Logros clave, tecnologías usadas, responsabilidades..."
-                          />
-                          {(item as { title: string; body: string }).body && (
-                            <div className="mt-1.5 p-2.5 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300">
-                              <span className="block text-[10px] uppercase font-bold text-slate-500 mb-1">Vista Previa (Markdown)</span>
-                              <div
-                                className="prose prose-invert prose-xs max-w-none font-sans"
-                                dangerouslySetInnerHTML={{
-                                  __html: DOMPurify.sanitize(
-                                    parseMarkdownToHtml((item as { title: string; body: string }).body),
-                                    { ALLOWED_TAGS: ALLOWED_HTML_TAGS }
-                                  )
-                                }}
-                              />
+                        
+                        <Input
+                          label="Puesto / Título *"
+                          name={`job-title-${idx}-${itemIdx}`}
+                          value={item.title || ''}
+                          onChange={(e) => updateItem(idx, itemIdx, { ...item, title: e.target.value })}
+                          placeholder="Ej: Programador Senior, Certificación AWS, etc."
+                          animate={false}
+                        />
+                        
+                        <Textarea
+                          label="Cuerpo / Descripción de Logros *"
+                          name={`job-body-${idx}-${itemIdx}`}
+                          value={item.body || ''}
+                          onChange={(e) => updateItem(idx, itemIdx, { ...item, body: e.target.value })}
+                          placeholder="Logros clave, tecnologías usadas, responsabilidades..."
+                          rows={3}
+                          animate={false}
+                        />
+                        
+                        {item.body && (
+                          <div className="mt-1.5 p-2.5 rounded-lg bg-white/5 border border-white/5 text-xs text-slate-300">
+                            <span className="block text-[10px] uppercase font-bold text-slate-500 mb-1">Vista Previa (Markdown)</span>
+                            <div className="prose prose-invert prose-xs max-w-none font-sans">
+                              <MarkdownRenderer markdown={item.body} />
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

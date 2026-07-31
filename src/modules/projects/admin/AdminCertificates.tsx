@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useCallback } from 'react';
 import { useAdminCertificates, emptyCertificateForm, CertificateForm } from '../hooks/useAdminCertificates';
 import { CertificateFormModal } from './CertificateFormModal';

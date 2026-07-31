@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useState, useEffect, useRef } from 'react';
 import type { CertificateForm } from '../hooks/useAdminCertificates';
+import { TagInput } from './TagInput';
 
 interface Props {
   isOpen: boolean;
@@ -139,11 +142,9 @@ export const CertificateFormModal: React.FC<Props> = ({
 
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1.5">Etiquetas (Tags, separadas por coma)</label>
-                <input
-                  type="text"
+                <TagInput
                   value={form.tags}
-                  onChange={(e) => setForm({ ...form, tags: e.target.value })}
-                  className="w-full px-4 py-2.5 rounded-xl bg-black/20 border border-white/10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                  onChange={(val) => setForm({ ...form, tags: val })}
                   placeholder="GCP, Kubernetes, IAM"
                 />
               </div>

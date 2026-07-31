@@ -1,11 +1,15 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { gsap } from 'gsap';
 import IonIcon from '@reacticons/ionicons';
 import { useNavItems } from '../../hooks/useNavItems';
 
 function ResponsiveMenu() {
     const [isOpen, setIsOpen] = useState(false);
+    const pathname = usePathname();
     const sidebarRef = useRef(null);
     const animationRef = useRef<gsap.core.Timeline | null>(null);
     const navItems = useNavItems();
@@ -102,28 +106,32 @@ function ResponsiveMenu() {
             >
                 {/* Lista de elementos del menú */}
                 <ul className="flex flex-col h-full justify-center items-start p-6 space-y-4">
-                    {navItems.map((item) => (
-                        <li
-                            key={item} // Clave única para cada elemento
-                            className="nav-item" // Clase para animaciones
-                            style={{ willChange: 'transform, opacity' }} // Optimización
-                        >
-                            {/* Enlace de navegación */}
-                            <NavLink
-                                to={`/${item.toLowerCase()}`} // Ruta dinámica
-                                className={({ isActive }) => `
-                                    px-4 py-3 w-full block
-                                    text-lg font-medium rounded-xl
-                                    transition-colors duration-200
-                                    hover:bg-gray-200/50
-                                    ${isActive ? 'bg-gray-200/50' : ''}
-                                `}
-                                onClick={() => setIsOpen(false)} // Cierra el menú al hacer clic
+                    {navItems.map((item) => {
+                        const href = `/${item.toLowerCase()}`;
+                        const isActive = pathname === href || (pathname === '/' && href === '/inicio');
+                        return (
+                            <li
+                                key={item} // Clave única para cada elemento
+                                className="nav-item" // Clase para animaciones
+                                style={{ willChange: 'transform, opacity' }} // Optimización
                             >
-                                {item} {/* Texto del enlace */}
-                            </NavLink>
-                        </li>
-                    ))}
+                                {/* Enlace de navegación */}
+                                <Link
+                                    href={href} // Ruta dinámica
+                                    className={`
+                                        px-4 py-3 w-full block
+                                        text-lg font-medium rounded-xl
+                                        transition-colors duration-200
+                                        hover:bg-gray-200/50
+                                        ${isActive ? 'bg-gray-200/50' : ''}
+                                    `}
+                                    onClick={() => setIsOpen(false)} // Cierra el menú al hacer clic
+                                >
+                                    {item} {/* Texto del enlace */}
+                                </Link>
+                            </li>
+                        );
+                    })}
                 </ul>
             </nav>
         </>

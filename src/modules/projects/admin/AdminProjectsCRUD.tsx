@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useCallback } from 'react';
 import { useAdminProjects, emptyForm, ProjectForm } from '../hooks/useAdminProjects';
 import { ProjectFormModal } from './ProjectFormModal';

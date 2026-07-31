@@ -1,21 +1,13 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import IonIcon from '@reacticons/ionicons';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
-import { isValidEmail } from './utils/validation';
-import { supabase, isSupabaseConfigured } from '../config/supabase';
-import { trackContactAttempt } from '../utils/analytics';
-
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
-
-type FormField = keyof FormData;
+import { Input } from '../../../shared/components/Input';
+import { Textarea } from '../../../shared/components/Textarea';
+import { trackContactAttempt } from '../../../core/utils/analytics';
+import { useContactForm } from '../hooks/useContactForm';
 
 interface SocialLink {
   name: string;
@@ -37,135 +29,8 @@ const SOCIAL_ITEMS: SocialLink[] = [
   { name: 'github', icon: 'logo-github', url: SOCIAL_LINKS.github, hoverColor: 'hover:text-gray-400', ariaLabel: 'Ver perfil de GitHub' }
 ];
 
-const AnimatedInput: React.FC<{
-  label: string;
-  name: FormField;
-  type: string;
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: boolean;
-}> = ({ label, name, type, placeholder, value, onChange, error }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
-  const underlineRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (isFocused) {
-      gsap.to(labelRef.current, { scale: 1.02, duration: 0.3 });
-      gsap.to(inputRef.current, { scale: 1.01, duration: 0.3 });
-      gsap.to(underlineRef.current, { width: '100%', duration: 0.3 });
-    } else {
-      gsap.to(labelRef.current, { scale: 1, duration: 0.3 });
-      gsap.to(inputRef.current, { scale: 1, duration: 0.3 });
-      gsap.to(underlineRef.current, { width: 0, duration: 0.3 });
-    }
-  }, [isFocused]);
-
-  return (
-    <div ref={containerRef} className="form-item opacity-0 translate-y-5 relative">
-      <label
-        ref={labelRef}
-        htmlFor={name}
-        className={`block mb-2 font-medium transition-colors duration-300 origin-left ${
-          isFocused ? 'text-blue-400' : 'text-slate-200'
-        }`}
-      >
-        {label}
-      </label>
-      <div ref={inputRef} className="relative transform-gpu">
-        <input
-          type={type}
-          id={name}
-          name={name}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          className={`w-full px-4 py-3 text-white bg-white/5 border-2 rounded-xl backdrop-blur-sm focus:outline-none transition-all duration-300 ${
-            error
-              ? 'border-red-500/50 focus:border-red-400'
-              : isFocused
-              ? 'border-blue-400/50 focus:border-blue-400'
-              : 'border-white/10 hover:border-white/20'
-          }`}
-          placeholder={placeholder}
-        />
-        <div
-          ref={underlineRef}
-          className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 w-0"
-        />
-      </div>
-    </div>
-  );
-};
-
-const AnimatedTextarea: React.FC<{
-  label: string;
-  name: FormField;
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  error?: boolean;
-}> = ({ label, name, placeholder, value, onChange, error }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLLabelElement>(null);
-
-  useGSAP(() => {
-    if (isFocused) {
-      gsap.to(labelRef.current, { scale: 1.02, duration: 0.3 });
-    } else {
-      gsap.to(labelRef.current, { scale: 1, duration: 0.3 });
-    }
-  }, [isFocused]);
-
-  return (
-    <div ref={containerRef} className="form-item opacity-0 translate-y-5 relative">
-      <label
-        ref={labelRef}
-        htmlFor={name}
-        className={`block mb-2 font-medium transition-colors duration-300 origin-left ${
-          isFocused ? 'text-blue-400' : 'text-slate-200'
-        }`}
-      >
-        {label}
-      </label>
-      <textarea
-        id={name}
-        name={name}
-        rows={4}
-        value={value}
-        onChange={onChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        className={`w-full px-4 py-3 text-white bg-white/5 border-2 rounded-xl backdrop-blur-sm focus:outline-none transition-all duration-300 resize-none ${
-          error
-            ? 'border-red-500/50 focus:border-red-400'
-            : isFocused
-            ? 'border-blue-400/50 focus:border-blue-400'
-            : 'border-white/10 hover:border-white/20'
-        }`}
-        placeholder={placeholder}
-      />
-    </div>
-  );
-};
-
-const ContactForm: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
-
-  const [responseMessage, setResponseMessage] = useState('');
-  const [error, setError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<Partial<Record<FormField, boolean>>>({});
+export const ContactForm: React.FC = () => {
+  const { formData, isSubmitting, error, responseMessage, fieldErrors, handleChange, handleSubmit } = useContactForm();
 
   const formRef = useRef<HTMLFormElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -202,80 +67,6 @@ const ContactForm: React.FC = () => {
     }
   }, [isSubmitting]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-    if (fieldErrors[name as FormField]) {
-      setFieldErrors({ ...fieldErrors, [name]: false });
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError('');
-    setResponseMessage('');
-
-    try {
-      if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-        setError('Por favor, completa todos los campos del formulario.');
-        setFieldErrors({
-          name: !formData.name.trim(),
-          email: !formData.email.trim(),
-          message: !formData.message.trim()
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!isValidEmail(formData.email)) {
-        setError('Por favor, ingresa un correo electrónico válido.');
-        setFieldErrors({ email: true });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (formData.phone && !/^\d{11}$/.test(formData.phone)) {
-        setError('Por favor, ingresa un número de teléfono válido (11 dígitos).');
-        setFieldErrors({ phone: true });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (!isSupabaseConfigured) {
-        setError('El formulario de contacto no está configurado.');
-        setIsSubmitting(false);
-        return;
-      }
-      const { error: submitError } = await supabase.from('contact_submissions').insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim() || null,
-        message: formData.message.trim(),
-      });
-      if (submitError) throw submitError;
-
-      setResponseMessage('¡Formulario enviado con éxito!');
-      setError('');
-      setFieldErrors({});
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: ''
-      });
-    } catch (err) {
-      console.error('Error al enviar el mensaje:', err);
-      setResponseMessage('');
-      setError('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-transparent flex items-center justify-center p-4 overflow-hidden mt-12">
       <form
@@ -292,7 +83,7 @@ const ContactForm: React.FC = () => {
           </h2>
 
           <div className="space-y-5">
-            <AnimatedInput
+            <Input
               label="Nombre"
               name="name"
               type="text"
@@ -300,8 +91,9 @@ const ContactForm: React.FC = () => {
               value={formData.name}
               onChange={handleChange}
               error={fieldErrors.name}
+              animate={true}
             />
-            <AnimatedInput
+            <Input
               label="Email"
               name="email"
               type="email"
@@ -309,8 +101,9 @@ const ContactForm: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               error={fieldErrors.email}
+              animate={true}
             />
-            <AnimatedInput
+            <Input
               label="Teléfono"
               name="phone"
               type="tel"
@@ -318,14 +111,17 @@ const ContactForm: React.FC = () => {
               value={formData.phone}
               onChange={handleChange}
               error={fieldErrors.phone}
+              animate={true}
             />
-            <AnimatedTextarea
+            <Textarea
               label="Mensaje"
               name="message"
               placeholder="Cuéntame sobre tu proyecto..."
               value={formData.message}
               onChange={handleChange}
               error={fieldErrors.message}
+              animate={true}
+              rows={4}
             />
 
             <button

@@ -31,3 +31,9 @@ dist-ssr
 
 # Testing
 coverage
+
+# Next.js
+.next
+out
+.vercel
+next-env.d.ts

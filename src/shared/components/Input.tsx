@@ -1,35 +1,62 @@
 // Importación de React
+"use client";
 import React from 'react';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  name: string;
-  type: string;
-  placeholder?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: boolean;
+  animate?: boolean;
 }
 
-// Componente Input
-// Este componente es reutilizable y se utiliza para crear campos de entrada con etiquetas asociadas.
-const Input: React.FC<InputProps> = ({ label, name, type, placeholder, onChange }) => (
-    <div className="relative">
-        {/* Etiqueta para el campo de entrada */}
-        <label htmlFor={name} className="text-[#f0f8ff] block mb-2">
-            {label} {/* Texto de la etiqueta */}
-        </label>
+export const Input: React.FC<InputProps> = ({ 
+  label, 
+  error, 
+  animate = false,
+  className = '',
+  ...props 
+}) => {
+  const inputRef = React.useRef<HTMLDivElement>(null);
 
-        {/* Campo de entrada */}
+  useGSAP(() => {
+    if (animate && inputRef.current) {
+      gsap.to(inputRef.current, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+      });
+    }
+  }, [animate]);
+
+  return (
+    <div 
+      ref={inputRef} 
+      className={`form-item relative ${animate ? 'opacity-0 translate-y-5' : ''} ${className}`}
+    >
+      <label
+        htmlFor={props.id || props.name}
+        className={`block mb-2 font-medium transition-colors duration-300 origin-left ${
+          error ? 'text-red-400' : 'text-slate-200'
+        }`}
+      >
+        {label}
+      </label>
+      <div className="relative transform-gpu">
         <input
-            type={type} // Tipo de entrada (texto, email, etc.)
-            id={name} // ID único para asociar con la etiqueta
-            name={name} // Nombre del campo (clave para manejar datos del formulario)
-            onChange={onChange} // Función que se ejecuta al cambiar el valor del campo
-            className="w-full px-3 py-2 text-[#f0f8ff] bg-[#3a3a3a] rounded-md focus:outline-none focus:ring-2 focus:ring-[#f0f8ff] transition-all duration-300 ease-in-out"
-            placeholder={placeholder} // Texto de marcador de posición
+          {...props}
+          id={props.id || props.name}
+          className={`w-full px-4 py-3 text-white bg-white/5 border-2 rounded-xl backdrop-blur-sm focus:outline-none transition-all duration-300 ${
+            error
+              ? 'border-red-500/50 focus:border-red-500'
+              : 'border-white/10 hover:border-white/20 focus:border-blue-400/50'
+          }`}
         />
+        {!error && (
+          <div className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-400 w-0" />
+        )}
+      </div>
     </div>
-);
-
-// Exportación del componente
-// Esto permite que el componente sea utilizado en otros archivos.
-export default Input;
+  );
+};

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useMemo, useState } from "react";
 
 export type CircleProfileSize = "xs" | "sm" | "md" | "lg" | "xl";

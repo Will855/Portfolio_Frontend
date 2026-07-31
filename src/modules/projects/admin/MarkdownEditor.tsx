@@ -1,7 +1,7 @@
-import React, { useRef, useCallback, useState } from 'react';
-import DOMPurify from 'dompurify';
-import { ALLOWED_HTML_TAGS, parseMarkdownToHtml } from '../utils/markdown';
+'use client';
 
+import React, { useRef, useCallback, useState } from 'react';
+import { MarkdownRenderer } from '../../../shared/components/MarkdownRenderer';
 interface MarkdownEditorProps {
   value: string;
   onChange: (val: string) => void;
@@ -125,6 +125,14 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange,
             >
               Imagen
             </button>
+            <button
+              type="button"
+              onClick={() => insertMarkdown('```mermaid\n', '\n```', 'graph TD;\n    A-->B;')}
+              className="px-2 py-1 rounded-lg bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/30 hover:border-blue-500/40 text-[11px] font-semibold text-blue-300 transition-all active:scale-95 flex items-center gap-1"
+              title="Diagrama Mermaid"
+            >
+              📊 Diagrama
+            </button>
             
             <div className="h-4 w-px bg-white/10 mx-0.5" />
 
@@ -165,14 +173,10 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({ value, onChange,
 
           <div
             ref={previewRef}
-            className="prose max-w-none text-slate-700 leading-relaxed font-sans bg-white p-4 rounded-xl border border-slate-200 overflow-y-auto h-[220px] md:h-[280px]"
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                parseMarkdownToHtml(value || '_Escribe en el editor o carga un archivo .md para previsualizar_'),
-                { ALLOWED_TAGS: ALLOWED_HTML_TAGS }
-              )
-            }}
-          />
+            className="prose prose-invert max-w-none font-sans bg-slate-900/50 p-4 rounded-xl border border-slate-700 overflow-y-auto h-[220px] md:h-[280px]"
+          >
+            <MarkdownRenderer markdown={value || '_Escribe en el editor o carga un archivo .md para previsualizar_'} />
+          </div>
         </div>
       </div>
     </div>

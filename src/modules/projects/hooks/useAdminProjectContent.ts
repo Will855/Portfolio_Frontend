@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useCallback, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../shared/services/supabase/supabase';
@@ -23,20 +25,25 @@ export function useAdminProjectContent(projectId: string) {
   const [localBlocks, setLocalBlocks] = useState<LocalBlock[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [syncedProjectId, setSyncedProjectId] = useState<string | null>(null);
 
   useEffect(() => {
-    setLocalBlocks(
-      blocks.map((b) => ({
-        id: b.id,
-        type: b.type,
-        content: b.content,
-        caption: b.caption,
-        order: b.order,
-        file: null,
-        previewUrl: b.type !== 'text' ? (getStoragePublicUrl(b.content) || b.content) : undefined,
-      }))
-    );
-  }, [blocks]);
+    if (isLoading) return;
+    if (syncedProjectId !== projectId) {
+      setLocalBlocks(
+        blocks.map((b) => ({
+          id: b.id,
+          type: b.type,
+          content: b.content,
+          caption: b.caption,
+          order: b.order,
+          file: null,
+          previewUrl: b.type !== 'text' ? (getStoragePublicUrl(b.content) || b.content) : undefined,
+        }))
+      );
+      setSyncedProjectId(projectId);
+    }
+  }, [blocks, isLoading, projectId, syncedProjectId]);
 
   const addBlock = useCallback((type: BlockType) => {
     setLocalBlocks((prev) => [
@@ -139,6 +146,7 @@ export function useAdminProjectContent(projectId: string) {
       }
 
       queryClient.invalidateQueries({ queryKey: ['project_content', projectId] });
+      setSyncedProjectId(null);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error al guardar');
     } finally {

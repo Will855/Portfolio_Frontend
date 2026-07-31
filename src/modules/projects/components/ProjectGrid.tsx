@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Card from "./ProjectCard";
 import { useCards } from "../hooks/useCards";
 import { trackSearchExecution } from "../../../core/utils/analytics";
@@ -118,7 +120,7 @@ const Grid: React.FC = () => {
       >
         {filteredCards.map((card) => (
           <div key={card.id}>
-            <Link to={`/page/${card.id}`}>
+            <Link href={`/page/${card.id}`}>
               <Card
                 id={card.id}
                 title={card.title}
