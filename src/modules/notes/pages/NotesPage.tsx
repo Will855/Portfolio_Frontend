@@ -97,7 +97,7 @@ export const NotesPage: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
               </svg>
               <div>
-                <h2 className="text-xl text-slate-200 font-semibold mb-2">Mi Segundo Cerebro</h2>
+                <h2 className="text-xl text-slate-200 font-semibold mb-2">Base de conocimiento</h2>
                 <p>Selecciona un apunte del menú lateral para explorar mi base de conocimiento técnica.</p>
               </div>
             </div>
