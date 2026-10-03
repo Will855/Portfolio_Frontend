@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useId } from 'react';
+import { createPortal } from 'react-dom';
 import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-zoom-pan-pinch';
 
 interface MermaidBlockProps {
@@ -178,12 +179,12 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     );
   }
 
-  // ─── Fullscreen overlay (Powered by react-zoom-pan-pinch) ────────────────────
-  if (isFullscreen) {
+  // ─── Fullscreen overlay (Powered by react-zoom-pan-pinch + React Portal) ────
+  if (isFullscreen && typeof document !== 'undefined') {
     const initialFit = getInitialFitScale();
 
-    return (
-      <div className="mermaid-wrapper fixed inset-0 z-[9999] bg-slate-950 flex flex-col select-none">
+    return createPortal(
+      <div className="mermaid-wrapper fixed inset-0 w-screen h-screen z-[99999] bg-slate-950 flex flex-col select-none">
         <TransformWrapper
           initialScale={initialFit}
           minScale={0.15}
@@ -235,10 +236,10 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
               </div>
 
               {/* Viewport Canvas interactivo */}
-              <div className="relative flex-1 w-full h-full overflow-hidden bg-[#070b14] cursor-grab active:cursor-grabbing">
+              <div className="relative flex-1 w-full h-[calc(100vh-100px)] overflow-hidden bg-[#070b14] cursor-grab active:cursor-grabbing">
                 <TransformComponent
-                  wrapperClass="!w-full !h-full"
-                  contentClass="!w-full !h-full flex items-center justify-center"
+                  wrapperStyle={{ width: "100%", height: "100%" }}
+                  contentStyle={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
                 >
                   <div
                     className="flex items-center justify-center p-8 [&_svg]:max-w-none [&_svg]:h-auto"
@@ -253,7 +254,8 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
             </>
           )}
         </TransformWrapper>
-      </div>
+      </div>,
+      document.body
     );
   }
 
