@@ -191,7 +191,8 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
           maxScale={6}
           centerOnInit
           limitToBounds={false}
-          wheel={{ step: 0.02 }}
+          smooth={false}
+          wheel={{ step: 0.04 }}
           pinch={{ step: 1 }}
           doubleClick={{ mode: 'reset' }}
         >
