@@ -7,7 +7,7 @@
 import { useContentBlock } from './useContentBlock';
 
 /** Ítems de navegación por defecto cuando no hay datos en Supabase o el JSON es inválido. */
-const DEFAULT_NAV_ITEMS = ['Inicio', 'Proyectos'];
+const DEFAULT_NAV_ITEMS = ['Inicio', 'Proyectos', 'Notas'];
 
 /** Ítems que no deben mostrarse en el navbar (páginas eliminadas o unificadas en Home). */
 const EXCLUDED_NAV_ITEMS = ['Informacion', 'Contacto', 'Planes'];
@@ -34,6 +34,9 @@ export function useNavItems(): string[] {
       ? (parsed as string[])
       : DEFAULT_NAV_ITEMS;
     const filtered = filterNavItems(items);
+    if (!filtered.some((i) => i.toLowerCase() === 'notas')) {
+      filtered.push('Notas');
+    }
     return filtered.length > 0 ? filtered : DEFAULT_NAV_ITEMS;
   } catch {
     return DEFAULT_NAV_ITEMS;

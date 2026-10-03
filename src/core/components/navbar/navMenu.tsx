@@ -36,7 +36,7 @@ function NavMenu() {
       <ul className="flex justify-between items-center py-2">
         {navItems.map((item) => {
           const href = `/${item.toLowerCase()}`;
-          const isActive = pathname === href || (pathname === '/' && href === '/inicio');
+          const isActive = pathname === href || (pathname === '/' && href === '/inicio') || (href === '/notas' && pathname.startsWith('/notas'));
           return (
             <li key={item}>
               <Link 

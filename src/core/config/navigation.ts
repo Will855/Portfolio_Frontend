@@ -9,7 +9,9 @@ export const NAV_ICONS: Record<string, string> = {
     'sobre mi': 'person-outline',
     contacto: 'mail-outline',
     blog: 'document-text-outline',
-    servicios: 'briefcase-outline'
+    servicios: 'briefcase-outline',
+    notas: 'book-outline',
+    apuntes: 'book-outline'
 };
 
 export const DEFAULT_NAV_ICON = 'compass-outline';

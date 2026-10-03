@@ -47,7 +47,7 @@ const DockMobileNav = () => {
     // Calcular metadatos para decidir qué ítem está activo
     const navItemsMetadata = navItems.map(item => {
         const meta = getNavMetadata(item);
-        const isActive = pathname === meta.href || (pathname === '/' && meta.normalized === 'inicio');
+        const isActive = pathname === meta.href || (pathname === '/' && meta.normalized === 'inicio') || (meta.normalized === 'notas' && pathname.startsWith('/notas'));
         return { ...meta, isActive };
     });
 

@@ -108,7 +108,7 @@ function ResponsiveMenu() {
                 <ul className="flex flex-col h-full justify-center items-start p-6 space-y-4">
                     {navItems.map((item) => {
                         const href = `/${item.toLowerCase()}`;
-                        const isActive = pathname === href || (pathname === '/' && href === '/inicio');
+                        const isActive = pathname === href || (pathname === '/' && href === '/inicio') || (href === '/notas' && pathname.startsWith('/notas'));
                         return (
                             <li
                                 key={item} // Clave única para cada elemento
