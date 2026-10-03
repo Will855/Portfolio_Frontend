@@ -10,6 +10,7 @@ import Footer from '../../../core/components/footer/Footer';
 export const NotesPage: React.FC = () => {
   const searchParams = useSearchParams();
   const currentPath = searchParams.get('path') || '';
+  const [isExpanded, setIsExpanded] = React.useState(false);
   
   // Si el path termina en .md, es un archivo. Si no, asumimos que es una carpeta.
   const isFile = currentPath.endsWith('.md');
@@ -21,9 +22,54 @@ export const NotesPage: React.FC = () => {
   const { data: tree, isLoading: treeLoading, error: treeError } = useGithubNotesTree(folderPath);
   const { data: content, isLoading: contentLoading } = useGithubNoteContent(isFile ? currentPath : '');
 
+  // Render principal del contenido
+  const MainContent = (
+    <div className="relative w-full h-full">
+      {isFile && content && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="absolute top-2 right-2 sm:top-0 sm:right-0 z-20 p-2.5 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all shadow-lg"
+          title={isExpanded ? "Contraer" : "Pantalla Completa"}
+        >
+          {isExpanded ? (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          )}
+        </button>
+      )}
+
+      {!isFile ? (
+        <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center space-y-4 pt-10">
+          <svg className="w-16 h-16 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+          </svg>
+          <div>
+            <h2 className="text-xl text-slate-200 font-semibold mb-2">Base de conocimiento</h2>
+            <p>Selecciona un apunte del menú lateral para explorar mi base de conocimiento técnica.</p>
+          </div>
+        </div>
+      ) : contentLoading ? (
+        <div className="flex items-center justify-center h-full min-h-[300px]">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : content ? (
+        <div className="prose prose-invert prose-blue max-w-none break-words pt-4">
+          <MarkdownRenderer markdown={content} />
+        </div>
+      ) : (
+        <p className="text-red-400 pt-10">Error al cargar el documento.</p>
+      )}
+    </div>
+  );
+
   return (
     <div className="min-h-screen flex flex-col pt-24 pb-12 bg-[#000000] text-slate-200">
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex-1 flex flex-col md:flex-row gap-8">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex-1 flex flex-col md:flex-row gap-8 relative">
         
         {/* Sidebar: Explorador de Archivos */}
         <aside className="w-full md:w-64 lg:w-72 flex-shrink-0">
@@ -89,32 +135,20 @@ export const NotesPage: React.FC = () => {
           </div>
         </aside>
 
-        {/* Main Content: Markdown */}
-        <main className="flex-1 bg-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl min-h-[600px] overflow-hidden">
-          {!isFile ? (
-            <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center space-y-4">
-              <svg className="w-16 h-16 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-              </svg>
-              <div>
-                <h2 className="text-xl text-slate-200 font-semibold mb-2">Base de conocimiento</h2>
-                <p>Selecciona un apunte del menú lateral para explorar mi base de conocimiento técnica.</p>
-              </div>
-            </div>
-          ) : contentLoading ? (
-            <div className="flex items-center justify-center h-full">
-              <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          ) : content ? (
-            <div className="prose prose-invert prose-blue max-w-none overflow-x-auto break-words">
-              <MarkdownRenderer content={content} />
-            </div>
-          ) : (
-            <p className="text-red-400">Error al cargar el documento.</p>
-          )}
+        {/* Main Content: Vista normal */}
+        <main className="flex-1 bg-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl min-h-[600px] overflow-x-auto relative">
+          {MainContent}
         </main>
-
       </div>
+
+      {/* Overlay: Vista Expandida (100vh) */}
+      {isExpanded && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md p-4 sm:p-8 flex justify-center items-start overflow-y-auto">
+          <div className="w-full max-w-5xl bg-slate-900/80 border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl relative mt-4 sm:mt-8 mb-8">
+            {MainContent}
+          </div>
+        </div>
+      )}
       
       <div className="mt-16 w-full">
         <Footer />
