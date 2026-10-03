@@ -33,19 +33,9 @@ export const NotesPage: React.FC = () => {
             title={isExpanded ? "Contraer" : "Pantalla Completa"}
           >
             {isExpanded ? (
-              <>
-                <svg width="20" height="20" className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                <span className="text-sm font-medium pr-1">Contraer</span>
-              </>
+              <span className="text-sm font-medium px-2">Contraer Pantalla</span>
             ) : (
-              <>
-                <svg width="20" height="20" className="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                </svg>
-                <span className="text-sm font-medium pr-1">Expandir</span>
-              </>
+              <span className="text-sm font-medium px-2">Expandir Pantalla</span>
             )}
           </button>
         </div>
@@ -53,9 +43,7 @@ export const NotesPage: React.FC = () => {
 
       {!isFile ? (
         <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center space-y-4 pt-10">
-          <svg width="64" height="64" className="w-16 h-16 text-slate-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-          </svg>
+          <span className="text-6xl" role="img" aria-label="Directorio">📂</span>
           <div>
             <h2 className="text-xl text-slate-200 font-semibold mb-2">Base de conocimiento</h2>
             <p>Selecciona un apunte del menú lateral para explorar mi base de conocimiento técnica.</p>
@@ -83,9 +71,7 @@ export const NotesPage: React.FC = () => {
         <aside className="w-full md:w-64 lg:w-72 flex-shrink-0">
           <div className="bg-slate-900/50 backdrop-blur-md border border-white/10 rounded-2xl p-6 sticky top-28">
             <h3 className="text-xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent flex items-center gap-2">
-              <svg width="20" height="20" className="w-5 h-5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
+              <span className="text-xl" role="img" aria-label="Conocimiento">📚</span>
               Conocimiento
             </h3>
             
@@ -95,9 +81,7 @@ export const NotesPage: React.FC = () => {
                 href={`/notas?path=${pathParts.slice(0, isFile ? -2 : -1).join('/')}`}
                 className="flex items-center gap-2 text-slate-400 hover:text-white text-sm mb-4 transition-colors"
               >
-                <svg width="16" height="16" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
-                </svg>
+                <span className="text-sm" role="img" aria-label="Atrás">⬅️</span>
                 Atrás
               </Link>
             )}
@@ -125,13 +109,9 @@ export const NotesPage: React.FC = () => {
                         }`}
                       >
                         {node.type === 'dir' ? (
-                          <svg width="16" height="16" className="w-4 h-4 text-purple-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                          </svg>
+                          <span className="text-base" role="img" aria-label="Carpeta">📁</span>
                         ) : (
-                          <svg width="16" height="16" className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
+                          <span className="text-base" role="img" aria-label="Archivo">📄</span>
                         )}
                         <span className="truncate flex-1">{node.name.replace('.md', '')}</span>
                       </Link>
