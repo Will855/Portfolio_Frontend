@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useId, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useId } from 'react';
+import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-zoom-pan-pinch';
 
 interface MermaidBlockProps {
   code: string;
@@ -39,18 +40,24 @@ const getViewBoxDimensions = (svgStr: string | null) => {
   return null;
 };
 
+// Componente que muestra en tiempo real el porcentaje de zoom sin relanzar re-renders innecesarios
+const ZoomIndicator: React.FC = () => {
+  const [scale, setScale] = useState(1);
+  useTransformEffect(({ state }) => {
+    setScale(state.scale);
+  });
+  return (
+    <span className="text-blue-400 font-mono text-xs ml-3 font-semibold select-none">
+      {Math.round(scale * 100)}%
+    </span>
+  );
+};
+
 const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
   const [svgContent, setSvgContent]     = useState<string | null>(null);
   const [error, setError]               = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [scale, setScale]               = useState(1);
-  const [translate, setTranslate]       = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging]     = useState(false);
-
-  const isDraggingRef = useRef(false);
-  const dragStartRef  = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
-  const canvasRef     = useRef<HTMLDivElement>(null);
-  const containerId   = `mermaid-${useId().replace(/:/g, '')}`;
+  const containerId                     = `mermaid-${useId().replace(/:/g, '')}`;
 
   useEffect(() => {
     let isMounted = true;
@@ -107,7 +114,6 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
 
         let { svg } = await mermaid.render(containerId, code);
 
-        // Inject custom CSS into the SVG string for crisp typography and cluster borders
         const styleTag = `<style>${CUSTOM_DIAGRAM_CSS}</style>`;
         svg = svg.replace(/<svg([^>]*)>/, `<svg$1>${styleTag}`);
 
@@ -127,114 +133,28 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     return () => { isMounted = false; };
   }, [code, containerId]);
 
-  // ── Fit & Reset ────────────────────────────────────────────────────────────
-  const resetView = useCallback(() => {
-    const dims = getViewBoxDimensions(svgContent);
-    if (dims && dims.w > 0 && dims.h > 0) {
-      const availableW = window.innerWidth * 0.9;
-      const availableH = (window.innerHeight - 120) * 0.9;
-      const fitScale = Math.min(1.2, Math.max(0.35, Math.min(availableW / dims.w, availableH / dims.h)));
-      setScale(Number(fitScale.toFixed(2)));
-    } else {
-      setScale(1);
-    }
-    setTranslate({ x: 0, y: 0 });
-  }, [svgContent]);
-
-  const handleOpenFullscreen = () => {
-    resetView();
-    setIsFullscreen(true);
-  };
-
-  // ── Drag (Pan) ─────────────────────────────────────────────────────────────
-  const onMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return;
-    isDraggingRef.current = true;
-    setIsDragging(true);
-    dragStartRef.current = {
-      x: e.clientX,
-      y: e.clientY,
-      tx: translate.x,
-      ty: translate.y,
-    };
-    e.preventDefault();
-  };
-
-  const onMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDraggingRef.current) return;
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    setTranslate({
-      x: dragStartRef.current.tx + dx,
-      y: dragStartRef.current.ty + dy,
-    });
-  }, []);
-
-  const onMouseUp = useCallback(() => {
-    isDraggingRef.current = false;
-    setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (isFullscreen) {
-      window.addEventListener('mousemove', onMouseMove);
-      window.addEventListener('mouseup', onMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', onMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
-      };
-    }
-  }, [isFullscreen, onMouseMove, onMouseUp]);
-
-  // ── Wheel Zoom with cursor tracking ─────────────────────────────────────────
-  useEffect(() => {
-    const el = canvasRef.current;
-    if (!el || !isFullscreen) return;
-
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const rect = el.getBoundingClientRect();
-      const mouseX = e.clientX - (rect.left + rect.width / 2);
-      const mouseY = e.clientY - (rect.top + rect.height / 2);
-
-      const factor = Math.exp(-e.deltaY * 0.002);
-
-      setScale((prevScale) => {
-        const nextScale = Math.min(6, Math.max(0.2, Number((prevScale * factor).toFixed(3))));
-        const ratio = nextScale / prevScale;
-
-        setTranslate((prev) => ({
-          x: mouseX - (mouseX - prev.x) * ratio,
-          y: mouseY - (mouseY - prev.y) * ratio,
-        }));
-
-        return nextScale;
-      });
-    };
-
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => el.removeEventListener('wheel', onWheel);
-  }, [isFullscreen]);
-
-  // ── Button Zoom ────────────────────────────────────────────────────────────
-  const zoomIn = () => {
-    setScale((s) => Math.min(6, Number((s * 1.25).toFixed(2))));
-  };
-
-  const zoomOut = () => {
-    setScale((s) => Math.max(0.2, Number((s * 0.8).toFixed(2))));
-  };
-
-  // ── Keyboard close ─────────────────────────────────────────────────────────
+  // Tecla Escape para salir de pantalla completa
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setIsFullscreen(false);
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
+    if (isFullscreen) {
+      window.addEventListener('keydown', onKey);
+      return () => window.removeEventListener('keydown', onKey);
+    }
+  }, [isFullscreen]);
+
+  // Calcular la escala inicial para ajustar a la pantalla sin deformar
+  const getInitialFitScale = () => {
+    const dims = getViewBoxDimensions(svgContent);
+    if (dims && dims.w > 0 && dims.h > 0 && typeof window !== 'undefined') {
+      const availableW = window.innerWidth * 0.88;
+      const availableH = (window.innerHeight - 140) * 0.88;
+      const fit = Math.min(1.2, Math.max(0.25, Math.min(availableW / dims.w, availableH / dims.h)));
+      return Number(fit.toFixed(2));
+    }
+    return 1;
+  };
 
   // ─── Error state ───────────────────────────────────────────────────────────
   if (error) {
@@ -258,72 +178,81 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     );
   }
 
-  // ─── Fullscreen overlay ───────────────────────────────────────────────────
+  // ─── Fullscreen overlay (Powered by react-zoom-pan-pinch) ────────────────────
   if (isFullscreen) {
+    const initialFit = getInitialFitScale();
+
     return (
-      <div className="mermaid-wrapper fixed inset-0 z-[9999] bg-slate-950 flex flex-col">
-        {/* Toolbar */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-slate-900/90 backdrop-blur-md shrink-0">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={zoomIn}
-              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
-              title="Acercar (+25%)"
-            >
-              ＋
-            </button>
-            <button
-              onClick={zoomOut}
-              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
-              title="Alejar (-20%)"
-            >
-              －
-            </button>
-            <button
-              onClick={resetView}
-              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-medium transition-all active:scale-95 cursor-pointer"
-              title="Ajustar diagrama a la pantalla"
-            >
-              Ajustar pantalla
-            </button>
-            <span className="text-blue-400 font-mono text-xs ml-3 font-semibold">
-              {Math.round(scale * 100)}%
-            </span>
-          </div>
-
-          <button
-            onClick={() => { setIsFullscreen(false); }}
-            className="px-4 py-1.5 rounded-lg bg-red-600/80 hover:bg-red-500 text-white text-sm font-medium transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer"
-          >
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            Cerrar (Esc)
-          </button>
-        </div>
-
-        {/* Diagram canvas */}
-        <div
-          ref={canvasRef}
-          className="relative flex-1 w-full h-full overflow-hidden select-none bg-slate-950 flex items-center justify-center"
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-          onMouseDown={onMouseDown}
-          onDoubleClick={resetView}
+      <div className="mermaid-wrapper fixed inset-0 z-[9999] bg-slate-950 flex flex-col select-none">
+        <TransformWrapper
+          initialScale={initialFit}
+          minScale={0.15}
+          maxScale={6}
+          centerOnInit
+          limitToBounds={false}
+          wheel={{ step: 0.08 }}
+          pinch={{ step: 5 }}
+          doubleClick={{ mode: 'reset' }}
         >
-          <div
-            style={{
-              transform: `translate3d(${translate.x}px, ${translate.y}px, 0) scale(${scale})`,
-              transformOrigin: 'center center',
-              transition: isDragging ? 'none' : 'transform 0.08s ease-out',
-            }}
-            className="flex items-center justify-center [&_svg]:max-w-none [&_svg]:max-h-none"
-            dangerouslySetInnerHTML={{ __html: svgContent }}
-          />
-        </div>
+          {({ zoomIn, zoomOut, resetTransform }) => (
+            <>
+              {/* Toolbar */}
+              <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-slate-900/95 backdrop-blur-md shrink-0 z-10">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => zoomIn(0.25)}
+                    className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
+                    title="Acercar"
+                  >
+                    ＋
+                  </button>
+                  <button
+                    onClick={() => zoomOut(0.25)}
+                    className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
+                    title="Alejar"
+                  >
+                    －
+                  </button>
+                  <button
+                    onClick={() => resetTransform()}
+                    className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-medium transition-all active:scale-95 cursor-pointer"
+                    title="Ajustar diagrama al tamaño inicial"
+                  >
+                    Ajustar
+                  </button>
+                  <ZoomIndicator />
+                </div>
 
-        <p className="text-center text-slate-400 text-xs py-2.5 bg-slate-900/60 border-t border-white/5 shrink-0">
-          💡 Arrastra para mover · Rueda del ratón para zoom · Doble clic para ajustar a pantalla
-        </p>
+                <button
+                  onClick={() => setIsFullscreen(false)}
+                  className="px-4 py-1.5 rounded-lg bg-red-600/80 hover:bg-red-500 text-white text-sm font-medium transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer"
+                >
+                  <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Cerrar (Esc)
+                </button>
+              </div>
+
+              {/* Viewport Canvas interactivo */}
+              <div className="relative flex-1 w-full h-full overflow-hidden bg-[#070b14] cursor-grab active:cursor-grabbing">
+                <TransformComponent
+                  wrapperClass="!w-full !h-full"
+                  contentClass="!w-full !h-full flex items-center justify-center"
+                >
+                  <div
+                    className="flex items-center justify-center p-8 [&_svg]:max-w-none [&_svg]:h-auto"
+                    dangerouslySetInnerHTML={{ __html: svgContent }}
+                  />
+                </TransformComponent>
+              </div>
+
+              <p className="text-center text-slate-400 text-xs py-2 bg-slate-900/60 border-t border-white/5 shrink-0 select-none">
+                💡 Arrastra para mover · Rueda o pellizca para zoom · Doble clic para restablecer
+              </p>
+            </>
+          )}
+        </TransformWrapper>
       </div>
     );
   }
@@ -331,9 +260,9 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
   // ─── Inline preview ────────────────────────────────────────────────────────
   return (
     <div className="mermaid-wrapper relative group my-6">
-      {/* Expand button */}
+      {/* Botón de ampliar */}
       <button
-        onClick={handleOpenFullscreen}
+        onClick={() => setIsFullscreen(true)}
         title="Ampliar diagrama"
         className="absolute top-3 right-3 z-10 opacity-70 group-hover:opacity-100 transition-all
                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-blue-600/90 border border-white/20
@@ -346,7 +275,7 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
       </button>
 
       <div
-        onClick={handleOpenFullscreen}
+        onClick={() => setIsFullscreen(true)}
         className="w-full overflow-x-auto rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl p-4 sm:p-6 cursor-pointer hover:border-blue-500/40 transition-all flex justify-center [&_svg]:max-w-full [&_svg]:h-auto"
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
