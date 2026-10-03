@@ -25,22 +25,6 @@ export const NotesPage: React.FC = () => {
   // Render principal del contenido
   const MainContent = (
     <div className="relative w-full h-full">
-      {isFile && content && (
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="z-20 p-2 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all shadow-lg flex items-center gap-2"
-            title={isExpanded ? "Contraer" : "Pantalla Completa"}
-          >
-            {isExpanded ? (
-              <span className="text-sm font-medium px-2">Contraer Pantalla</span>
-            ) : (
-              <span className="text-sm font-medium px-2">Expandir Pantalla</span>
-            )}
-          </button>
-        </div>
-      )}
-
       {!isFile ? (
         <div className="h-full flex flex-col items-center justify-center text-slate-400 text-center space-y-4 pt-10">
           <span className="text-6xl" role="img" aria-label="Directorio">📂</span>

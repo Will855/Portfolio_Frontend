@@ -274,14 +274,13 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
       <button
         onClick={handleOpenFullscreen}
         title="Expandir diagrama"
-        className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity
-                   flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600/90 border border-blue-400/30
-                   text-white text-xs font-semibold hover:bg-blue-500 shadow-xl backdrop-blur-md cursor-pointer"
+        className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity
+                   p-1.5 rounded-lg bg-blue-600/80 border border-blue-400/20
+                   text-white hover:bg-blue-500 shadow-lg backdrop-blur-sm cursor-pointer"
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
         </svg>
-        Expandir a pantalla completa
       </button>
 
       <div

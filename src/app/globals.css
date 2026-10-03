@@ -30,17 +30,6 @@
  * se aplican a HTML inyectado dinámicamente por react-markdown.
  */
 
-/* Estilos para documentación técnica y bloques de código markdown */
-.prose {
-  color: #334155;
-}
-
-.prose p:not(.mermaid-wrapper *),
-.prose li:not(.mermaid-wrapper *),
-.prose span:not(.mermaid-wrapper *),
-.prose div:not(.mermaid-wrapper *) {
-  color: #334155;
-}
 
 /* Custom high-contrast overrides for Mermaid diagrams */
 .mermaid-wrapper,
