@@ -102,6 +102,7 @@ const DockMobileNav = () => {
                                 <div className="flex flex-col items-center justify-center w-full h-full transform transition-transform duration-500 ease-out">
                                     <IonIcon
                                         name={icon as any}
+                                        style={{ width: '1em', height: '1em', display: 'block' }}
                                         className={`
                                             transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]
                                             ${!isExpanded ? 'text-3xl translate-y-0' : 'text-xl -translate-y-1'}
