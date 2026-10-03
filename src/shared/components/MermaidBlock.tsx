@@ -191,8 +191,8 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
           maxScale={6}
           centerOnInit
           limitToBounds={false}
-          wheel={{ step: 0.08 }}
-          pinch={{ step: 5 }}
+          wheel={{ step: 0.02 }}
+          pinch={{ step: 1 }}
           doubleClick={{ mode: 'reset' }}
         >
           {({ zoomIn, zoomOut, resetTransform }) => (
@@ -201,14 +201,14 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
               <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-slate-900/95 backdrop-blur-md shrink-0 z-10">
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => zoomIn(0.25)}
+                    onClick={() => zoomIn(0.15)}
                     className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
                     title="Acercar"
                   >
                     ＋
                   </button>
                   <button
-                    onClick={() => zoomOut(0.25)}
+                    onClick={() => zoomOut(0.15)}
                     className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
                     title="Alejar"
                   >
