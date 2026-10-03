@@ -26,21 +26,29 @@ export const NotesPage: React.FC = () => {
   const MainContent = (
     <div className="relative w-full h-full">
       {isFile && content && (
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="absolute top-2 right-2 sm:top-0 sm:right-0 z-20 p-2.5 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all shadow-lg"
-          title={isExpanded ? "Contraer" : "Pantalla Completa"}
-        >
-          {isExpanded ? (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          ) : (
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
-          )}
-        </button>
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="z-20 p-2 rounded-xl bg-white/10 backdrop-blur-lg border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all shadow-lg flex items-center gap-2"
+            title={isExpanded ? "Contraer" : "Pantalla Completa"}
+          >
+            {isExpanded ? (
+              <>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span className="text-sm font-medium pr-1">Contraer</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+                <span className="text-sm font-medium pr-1">Expandir</span>
+              </>
+            )}
+          </button>
+        </div>
       )}
 
       {!isFile ? (
@@ -136,7 +144,7 @@ export const NotesPage: React.FC = () => {
         </aside>
 
         {/* Main Content: Vista normal */}
-        <main className="flex-1 bg-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl min-h-[600px] overflow-x-auto relative">
+        <main className="flex-1 min-w-0 bg-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl min-h-[600px] overflow-x-auto relative">
           {MainContent}
         </main>
       </div>
