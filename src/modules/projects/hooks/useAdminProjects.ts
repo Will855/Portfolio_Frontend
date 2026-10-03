@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../../shared/services/supabase/supabase';
 import { STORAGE_BUCKET } from '../../../types/supabase';

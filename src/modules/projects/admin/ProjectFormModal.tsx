@@ -35,7 +35,7 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
   saving,
   error,
   setError,
-  cards,
+  cards: _cards,
 }) => {
   const [form, setForm] = useState<ProjectForm>(initialForm);
   const [cardImage, setCardImage] = useState<File | null>(null);

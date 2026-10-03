@@ -1,14 +1,5 @@
 /* Importación de fuentes desde Google Fonts */
 
-
-/* Variables CSS globales */
-:root {
-  --fs-small: clamp(1rem, (1rem + 1vw), 1.5rem); /* Tamaño de fuente adaptable */
-  --clr-text: hsl(0, 0%, 20%); /* Color del texto principal */
-  --clr-text-magnetic-btn: hsl(0, 0%, 80%); /* Color del texto en botones magnéticos */
-  --clr-magnetic-btn-bg: hsl(0, 0%, 10%); /* Color de fondo de botones magnéticos */
-}
-
 /* Estilos generales para todos los elementos */
 * {
   margin: 0; /* Eliminar márgenes */
@@ -33,78 +24,11 @@
   }
 }
 
-/* Estilos para botones magnéticos */
-.magnetic-btn {
-  border-radius: 50%; /* Bordes redondeados */
-  color: var(--clr-text-magnetic-btn); /* Color del texto */
-  cursor: pointer; /* Cambiar cursor al pasar el mouse */
-  overflow: hidden; /* Ocultar contenido que desborda */
-  position: relative; /* Necesario para el pseudo-elemento */
-  transition: color 0.2s ease-out; /* Transición suave para el color del texto */
-}
-
-/* Pseudo-elemento para el efecto de fondo en el botón magnético */
-.magnetic-btn::before {
-  content: ''; /* Contenido vacío para el pseudo-elemento */
-  position: absolute; /* Posicionamiento absoluto */
-  top: 0; /* Alinear al top */
-  left: 0; /* Alinear a la izquierda */
-  right: 100%; /* Comienza fuera del botón */
-  bottom: 0; /* Alinear al bottom */
-  background-color: white; /* Color de fondo que aparecerá */
-  transition: right 0.4s ease-out; /* Transición para mover el fondo */
-  z-index: 0; /* Asegura que el pseudo-elemento esté detrás del texto */
-}
-
-/* Efecto al pasar el mouse sobre el botón magnético */
-.magnetic-btn:hover::before {
-  right: 0; /* Mueve el fondo para cubrir todo el botón */
-}
-
-.word-cloud-icon {
-  transition: filter 0.3s ease;
-}
-
-.word-cloud-icon:hover {
-  filter: drop-shadow(0 4px 8px rgba(255,255,255,0.15));
-}
-
-/* Estilos para el texto dentro del botón magnético */
-.text {
-  display: block; /* Mostrar como bloque */
-  font-weight: 500; /* Peso de la fuente */
-  position: relative; /* Necesario para que el texto esté por encima del pseudo-elemento */
-  z-index: 1; /* Asegura que el texto esté por encima del fondo */
-}
-
-/* Cambiar color del texto al pasar el mouse sobre el botón */
-.magnetic-btn:hover .text {
-  color: black; /* Cambia el color del texto al pasar el mouse */
-}
-
-/* Estilos para iconos */
-ion-icon {
-  color: aliceblue; /* Color de los iconos */
-}
-
-/* Estilos para el contenedor con efecto de vidrio */
-#glass {
-  background: #1f1f1f; /* Fondo semitransparente */
-  box-shadow: 0 8px 32px 0 rgba(55, 55, 58, 0.137); /* Sombra del contenedor */
-  backdrop-filter: blur(0.5px); /* Efecto de desenfoque de fondo */
-  -webkit-backdrop-filter: blur(1.5px); /* Efecto de desenfoque para navegadores WebKit */
-  border-radius: 10px; /* Bordes redondeados */
-  border: 1px solid rgba(250, 247, 247, 0.18); /* Borde semitransparente */
-}
-
-.code {
-  background-color: #1f1f1f;
-  width: auto;
-  overflow-x: scroll;
-  padding: 8px;
-  margin: 8px 0 8px;
-  color: aliceblue;
-}
+/* 
+ * ESTILOS DE MARKDOWN Y MERMAID 
+ * Estos estilos no se pueden mover fácilmente a Tailwind porque
+ * se aplican a HTML inyectado dinámicamente por react-markdown.
+ */
 
 /* Estilos para documentación técnica y bloques de código markdown */
 .prose {

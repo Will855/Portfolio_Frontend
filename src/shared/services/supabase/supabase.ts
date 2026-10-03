@@ -25,7 +25,7 @@ const customFetch = async (url: RequestInfo | URL, options?: RequestInit) => {
     return response;
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
-    console.error(`❌ Fallo de red: ${reason}`);
+    console.warn(`⚠️ Fallo de red (fallback activado): ${reason}`);
     console.info('ℹ️ Causa probable: el proyecto Supabase está pausado o la URL es incorrecta.');
     console.info(`ℹ️ URL configurada: ${supabaseUrl}`);
     console.groupEnd();

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { useRouter } from 'next/navigation';
 import IonIcon from '@reacticons/ionicons';
@@ -93,10 +93,10 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
      * Maneja la redirección a la página de información
      * @function handleRedirect
      */
-    const handleRedirect = () => {
+    const handleRedirect = useCallback(() => {
         trackButtonClick('Magnetic Button', 'Home Section');
         router.push('/informacion');
-    };
+    }, [router]);
 
     /**
      * Efecto para manejar eventos de interacción
@@ -109,24 +109,26 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
         const handleMouseMove = (e: MouseEvent) => handleMove(e.clientX, e.clientY);
         const handleTouchMove = (e: TouchEvent) => {
             const touch = e.touches[0];
-            handleMove(touch.clientX, touch.clientY);
+            if (touch) handleMove(touch.clientX, touch.clientY);
         };
-
         const handleTouchStart = (e: TouchEvent) => {
-            touchStartTime.current = Date.now();
-            touchStartPos.current = {
-                x: e.touches[0].clientX,
-                y: e.touches[0].clientY
-            };
+            if (e.touches[0]) {
+                touchStartTime.current = Date.now();
+                touchStartPos.current = {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+            }
         };
-
-        const handleTouchEnd = () => {
+        const handleTouchEnd = (e: TouchEvent) => {
+            resetPosition();
+            const touch = e.changedTouches[0];
+            if (!touch) return;
             const timeDiff = Date.now() - touchStartTime.current;
             const dist = Math.hypot(
-                lastPosition.current.x - touchStartPos.current.x,
-                lastPosition.current.y - touchStartPos.current.y
+                touch.clientX - touchStartPos.current.x,
+                touch.clientY - touchStartPos.current.y
             );
-
             if (timeDiff < 300 && dist < 10) {
                 handleRedirect();
             }
@@ -145,7 +147,7 @@ const MagneticBtn: React.FC<MagneticBtnProps> = ({ iconName, subtitle }) => {
             btn.removeEventListener('touchstart', handleTouchStart);
             btn.removeEventListener('touchend', handleTouchEnd);
         };
-    }, []);
+    }, [handleRedirect]);
 
     return (
         <button

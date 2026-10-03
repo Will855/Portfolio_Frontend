@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from "react";
-import { CardProps } from "../../../types/types";
+import React, { useRef } from "react";
 import { handleMouseMove, resetCardPosition } from "../../../shared/utils/cardAnimations";
 import { useRouter } from "next/navigation";
 

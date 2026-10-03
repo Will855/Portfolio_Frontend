@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -26,7 +26,7 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({ src, onClose }) =>
         );
     }, { scope: modalRef });
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         gsap.to(contentRef.current, { 
             scale: 0.9, 
             opacity: 0, 
@@ -39,7 +39,7 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({ src, onClose }) =>
             ease: "power2.in",
             onComplete: onClose 
         });
-    };
+    }, [onClose]);
 
     // ESC key and scroll lock
     useEffect(() => {
@@ -57,7 +57,7 @@ export const LightboxModal: React.FC<LightboxModalProps> = ({ src, onClose }) =>
             window.removeEventListener("keydown", handleKeyDown);
             document.body.style.overflow = "";
         };
-    }, []);
+    }, [handleClose]);
 
     return (
         <div 

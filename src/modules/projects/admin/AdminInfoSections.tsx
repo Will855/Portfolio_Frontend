@@ -22,9 +22,9 @@ export const AdminInfoSections: React.FC = () => {
         <h2 className="text-2xl font-bold text-white">Secciones de información</h2>
         <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
           <p className="text-sm text-blue-300">
-            <strong>Habilidades:</strong> Tarjetas compactas que se muestran en la sección "Información" del home.
+            <strong>Habilidades:</strong> Tarjetas compactas que se muestran en la sección &quot;Información&quot; del home.
             <br />
-            <strong>Carrera y Experiencia:</strong> Trayectorias o hitos de tu carrera profesional en "Carrera y Experiencia".
+            <strong>Carrera y Experiencia:</strong> Trayectorias o hitos de tu carrera profesional en &quot;Carrera y Experiencia&quot;.
           </p>
         </div>
       </div>

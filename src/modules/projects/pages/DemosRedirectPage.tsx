@@ -1,7 +1,7 @@
 'use client';
 
-import React from "react";
-import { useParams, redirect } from "next/navigation";
+import React, { useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { projectIds } from "../config/project";
 
 /**
@@ -10,11 +10,17 @@ import { projectIds } from "../config/project";
  */
 const Demo: React.FC = () => {
   const params = useParams();
+  const router = useRouter();
   const projectId = params?.projectId as string;
-  if (projectId && projectIds.includes(projectId)) {
-    redirect(`/page/${projectId}`);
-  }
-  redirect("/proyectos");
+
+  useEffect(() => {
+    if (projectId && projectIds.includes(projectId)) {
+      router.replace(`/page/${projectId}`);
+    } else {
+      router.replace("/proyectos");
+    }
+  }, [projectId, router]);
+
   return null;
 };
 

@@ -1,8 +1,8 @@
 "use client";
 
 import React from 'react';
-import Link from 'next/link';
 import IonIcon from '@reacticons/ionicons';
+import QRCode from 'react-qr-code';
 import { trackContactAttempt } from '../../utils/analytics';
 
 // Configuración reutilizable
@@ -75,17 +75,25 @@ const Footer: React.FC = () => {
               </ul>
             </div>
 
-            {/* QR WhatsApp */}
+            {/* QR WhatsApp Nativo */}
             <div className="flex flex-col items-center space-y-4">
-              <div className="bg-white/10 p-3 rounded-xl border border-white/10 hover:scale-105 transition-transform duration-300 shadow-lg">
-                <img
-                  src="/assets/qrWhatsapp.webp"
-                  alt="Código QR para contacto por WhatsApp"
-                  className="w-32 h-32 object-contain"
-                  loading="lazy"
-                  decoding="async"
+              <a 
+                href={CONTACT_INFO.socialMedia.whatsapp.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => handleSocialClick('whatsapp')}
+                className="bg-white p-3 rounded-xl hover:scale-105 transition-transform duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                aria-label="Abrir chat de WhatsApp"
+              >
+                <QRCode 
+                  value={CONTACT_INFO.socialMedia.whatsapp.url}
+                  size={128}
+                  bgColor="#ffffff"
+                  fgColor="#000000"
+                  level="Q"
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
                 />
-              </div>
+              </a>
               <p className="text-sm opacity-75">Escanea para contactar</p>
             </div>
 

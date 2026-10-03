@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useCards } from '../hooks/useCards';
-import { useAdminProjectContent, BlockType, LocalBlock } from '../hooks/useAdminProjectContent';
+import { useAdminProjectContent, BlockType } from '../hooks/useAdminProjectContent';
 import { TextBlock } from './components/TextBlock';
 import { MediaBlock } from './components/MediaBlock';
 
@@ -12,10 +12,10 @@ export const AdminContent: React.FC = () => {
   const list = Array.isArray(cards) ? cards : [];
 
   useEffect(() => {
-    if (!selectedProjectId && list.length > 0) {
-      setSelectedProjectId(list[0].id);
+    if (!selectedProjectId && Array.isArray(cards) && cards.length > 0) {
+      setSelectedProjectId(cards[0].id);
     }
-  }, [list, selectedProjectId]);
+  }, [cards, selectedProjectId]);
 
   return (
     <div className="space-y-6">

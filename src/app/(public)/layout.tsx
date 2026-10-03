@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useAppDataReady } from '../../core/hooks/useAppDataReady';
 import { LoadingScreen } from '../../core/components/LoadingScreen';
 import NavMenu from '../../core/components/navbar/navMenu';
-import ResponsiveMenu from '../../core/components/navbar/menuResponsive';
+import DockMobileNav from '../../core/components/navbar/DockMobileNav';
 
 const BackgroundStars = dynamic(() => import('../../core/components/StarsBackground'), { ssr: false });
 
@@ -32,7 +32,7 @@ export default function PublicLayout({
     <>
       <NavMenu />
       <BackgroundStars />
-      <ResponsiveMenu />
+      <DockMobileNav />
       <main>
         {children}
       </main>

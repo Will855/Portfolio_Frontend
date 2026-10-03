@@ -53,12 +53,12 @@ git clone [URL_DEL_REPOSITORIO]
 
 2. Instalar dependencias:
 ```bash
-npm install
+pnpm install
 ```
 
 3. Iniciar el servidor de desarrollo:
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ## 📝 Guía de Uso

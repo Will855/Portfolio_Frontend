@@ -27,7 +27,10 @@ async function fetchProjectsMeta(): Promise<ProjectMeta[] | null> {
     .from('projects_meta')
     .select('*')
     .order('order');
-  if (error) throw error;
+  if (error) {
+    console.warn('⚠️ Supabase error in fetchProjectsMeta:', error.message);
+    return null;
+  }
   if (!data?.length) return null;
   return (data as ProjectMetaRow[]).map((row) => ({
     id: row.id,

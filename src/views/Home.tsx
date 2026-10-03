@@ -5,8 +5,8 @@ import CircleProfile from "../shared/components/CircleProfile";
 import Footer from "../core/components/footer/Footer";
 import WordCloud from "../modules/profile/components/WordCloud";
 import { useHeroContent } from "../modules/profile/hooks/useHeroContent";
-import { SkillSection, ExpAndTecnologies } from "../modules/projects/components/InformationContent";
-import { useEffect, useRef } from "react";
+import { SkillSection } from "../modules/projects/components/InformationContent";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -44,7 +44,6 @@ const Home = () => {
             >
                 <div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 backdrop-blur-lg bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
                     <SkillSection />
-                    <ExpAndTecnologies />
                 </div>
             </section>
             <Footer />

@@ -4,7 +4,7 @@
  * Los bloques se identifican por una clave (key) y pueden ser tipo 'html' o 'json'.
  * Usado para ítems de navegación, secciones about, footer, etc.
  */
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueries } from '@tanstack/react-query';
 import { supabase, isSupabaseConfigured } from '../../shared/services/supabase/supabase';
 import type { ContentBlockRow } from '../../types/supabase';
 
@@ -21,7 +21,10 @@ async function fetchContentBlock(key: string): Promise<ContentBlockRow | null> {
     .select('*')
     .eq('key', key)
     .single();
-  if (error) throw error;
+  if (error) {
+    console.warn(`⚠️ Supabase error in fetchContentBlock (${key}):`, error.message);
+    return null;
+  }
   if (!data) return null;
   return data as ContentBlockRow;
 }
@@ -58,9 +61,16 @@ export function useContentBlock(key: string | null) {
  * const { blocks, isLoading } = useContentBlocks(['nav_items', 'footer_contact']);
  */
 export function useContentBlocks(keys: string[]) {
-  const queries = keys.map((key) => useContentBlock(key));
+  const queries = useQueries({
+    queries: keys.map((key) => ({
+      queryKey: ['content_block', key],
+      queryFn: () => fetchContentBlock(key),
+      enabled: Boolean(key),
+      staleTime: 5 * 60 * 1000,
+    })),
+  });
   const blocks = Object.fromEntries(
-    keys.map((key, i) => [key, queries[i].block])
+    keys.map((key, i) => [key, queries[i]?.data ?? null])
   );
   const isLoading = queries.some((q) => q.isLoading);
   return { blocks, isLoading, queries };

@@ -16,15 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js environment
+      # 2. Setup pnpm and Node.js environment
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.15.0' 
+          node-version: '20.15.0'
+          cache: 'pnpm'
 
       # 3. Install dependencies and build the project
       - name: Install dependencies and build
-        run: npm ci && npm run build
+        run: pnpm install --frozen-lockfile && pnpm run build
 
       # 4. Deploy to Firebase Hosting
       - name: Deploy to Firebase Hosting

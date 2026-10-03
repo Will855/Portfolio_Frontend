@@ -11,7 +11,10 @@ async function fetchInfoSections(sectionType: 'skill' | 'knowledge'): Promise<In
     .select('*')
     .eq('section_type', sectionType)
     .order('order', { ascending: true });
-  if (error) throw error;
+  if (error) {
+    console.warn(`⚠️ Supabase error in fetchInfoSections (${sectionType}):`, error.message);
+    return null;
+  }
   if (!data) return null;
   return data.map((row: Record<string, unknown>) => ({
     ...row,

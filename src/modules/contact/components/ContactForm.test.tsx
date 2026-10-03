@@ -4,21 +4,26 @@ import userEvent from '@testing-library/user-event';
 import ContactForm from './ContactForm';
 
 // Mock GSAP to prevent animation issues in JSDOM
-jest.mock('gsap', () => ({
-  default: {
+jest.mock('gsap', () => {
+  const mockTimeline = {
+    fromTo: jest.fn().mockReturnThis(),
+    to: jest.fn().mockReturnThis(),
+  };
+  const mockGsap = {
     to: jest.fn(),
     fromTo: jest.fn(),
-    timeline: () => ({
-      fromTo: jest.fn().mockReturnThis(),
-    }),
-  },
-}));
+    timeline: jest.fn(() => mockTimeline),
+  };
+  return {
+    __esModule: true,
+    default: mockGsap,
+    ...mockGsap,
+  };
+});
 
 jest.mock('@gsap/react', () => ({
-  useGSAP: (callback: any, dependencies: any[]) => {
-    React.useEffect(() => {
-      callback();
-    }, dependencies || []);
+  useGSAP: (callback: () => void) => {
+    callback();
   },
 }));
 
@@ -34,7 +39,8 @@ jest.mock('../../../shared/services/supabase/supabase', () => ({
 
 // Mock IonIcon
 jest.mock('@reacticons/ionicons', () => ({
-  default: () => <div data-testid="ion-icon" />
+  __esModule: true,
+  default: (props: any) => <div data-testid="ion-icon" {...props} />
 }));
 
 // Mock Analytics

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
-import { isValidEmail } from '../../../shared/utils/validation';
+import { isValidEmail, isValidPhone } from '../../../shared/utils/validation';
 
 export interface ContactFormData {
   name: string;
@@ -57,8 +57,8 @@ export const useContactForm = () => {
         return;
       }
 
-      if (formData.phone && !/^\d{11}$/.test(formData.phone)) {
-        setError('Por favor, ingresa un número de teléfono válido (11 dígitos).');
+      if (formData.phone && !isValidPhone(formData.phone)) {
+        setError('Por favor, ingresa un número de teléfono válido.');
         setFieldErrors({ phone: true });
         setIsSubmitting(false);
         return;

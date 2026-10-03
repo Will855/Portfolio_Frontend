@@ -101,9 +101,9 @@ const WordCloud = () => {
   return (
     <div
       onMouseMove={handleMouseMove} // Evento para mover el mouse
-      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center',height : '150px', position: 'relative', alignContent: 'center', color: 'white' }}
+      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', height: '150px', position: 'relative', alignContent: 'center' }}
       id='skills'
-      className='my-20'
+      className='my-20 text-slate-50'
     >
       {words.map((word, index) => (
         <div

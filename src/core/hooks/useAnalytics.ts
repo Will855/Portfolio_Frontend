@@ -41,6 +41,7 @@ export const useAnalytics = () => {
       }
     };
 
+    const initialStartTime = startTime.current;
     window.addEventListener('scroll', handleScroll);
 
     return () => {
@@ -48,7 +49,7 @@ export const useAnalytics = () => {
       window.removeEventListener('scroll', handleScroll);
       
       // Enviar tiempo final al desmontar
-      const finalTimeSpent = Math.floor((Date.now() - startTime.current) / 1000);
+      const finalTimeSpent = Math.floor((Date.now() - initialStartTime) / 1000);
       trackTimeOnPage(finalTimeSpent);
     };
   }, []);

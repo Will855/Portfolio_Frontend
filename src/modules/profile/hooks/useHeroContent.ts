@@ -30,7 +30,10 @@ async function fetchHero(): Promise<HeroContent & { profile_image_url: string }>
     .select('*')
     .eq('id', 'default')
     .single();
-  if (error) throw error;
+  if (error) {
+    console.warn('⚠️ Supabase error in fetchHero:', error.message);
+    return DEFAULT_HERO;
+  }
   if (!data) return DEFAULT_HERO;
   const row = data as HeroContent;
   return {

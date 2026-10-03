@@ -118,10 +118,15 @@ export const SkillSection: React.FC = () => {
             <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl bg-gradient-to-r from-blue-400 to-purple-300 bg-clip-text text-transparent mb-3">
                 Información
             </h2>
-            <div className="space-y-3 text-base leading-relaxed">
-                <p className="text-justify sm:text-left text-slate-200 text-sm sm:text-base">
-                    Wilmer Lynch — Programador Full Stack.
-                </p>
+            <div className="space-y-4 text-base leading-relaxed">
+                <div className="text-justify sm:text-left text-slate-200 text-sm sm:text-base space-y-3">
+                    <p>
+                        Programador Full Stack. He dedicado mi tiempo a estudiar el desarrollo de software a fondo por mi cuenta, acumulando apuntes que puedes visitar <a href="#" className="text-blue-400 hover:text-blue-300 underline transition-colors">aquí</a>.
+                    </p>
+                    <p>
+                        Mi enfoque siempre ha sido entender cómo funcionan las cosas por debajo (arquitectura, lógica y bases de datos) en lugar de solo memorizar código. Soy realista: tengo las bases teóricas claras para estructurar sistemas sólidos, aunque en el día a día no tenga problemas en consultar la documentación para recordar la sintaxis más básica.
+                    </p>
+                </div>
                 {isLoading ? (
                     <div className="flex items-center gap-2 text-slate-400 text-sm py-4">
                         <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />

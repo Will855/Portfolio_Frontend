@@ -10,7 +10,10 @@ async function fetchCertificates(): Promise<CertificateProps[]> {
   }
   
   const { data, error } = await supabase.from('certificates').select('*').order('order').order('id');
-  if (error) throw error;
+  if (error) {
+    console.warn('⚠️ Supabase error in fetchCertificates:', error.message);
+    return [];
+  }
   
   if (!data?.length) return [];
   

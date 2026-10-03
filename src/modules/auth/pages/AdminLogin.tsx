@@ -6,7 +6,7 @@ import { useAdminAuth } from '../hooks/useAdminAuth';
 import { testSupabaseConnection, type ConnectionTestResult } from '../../../core/utils/testSupabaseConnection';
 
 export const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState('lynchwilmer@gmail.com');
+  const email = 'lynchwilmer@gmail.com';
   const [step, setStep] = useState<'email' | 'otp'>('email');
   const [otp, setOtp] = useState('');
   const [message, setMessage] = useState('');

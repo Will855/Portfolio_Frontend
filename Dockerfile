@@ -1,8 +1,9 @@
 # Stage 1: Build
 FROM node:20-alpine AS build
+RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 COPY . .
 
 ARG VITE_SUPABASE_URL
@@ -13,7 +14,7 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 ENV VITE_N8N_WEBHOOK_URL=$VITE_N8N_WEBHOOK_URL
 
-RUN npm run build
+RUN pnpm run build
 
 # Stage 2: Serve
 FROM nginx:alpine
