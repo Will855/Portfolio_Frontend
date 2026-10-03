@@ -35,7 +35,9 @@ export function useGithubNoteContent(path: string) {
       // Usamos t=Date.now() para burlar la caché de 5 mins de raw.githubusercontent.com
       const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${REPO_NAME}/main/${path}?t=${Date.now()}`);
       if (!res.ok) throw new Error('Error fetching note content');
-      return await res.text();
+      const text = await res.text();
+      // Eliminar el bloque YAML de frontmatter (entre --- y ---)
+      return text.replace(/^---\n[\s\S]*?\n---\n/, '');
     },
     enabled: !!path && path !== '',
     staleTime: 1000 * 60 * 60,
