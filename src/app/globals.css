@@ -31,56 +31,25 @@
  */
 
 
-/* Custom high-contrast overrides for Mermaid diagrams */
-.mermaid-wrapper,
-.mermaid-wrapper * {
-  color: #ffffff !important;
+/* High-contrast defaults for Mermaid diagrams without overriding custom classes */
+.mermaid-wrapper text {
+  font-family: "Montserrat", system-ui, sans-serif;
 }
 
-.mermaid-wrapper text,
-.mermaid-wrapper span,
-.mermaid-wrapper div,
-.mermaid-wrapper p,
-.mermaid-wrapper tspan {
-  fill: #ffffff !important;
-  color: #ffffff !important;
-  font-weight: 600 !important;
-}
-
-.mermaid-wrapper .node rect,
-.mermaid-wrapper .node circle,
-.mermaid-wrapper .node polygon,
-.mermaid-wrapper .node path {
-  fill: #1e3a8a !important;
-  stroke: #60a5fa !important;
-  stroke-width: 2px !important;
-}
-
-.mermaid-wrapper .edgeLabel,
-.mermaid-wrapper .edgeLabel span,
-.mermaid-wrapper .edgeLabel p,
-.mermaid-wrapper .edgeLabel div {
-  background-color: #0f172a !important;
-  color: #7dd3fc !important;
-  fill: #7dd3fc !important;
-  font-weight: 600 !important;
-  font-size: 13px !important;
-}
-
-.mermaid-wrapper .edgeLabel rect {
-  fill: #0f172a !important;
-  opacity: 0.95 !important;
+.mermaid-wrapper .edgeLabel {
+  background-color: #0f172a;
+  color: #7dd3fc;
 }
 
 .mermaid-wrapper .edgePath path {
-  stroke: #38bdf8 !important;
-  stroke-width: 2px !important;
+  stroke: #38bdf8;
+  stroke-width: 2px;
 }
 
 .mermaid-wrapper .cluster rect {
-  fill: #090d16 !important;
-  stroke: #3b82f6 !important;
-  stroke-width: 1.5px !important;
+  fill: #090d16;
+  stroke: #3b82f6;
+  stroke-width: 1.5px;
 }
 
 .prose strong,

@@ -7,59 +7,50 @@ interface MermaidBlockProps {
 }
 
 const CUSTOM_DIAGRAM_CSS = `
-  /* Global CSS overrides for Mermaid diagram legibility */
   svg {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    height: auto !important;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
   }
-  .node rect, .node circle, .node polygon, .node path {
-    fill: #1e3a8a !important;
-    stroke: #60a5fa !important;
-    stroke-width: 2px !important;
-  }
-  .node .label, .node text, .node span, .node tspan, g.subgraph title, .cluster span, .cluster text, .nodeLabel {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-    font-weight: 700 !important;
-    font-size: 15px !important;
-  }
-  .edgeLabel, .edgeLabel text, .edgeLabel tspan, g.edgeLabel text, g.edgeLabel tspan {
-    fill: #7dd3fc !important;
+  .edgeLabel {
+    background-color: #0f172a !important;
     color: #7dd3fc !important;
-    font-weight: 600 !important;
+    fill: #7dd3fc !important;
     font-size: 13px !important;
-    font-family: 'Montserrat', 'Inter', sans-serif !important;
-  }
-  .edgeLabel rect, g.edgeLabel rect {
-    fill: #0f172a !important;
-    stroke: #38bdf8 !important;
-    stroke-width: 1px !important;
-    opacity: 0.95 !important;
-    rx: 4px;
-    ry: 4px;
   }
   .edgePath path {
     stroke: #38bdf8 !important;
     stroke-width: 2px !important;
   }
   .cluster rect {
-    fill: #090d16 !important;
+    fill: #0b1120 !important;
     stroke: #3b82f6 !important;
     stroke-width: 1.5px !important;
   }
 `;
 
+const getViewBoxDimensions = (svgStr: string | null) => {
+  if (!svgStr) return null;
+  const match = svgStr.match(/viewBox=["']([0-9.-]+)\s+([0-9.-]+)\s+([0-9.-]+)\s+([0-9.-]+)["']/);
+  if (match) {
+    return {
+      w: parseFloat(match[3]),
+      h: parseFloat(match[4]),
+    };
+  }
+  return null;
+};
+
 const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
   const [svgContent, setSvgContent]     = useState<string | null>(null);
   const [error, setError]               = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [scale, setScale]               = useState(1.4);
+  const [scale, setScale]               = useState(1);
   const [translate, setTranslate]       = useState({ x: 0, y: 0 });
-  const dragging  = useRef(false);
-  const dragStart = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
-  const containerId = `mermaid-${useId().replace(/:/g, '')}`;
+  const [isDragging, setIsDragging]     = useState(false);
+
+  const isDraggingRef = useRef(false);
+  const dragStartRef  = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const canvasRef     = useRef<HTMLDivElement>(null);
+  const containerId   = `mermaid-${useId().replace(/:/g, '')}`;
 
   useEffect(() => {
     let isMounted = true;
@@ -71,30 +62,52 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
 
         mermaid.initialize({
           startOnLoad: false,
-          theme: 'dark',
-          flowchart: {
-            htmlLabels: false,
-            curve: 'basis',
-          },
+          theme: 'base',
           themeVariables: {
             darkMode: true,
             background: 'transparent',
             primaryColor: '#1e3a8a',
-            primaryTextColor: '#ffffff',
+            primaryTextColor: '#f8fafc',
             primaryBorderColor: '#60a5fa',
             lineColor: '#38bdf8',
             secondaryColor: '#0f172a',
-            tertiaryColor: '#0f172a',
+            tertiaryColor: '#1e293b',
+            mainBkg: '#1e3a8a',
+            nodeBorder: '#60a5fa',
+            nodeTextColor: '#f8fafc',
+            clusterBkg: '#0b1120',
+            clusterBorder: '#3b82f6',
+            defaultLinkColor: '#38bdf8',
+            titleColor: '#f1f5f9',
             edgeLabelBackground: '#0f172a',
-            nodeTextColor: '#ffffff',
+            actorBkg: '#1e3a8a',
+            actorBorder: '#60a5fa',
+            actorTextColor: '#f8fafc',
+            actorLineColor: '#38bdf8',
+            signalColor: '#38bdf8',
+            signalTextColor: '#f1f5f9',
+            labelBoxBkgColor: '#0f172a',
+            labelBoxBorderColor: '#38bdf8',
+            labelTextColor: '#f1f5f9',
+            fontFamily: 'Montserrat, Inter, system-ui, sans-serif',
+            fontSize: '14px',
           },
-          fontSize: 14,
+          flowchart: {
+            htmlLabels: false,
+            curve: 'basis',
+            useMaxWidth: false,
+          },
+          sequence: {
+            useMaxWidth: false,
+            actorMargin: 50,
+            boxMargin: 10,
+          },
           securityLevel: 'loose',
         });
 
         let { svg } = await mermaid.render(containerId, code);
 
-        // Inject custom CSS into the SVG string for 100% styling override
+        // Inject custom CSS into the SVG string for crisp typography and cluster borders
         const styleTag = `<style>${CUSTOM_DIAGRAM_CSS}</style>`;
         svg = svg.replace(/<svg([^>]*)>/, `<svg$1>${styleTag}`);
 
@@ -114,38 +127,52 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     return () => { isMounted = false; };
   }, [code, containerId]);
 
-  // ── Zoom controls ──────────────────────────────────────────────────────────
-  const zoom = useCallback((delta: number) => {
-    setScale((s) => Math.min(5, Math.max(0.5, +(s + delta).toFixed(2))));
-  }, []);
-
+  // ── Fit & Reset ────────────────────────────────────────────────────────────
   const resetView = useCallback(() => {
-    setScale(1.4);
+    const dims = getViewBoxDimensions(svgContent);
+    if (dims && dims.w > 0 && dims.h > 0) {
+      const availableW = window.innerWidth * 0.9;
+      const availableH = (window.innerHeight - 120) * 0.9;
+      const fitScale = Math.min(1.2, Math.max(0.35, Math.min(availableW / dims.w, availableH / dims.h)));
+      setScale(Number(fitScale.toFixed(2)));
+    } else {
+      setScale(1);
+    }
     setTranslate({ x: 0, y: 0 });
-  }, []);
+  }, [svgContent]);
 
   const handleOpenFullscreen = () => {
     resetView();
     setIsFullscreen(true);
   };
 
-  // ── Drag (pan) ─────────────────────────────────────────────────────────────
+  // ── Drag (Pan) ─────────────────────────────────────────────────────────────
   const onMouseDown = (e: React.MouseEvent) => {
-    dragging.current = true;
-    dragStart.current = { x: e.clientX, y: e.clientY, tx: translate.x, ty: translate.y };
+    if (e.button !== 0) return;
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      tx: translate.x,
+      ty: translate.y,
+    };
     e.preventDefault();
   };
 
   const onMouseMove = useCallback((e: MouseEvent) => {
-    if (!dragging.current) return;
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - dragStartRef.current.x;
+    const dy = e.clientY - dragStartRef.current.y;
     setTranslate({
-      x: dragStart.current.tx + (e.clientX - dragStart.current.x),
-      y: dragStart.current.ty + (e.clientY - dragStart.current.y),
+      x: dragStartRef.current.tx + dx,
+      y: dragStartRef.current.ty + dy,
     });
   }, []);
 
   const onMouseUp = useCallback(() => {
-    dragging.current = false;
+    isDraggingRef.current = false;
+    setIsDragging(false);
   }, []);
 
   useEffect(() => {
@@ -159,10 +186,45 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     }
   }, [isFullscreen, onMouseMove, onMouseUp]);
 
-  // ── Wheel zoom ─────────────────────────────────────────────────────────────
-  const onWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    zoom(e.deltaY < 0 ? 0.15 : -0.15);
+  // ── Wheel Zoom with cursor tracking ─────────────────────────────────────────
+  useEffect(() => {
+    const el = canvasRef.current;
+    if (!el || !isFullscreen) return;
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const rect = el.getBoundingClientRect();
+      const mouseX = e.clientX - (rect.left + rect.width / 2);
+      const mouseY = e.clientY - (rect.top + rect.height / 2);
+
+      const factor = Math.exp(-e.deltaY * 0.002);
+
+      setScale((prevScale) => {
+        const nextScale = Math.min(6, Math.max(0.2, Number((prevScale * factor).toFixed(3))));
+        const ratio = nextScale / prevScale;
+
+        setTranslate((prev) => ({
+          x: mouseX - (mouseX - prev.x) * ratio,
+          y: mouseY - (mouseY - prev.y) * ratio,
+        }));
+
+        return nextScale;
+      });
+    };
+
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, [isFullscreen]);
+
+  // ── Button Zoom ────────────────────────────────────────────────────────────
+  const zoomIn = () => {
+    setScale((s) => Math.min(6, Number((s * 1.25).toFixed(2))));
+  };
+
+  const zoomOut = () => {
+    setScale((s) => Math.max(0.2, Number((s * 0.8).toFixed(2))));
   };
 
   // ── Keyboard close ─────────────────────────────────────────────────────────
@@ -199,32 +261,30 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
   // ─── Fullscreen overlay ───────────────────────────────────────────────────
   if (isFullscreen) {
     return (
-      <div
-        className="mermaid-wrapper fixed inset-0 z-[9999] bg-slate-950 flex flex-col select-none"
-        onWheel={onWheel}
-      >
+      <div className="mermaid-wrapper fixed inset-0 z-[9999] bg-slate-950 flex flex-col">
         {/* Toolbar */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-slate-900 shrink-0">
+        <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-slate-900/90 backdrop-blur-md shrink-0">
           <div className="flex items-center gap-2">
             <button
-              onClick={() => zoom(0.25)}
-              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95"
-              title="Acercar"
+              onClick={zoomIn}
+              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
+              title="Acercar (+25%)"
             >
               ＋
             </button>
             <button
-              onClick={() => zoom(-0.25)}
-              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95"
-              title="Alejar"
+              onClick={zoomOut}
+              className="px-3.5 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-base font-bold transition-all active:scale-95 cursor-pointer"
+              title="Alejar (-20%)"
             >
               －
             </button>
             <button
               onClick={resetView}
-              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-medium transition-all active:scale-95"
+              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-200 text-xs font-medium transition-all active:scale-95 cursor-pointer"
+              title="Ajustar diagrama a la pantalla"
             >
-              Restablecer (140%)
+              Ajustar pantalla
             </button>
             <span className="text-blue-400 font-mono text-xs ml-3 font-semibold">
               {Math.round(scale * 100)}%
@@ -232,13 +292,10 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
           </div>
 
           <button
-            onClick={() => {
-              setIsFullscreen(false);
-              resetView();
-            }}
-            className="px-4 py-1.5 rounded-lg bg-red-600/80 hover:bg-red-500 text-white text-sm font-medium transition-all flex items-center gap-1.5 shadow-lg active:scale-95"
+            onClick={() => { setIsFullscreen(false); }}
+            className="px-4 py-1.5 rounded-lg bg-red-600/80 hover:bg-red-500 text-white text-sm font-medium transition-all flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
             Cerrar (Esc)
@@ -246,22 +303,26 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
         </div>
 
         {/* Diagram canvas */}
-        <div className="flex-1 flex items-center justify-center overflow-hidden p-8">
+        <div
+          ref={canvasRef}
+          className="relative flex-1 w-full h-full overflow-hidden select-none bg-slate-950 flex items-center justify-center"
+          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+          onMouseDown={onMouseDown}
+          onDoubleClick={resetView}
+        >
           <div
             style={{
-              transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+              transform: `translate3d(${translate.x}px, ${translate.y}px, 0) scale(${scale})`,
               transformOrigin: 'center center',
-              transition: dragging.current ? 'none' : 'transform 0.1s ease-out',
-              cursor: dragging.current ? 'grabbing' : 'grab',
+              transition: isDragging ? 'none' : 'transform 0.08s ease-out',
             }}
-            onMouseDown={onMouseDown}
-            className="[&_svg]:w-full [&_svg]:h-auto [&_svg]:max-w-[85vw] [&_svg]:max-h-[80vh] [&_svg]:min-w-[700px]"
+            className="flex items-center justify-center [&_svg]:max-w-none [&_svg]:max-h-none"
             dangerouslySetInnerHTML={{ __html: svgContent }}
           />
         </div>
 
         <p className="text-center text-slate-400 text-xs py-2.5 bg-slate-900/60 border-t border-white/5 shrink-0">
-          💡 Tip: Arrastra con el ratón para mover · Usa la rueda para hacer zoom (o los botones ＋ / －)
+          💡 Arrastra para mover · Rueda del ratón para zoom · Doble clic para ajustar a pantalla
         </p>
       </div>
     );
@@ -273,19 +334,20 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
       {/* Expand button */}
       <button
         onClick={handleOpenFullscreen}
-        title="Expandir diagrama"
-        className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity
-                   p-1.5 rounded-lg bg-blue-600/80 border border-blue-400/20
-                   text-white hover:bg-blue-500 shadow-lg backdrop-blur-sm cursor-pointer"
+        title="Ampliar diagrama"
+        className="absolute top-3 right-3 z-10 opacity-70 group-hover:opacity-100 transition-all
+                   flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-blue-600/90 border border-white/20
+                   text-white text-xs font-medium shadow-lg backdrop-blur-md cursor-pointer"
       >
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
         </svg>
+        <span>Ampliar</span>
       </button>
 
       <div
         onClick={handleOpenFullscreen}
-        className="w-full overflow-x-auto rounded-2xl bg-slate-900 border border-white/10 shadow-xl p-4 sm:p-6 cursor-pointer hover:border-blue-500/40 transition-all [&_svg]:w-full [&_svg]:h-auto"
+        className="w-full overflow-x-auto rounded-2xl bg-slate-900/80 border border-white/10 shadow-xl p-4 sm:p-6 cursor-pointer hover:border-blue-500/40 transition-all flex justify-center [&_svg]:max-w-full [&_svg]:h-auto"
         dangerouslySetInnerHTML={{ __html: svgContent }}
       />
     </div>
