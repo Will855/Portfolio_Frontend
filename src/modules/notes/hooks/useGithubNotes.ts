@@ -32,7 +32,8 @@ export function useGithubNoteContent(path: string) {
   return useQuery({
     queryKey: ['github-note-content', path],
     queryFn: async (): Promise<string> => {
-      const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${REPO_NAME}/main/${path}`);
+      // Usamos t=Date.now() para burlar la caché de 5 mins de raw.githubusercontent.com
+      const res = await fetch(`https://raw.githubusercontent.com/${GITHUB_OWNER}/${REPO_NAME}/main/${path}?t=${Date.now()}`);
       if (!res.ok) throw new Error('Error fetching note content');
       return await res.text();
     },
