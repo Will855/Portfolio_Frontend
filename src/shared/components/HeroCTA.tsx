@@ -10,7 +10,7 @@ export const HeroCTA: React.FC = () => {
                 Ver Proyectos
             </a>
             <a 
-                href="/contacto" 
+                href="#contacto" 
                 className="px-8 py-3 bg-transparent border-2 border-slate-400 hover:border-slate-200 text-slate-300 hover:text-white font-semibold rounded-full transition-all duration-300 w-full sm:w-auto"
             >
                 Contáctame

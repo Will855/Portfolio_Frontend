@@ -3,9 +3,11 @@
 import Glitch from "../modules/profile/components/GlitchPresentation";
 import CircleProfile from "../shared/components/CircleProfile";
 import Footer from "../core/components/footer/Footer";
-import WordCloud from "../modules/profile/components/WordCloud";
+import { GithubActivity } from "../modules/profile/components/GithubActivity";
+import { HeroCTA } from "../shared/components/HeroCTA";
 import { useHeroContent } from "../modules/profile/hooks/useHeroContent";
 import { SkillSection } from "../modules/projects/components/InformationContent";
+import { FeaturedProjects } from "../modules/projects/components/FeaturedProjects";
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -35,8 +37,9 @@ const Home = () => {
                     fallbackSrc="/profile.jpeg"
                 />
                 <Glitch title={hero.title} subtitle={hero.subtitle} />
+                <HeroCTA />
             </section>
-            <WordCloud />
+            <GithubActivity username="Will855" />
 
             <section
                 ref={infoRef}
@@ -46,6 +49,9 @@ const Home = () => {
                     <SkillSection />
                 </div>
             </section>
+
+            <FeaturedProjects />
+            
             <Footer />
         </div>
     );

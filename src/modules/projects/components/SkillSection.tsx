@@ -121,7 +121,7 @@ export const SkillSection: React.FC = () => {
             <div className="space-y-4 text-base leading-relaxed">
                 <div className="text-justify sm:text-left text-slate-200 text-sm sm:text-base space-y-3">
                     <p>
-                        Programador Full Stack. He dedicado mi tiempo a estudiar el desarrollo de software a fondo por mi cuenta, acumulando apuntes que puedes visitar <a href="#" className="text-blue-400 hover:text-blue-300 underline transition-colors">aquí</a>.
+                        Programador Full Stack. He dedicado mi tiempo a estudiar el desarrollo de software a fondo por mi cuenta, acumulando apuntes que puedes visitar <a href="/notas" className="text-blue-400 hover:text-blue-300 underline transition-colors">aquí</a>.
                     </p>
                     <p>
                         Mi enfoque siempre ha sido entender cómo funcionan las cosas por debajo (arquitectura, lógica y bases de datos) en lugar de solo memorizar código. Soy realista: tengo las bases teóricas claras para estructurar sistemas sólidos, aunque en el día a día no tenga problemas en consultar la documentación para recordar la sintaxis más básica.

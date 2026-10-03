@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="relative text-slate-50 w-full">
+    <footer id="contacto" className="relative text-slate-50 w-full">
       <div className="relative mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl p-8 shadow-xl transition-all hover:shadow-2xl">
           {/* Sección de Contacto */}

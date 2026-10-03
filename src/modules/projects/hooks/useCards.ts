@@ -32,6 +32,7 @@ function mapFallback(c: (typeof fallbackCards)[number]): CardProps {
     demoUrl: c.demoUrl ?? '',
     bgImage: c.bgImage ?? '/images/bg-proyecto2.jpg',
     order: c.order ?? 0,
+    updated_at: new Date(Date.now() - (c.order ?? 0) * 86400000).toISOString(),
   };
 }
 
@@ -67,6 +68,7 @@ async function fetchCards(): Promise<CardProps[]> {
     architectural_doc: row.architectural_doc,
     category: row.category || 'Full Stack',
     tags: Array.isArray(row.tags) ? row.tags : [],
+    updated_at: row.updated_at,
   }));
 }
 

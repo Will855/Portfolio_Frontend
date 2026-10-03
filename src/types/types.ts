@@ -10,6 +10,7 @@ export interface CardProps extends Omit<CardRow, 'image_path' | 'button_text' | 
   codeUrl?: string;
   demoUrl?: string;
   bgImage?: string;
+  updated_at?: string;
 }
 
 export interface SkillGroup extends Omit<InfoSectionRow, 'section_type' | 'order' | 'created_at' | 'updated_at'> {
