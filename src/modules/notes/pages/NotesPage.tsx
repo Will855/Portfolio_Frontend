@@ -145,14 +145,14 @@ export const NotesPage: React.FC = () => {
 
         {/* Main Content: Vista normal */}
         <main className="flex-1 min-w-0 bg-slate-900/30 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl min-h-[600px] overflow-x-auto relative">
-          {MainContent}
+          {!isExpanded && MainContent}
         </main>
       </div>
 
       {/* Overlay: Vista Expandida (100vh) */}
       {isExpanded && (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md p-4 sm:p-8 flex justify-center items-start overflow-y-auto">
-          <div className="w-full max-w-5xl bg-slate-900/80 border border-white/10 rounded-2xl p-6 sm:p-10 shadow-2xl relative mt-4 sm:mt-8 mb-8">
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md p-4 sm:p-8 flex justify-center items-start overflow-y-auto">
+          <div className="w-full max-w-7xl bg-slate-900/90 border border-white/10 rounded-2xl p-6 sm:p-12 shadow-2xl relative mt-2 sm:mt-4 mb-8 min-h-[90vh]">
             {MainContent}
           </div>
         </div>
