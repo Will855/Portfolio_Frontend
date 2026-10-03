@@ -85,11 +85,11 @@
 
 .prose strong,
 .prose b {
-  color: #0f172a;
+  color: #f1f5f9;
 }
 
 .prose a {
-  color: #2563eb;
+  color: #60a5fa;
   text-decoration: underline;
 }
 
@@ -104,8 +104,8 @@
 }
 
 .prose code {
-  background-color: rgba(15, 23, 42, 0.08);
-  color: #7e22ce;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #c084fc;
   padding: 2px 6px;
   border-radius: 6px;
   font-size: 0.9em;
@@ -139,7 +139,7 @@
 .prose h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #f8fafc;
   margin-top: 24px;
   margin-bottom: 12px;
 }
@@ -147,7 +147,7 @@
 .prose h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #334155;
+  color: #e2e8f0;
   margin-top: 18px;
   margin-bottom: 8px;
 }
