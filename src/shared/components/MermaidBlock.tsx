@@ -58,10 +58,11 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
   const [svgContent, setSvgContent]     = useState<string | null>(null);
   const [error, setError]               = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const containerId                     = `mermaid-${useId().replace(/:/g, '')}`;
 
   useEffect(() => {
     let isMounted = true;
+    // Generar un ID único por cada ciclo de render para evitar colisiones en renders concurrentes
+    const renderId = `mermaid-${Math.random().toString(36).substring(2, 9)}`;
 
     const renderDiagram = async () => {
       try {
@@ -114,7 +115,7 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
           suppressErrorRendering: true,
         });
 
-        let { svg } = await mermaid.render(containerId, code);
+        let { svg } = await mermaid.render(renderId, code);
 
         const styleTag = `<style>${CUSTOM_DIAGRAM_CSS}</style>`;
         svg = svg.replace(/<svg([^>]*)>/, `<svg$1>${styleTag}`);
@@ -125,8 +126,8 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
         }
       } catch (err: any) {
         // Limpiar contenedores residuales inyectados en document.body por Mermaid en caso de error
-        document.getElementById(`d${containerId}`)?.remove();
-        document.getElementById(containerId)?.remove();
+        document.getElementById(`d${renderId}`)?.remove();
+        document.getElementById(renderId)?.remove();
 
         if (isMounted) {
           console.error('Mermaid render error:', err);
@@ -138,10 +139,10 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     renderDiagram();
     return () => {
       isMounted = false;
-      document.getElementById(`d${containerId}`)?.remove();
-      document.getElementById(containerId)?.remove();
+      document.getElementById(`d${renderId}`)?.remove();
+      document.getElementById(renderId)?.remove();
     };
-  }, [code, containerId]);
+  }, [code]);
 
   // Tecla Escape para salir de pantalla completa
   useEffect(() => {
