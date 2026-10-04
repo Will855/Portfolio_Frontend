@@ -2,19 +2,21 @@
 
 import React, { useState, useRef } from "react";
 import { LightboxModal } from "../../../shared/components/LightboxModal";
+import type { CertificateProps } from "../../../types/types";
 
 interface CertificateWidgetProps {
-    readonly certificate: any;
+    readonly certificate: CertificateProps;
+    readonly className?: string;
 }
 
-export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificate }) => {
+export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificate, className = "" }) => {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const widgetRef = useRef<HTMLDivElement>(null);
 
     return (
         <div 
             ref={widgetRef}
-            className="mt-8 relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden group"
+            className={`relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden group ${className}`}
         >
             {/* Background glowing gradients */}
             <div className="absolute -right-24 -bottom-24 w-48 h-48 rounded-full bg-blue-500/10 blur-3xl group-hover:bg-blue-500/15 transition-all duration-500" />
@@ -25,12 +27,12 @@ export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificat
                 <div className="flex-1 space-y-4 text-left w-full">
                     <div className="flex items-center gap-2">
                         {certificate.type_badge && (
-                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-blue-300 bg-blue-500/10 border border-blue-500/20 rounded-full uppercase tracking-wider">
+                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-blue-300 bg-blue-500/15 border border-blue-500/30 rounded-full uppercase tracking-wider">
                                 {certificate.type_badge}
                             </span>
                         )}
                         {certificate.status_badge && (
-                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/20 rounded-full uppercase tracking-wider">
+                            <span className="px-2.5 py-1 text-[10px] sm:text-xs font-semibold text-purple-300 bg-purple-500/15 border border-purple-500/30 rounded-full uppercase tracking-wider">
                                 {certificate.status_badge}
                             </span>
                         )}
@@ -40,12 +42,12 @@ export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificat
                         <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug group-hover:text-blue-300 transition-colors">
                             {certificate.title}
                         </h3>
-                        <p className="text-xs sm:text-sm text-slate-400 font-medium">
-                            Avalado por <span className="text-white">{certificate.issuer}</span> • Distribuido por <span className="text-white">{certificate.provider}</span>
+                        <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                            Avalado por <span className="text-white font-semibold">{certificate.issuer}</span> • Distribuido por <span className="text-white font-semibold">{certificate.provider}</span>
                         </p>
                     </div>
 
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                         {certificate.description}
                     </p>
 
@@ -54,7 +56,7 @@ export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificat
                             {certificate.tags.map((badge: string, idx: number) => (
                                 <span 
                                     key={idx} 
-                                    className="text-[10px] sm:text-xs text-slate-400 bg-white/5 px-2.5 py-1 rounded-md border border-white/5 hover:border-white/10 hover:bg-white/10 transition-colors"
+                                    className="text-[10px] sm:text-xs text-slate-200 bg-white/5 px-2.5 py-1 rounded-md border border-white/10 hover:border-white/20 hover:bg-white/10 transition-colors"
                                 >
                                     {badge}
                                 </span>

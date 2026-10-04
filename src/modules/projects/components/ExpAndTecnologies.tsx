@@ -10,14 +10,10 @@ if (typeof window !== "undefined") {
 }
 
 import { useKnowledgeSections } from "../hooks/useInfoSections";
-import { useCertificates } from "../hooks/useCertificates";
 import { KnowledgeTimelineItem } from "./KnowledgeTimelineItem";
-import { CertificateWidget } from "./CertificateWidget";
 
 export const ExpAndTecnologies: React.FC = () => {
-    const { knowledges, isLoading: isLoadingKnowledges } = useKnowledgeSections();
-    const { certificates, isLoading: isLoadingCertificates } = useCertificates();
-    const isLoading = isLoadingKnowledges || isLoadingCertificates;
+    const { knowledges, isLoading } = useKnowledgeSections();
     const containerRef = useRef<HTMLDivElement>(null);
 
     useGSAP(() => {
@@ -47,16 +43,11 @@ export const ExpAndTecnologies: React.FC = () => {
                     Cargando...
                 </div>
             ) : (
-                <>
-                    <ul className="mt-4 grid gap-4 sm:gap-5 lg:grid-cols-2">
-                        {knowledges.map((item, index) => (
-                            <KnowledgeTimelineItem key={item.id} item={item} index={index} />
-                        ))}
-                    </ul>
-                    {certificates.map(cert => (
-                        <CertificateWidget key={cert.id} certificate={cert} />
+                <ul className="mt-4 grid gap-4 sm:gap-5 lg:grid-cols-2">
+                    {knowledges.map((item, index) => (
+                        <KnowledgeTimelineItem key={item.id} item={item} index={index} />
                     ))}
-                </>
+                </ul>
             )}
         </article>
     );

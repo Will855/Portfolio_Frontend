@@ -7,6 +7,7 @@ import { GithubActivity } from "../modules/profile/components/GithubActivity";
 import { HeroCTA } from "../shared/components/HeroCTA";
 import { useHeroContent } from "../modules/profile/hooks/useHeroContent";
 import { SkillSection } from "../modules/projects/components/InformationContent";
+import { CertificatesSection } from "../modules/projects/components/CertificatesSection";
 import { FeaturedProjects } from "../modules/projects/components/FeaturedProjects";
 import { useRef } from "react";
 import gsap from "gsap";
@@ -49,6 +50,8 @@ const Home = () => {
                     <SkillSection />
                 </div>
             </section>
+
+            <CertificatesSection />
 
             <FeaturedProjects />
             

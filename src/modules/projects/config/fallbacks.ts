@@ -1,4 +1,19 @@
-import type { SkillGroup, CareerGroup } from '../../../types/types';
+import type { SkillGroup, CareerGroup, CertificateProps } from '../../../types/types';
+
+export const FALLBACK_CERTIFICATES: CertificateProps[] = [
+  {
+    id: 'cert-gcp-1',
+    title: 'Google Cloud Associate Cloud Engineer',
+    issuer: 'Google Cloud',
+    provider: 'Coursera',
+    description: 'Programa de preparación oficial centrado en la implementación, diseño, planificación y configuración de soluciones de infraestructura y servicios de almacenamiento, computación y red en Google Cloud Platform (GCP).',
+    status_badge: 'En Preparación',
+    type_badge: 'Certificación Oficial',
+    tags: ['GCP', 'Cloud Infrastructure', 'Kubernetes', 'IAM', 'VPC Networks', 'Compute Engine'],
+    img: '/assets/Certificado_GCP_1.png',
+    order: 1
+  }
+];
 
 export const FALLBACK_SKILLS: SkillGroup[] = [
   {
