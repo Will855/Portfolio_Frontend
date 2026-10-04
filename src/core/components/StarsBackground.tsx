@@ -1,117 +1,156 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
 
-// Units per second — fully frame-rate independent
-const FALL_SPEED_PER_SEC = 4.8;
+// Parámetros físicos idénticos a la simulación original
+const STAR_COUNT = 700;
+const FALL_SPEED = 4.8; // Unidades del mundo 3D por segundo (independiente de FPS)
+const WORLD_BOUND_Y = 50; // Límites del volumen cúbico 3D [-50, 50]
+const MIN_DEPTH = 5;      // Plano cercano de proyección
+const MAX_DEPTH = 95;     // Plano lejano de proyección
 
 const BackgroundStars = () => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const rafRef = useRef<number>(0);
-    const mountedRef = useRef<boolean>(false);
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
-        // Guard against StrictMode double-invoke: only run once per real mount
-        if (mountedRef.current) return;
-        mountedRef.current = true;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-        const container = containerRef.current;
-        if (!container) return;
+        const ctx = canvas.getContext("2d", { alpha: true });
+        if (!ctx) return;
 
-        // ─── Scene ────────────────────────────────────────────────────────────
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(
-            100,
-            window.innerWidth / window.innerHeight,
-            0.5,
-            300
-        );
-        camera.position.z = 5;
+        // Comprobar preferencia de accesibilidad (ahorro de batería / sin movimiento)
+        const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        container.appendChild(renderer.domElement);
-
-        // ─── Stars geometry ───────────────────────────────────────────────────
-        const starCount = 700;
-        const positions = new Float32Array(starCount * 3);
-        for (let i = 0; i < starCount * 3; i += 3) {
-            positions[i]     = (Math.random() - 0.5) * 100;
-            positions[i + 1] = (Math.random() - 0.5) * 100;
-            positions[i + 2] = (Math.random() - 0.5) * 100;
+        // ─── Estructura de Memoria Zero-GC (Float32Array plano) ─────────────
+        // Evita pausas de recolección de basura (GC) en el motor V8
+        // [x0, y0, z0,  x1, y1, z1, ...]
+        const stars = new Float32Array(STAR_COUNT * 3);
+        for (let i = 0; i < STAR_COUNT * 3; i += 3) {
+            stars[i]     = (Math.random() - 0.5) * 100;                 // X: [-50, 50]
+            stars[i + 1] = (Math.random() - 0.5) * 100;                 // Y: [-50, 50]
+            stars[i + 2] = MIN_DEPTH + Math.random() * (MAX_DEPTH - MIN_DEPTH); // Z: [5, 95]
         }
 
-        const starGeometry = new THREE.BufferGeometry();
-        starGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        let width = 0;
+        let height = 0;
+        let fovFactor = 0;
+        let dpr = 1;
 
-        const starMaterial = new THREE.PointsMaterial({
-            color: 0xffffff,
-            size: 0.18,
-            transparent: true,
-            opacity: 0.85,
-            sizeAttenuation: true,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-        });
+        // ─── Calibración de Resolución y Matriz de Proyección ──────────────
+        const handleResize = () => {
+            dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            width = window.innerWidth;
+            height = window.innerHeight;
 
-        scene.add(new THREE.Points(starGeometry, starMaterial));
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
 
-        // ─── Delta-time animation loop ─────────────────────────────────────────
+            // Distancia focal derivada de una cámara con FOV ~100 grados
+            // f = (dimension / 2) / tan(FOV / 2) -> para 100deg, tan(50deg) ≈ 1.1917
+            fovFactor = (Math.min(width, height) * 0.5) / 1.1917;
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        // ─── Bucle Cinemático con Geometría Proyectiva (Pinhole Camera) ────
+        let rafId = 0;
         let lastTime = -1;
+        let isRunning = true;
 
-        const animate = (now: number) => {
-            rafRef.current = requestAnimationFrame(animate);
+        const renderFrame = (now: number) => {
+            if (!isRunning) return;
 
-            // Initialize lastTime on first frame to avoid a huge first delta
             if (lastTime < 0) {
                 lastTime = now;
-                renderer.render(scene, camera);
-                return;
             }
-
             const delta = Math.min((now - lastTime) / 1000, 0.05);
             lastTime = now;
 
-            const pos = starGeometry.attributes.position.array as Float32Array;
-            const step = FALL_SPEED_PER_SEC * delta;
-            for (let i = 1; i < pos.length; i += 3) {
-                pos[i] -= step;
-                if (pos[i] < -50) pos[i] = 50;
+            // Limpieza del fotograma
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const cx = (width * 0.5) * dpr;
+            const cy = (height * 0.5) * dpr;
+            const fov = fovFactor * dpr;
+            const step = FALL_SPEED * delta;
+
+            ctx.fillStyle = "#ffffff";
+
+            for (let i = 0; i < STAR_COUNT * 3; i += 3) {
+                // Cinemática: caída vertical por delta-time
+                if (!prefersReducedMotion) {
+                    stars[i + 1] -= step;
+                    // Envoltura toroidal: al cruzar el límite inferior, reaparece arriba
+                    if (stars[i + 1] < -WORLD_BOUND_Y) {
+                        stars[i + 1] = WORLD_BOUND_Y;
+                        stars[i]     = (Math.random() - 0.5) * 100;
+                        stars[i + 2] = MIN_DEPTH + Math.random() * (MAX_DEPTH - MIN_DEPTH);
+                    }
+                }
+
+                const z = stars[i + 2];
+                // Proyección de Perspectiva 3D: S = focal / Z
+                const scale = fov / z;
+                const screenX = cx + stars[i] * scale;
+                const screenY = cy - stars[i + 1] * scale; // Inversión de eje Y para coordenadas cartesianas
+
+                // Frustum Culling: omitir estrellas fuera del viewport
+                if (screenX < 0 || screenX > canvas.width || screenY < 0 || screenY > canvas.height) {
+                    continue;
+                }
+
+                // Atenuación de tamaño y opacidad por distancia (Size & Alpha Attenuation)
+                const depthRatio = 1 - (z - MIN_DEPTH) / (MAX_DEPTH - MIN_DEPTH);
+                const size = Math.max(0.6 * dpr, (1.8 * depthRatio) * dpr);
+                const alpha = 0.25 + depthRatio * 0.65;
+
+                ctx.globalAlpha = alpha;
+                ctx.beginPath();
+                ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
+                ctx.fill();
             }
-            starGeometry.attributes.position.needsUpdate = true;
-            renderer.render(scene, camera);
+
+            if (!prefersReducedMotion) {
+                rafId = requestAnimationFrame(renderFrame);
+            }
         };
 
-        rafRef.current = requestAnimationFrame(animate);
+        // Si el usuario prefiere movimiento reducido, dibuja un solo frame estático
+        if (prefersReducedMotion) {
+            renderFrame(0);
+        } else {
+            rafId = requestAnimationFrame(renderFrame);
+        }
 
-        // ─── Resize ───────────────────────────────────────────────────────────
-        const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        // ─── Page Visibility API: 0% CPU en segundo plano ──────────────────
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                isRunning = false;
+                cancelAnimationFrame(rafId);
+            } else {
+                isRunning = true;
+                lastTime = -1; // Resetear delta para evitar saltos bruscos al volver
+                rafId = requestAnimationFrame(renderFrame);
+            }
         };
-        window.addEventListener("resize", handleResize);
 
-        // ─── Cleanup ──────────────────────────────────────────────────────────
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        // ─── Cleanup ───────────────────────────────────────────────────────
         return () => {
-            mountedRef.current = false;
-            cancelAnimationFrame(rafRef.current);
+            isRunning = false;
+            cancelAnimationFrame(rafId);
             window.removeEventListener("resize", handleResize);
-            if (renderer.domElement.parentNode === container) {
-                container.removeChild(renderer.domElement);
-            }
-            starGeometry.dispose();
-            starMaterial.dispose();
-            renderer.dispose();
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
         };
     }, []);
 
     return (
-        <div
-            ref={containerRef}
-            className="fixed inset-0 w-full h-full overflow-hidden"
+        <canvas
+            ref={canvasRef}
+            className="fixed inset-0 w-full h-full pointer-events-none"
             style={{
                 zIndex: -1,
                 background: "linear-gradient(to bottom, #000000 0%, #0a0a1a 60%, #1a1a2e 100%)",
