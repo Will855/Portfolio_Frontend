@@ -20,13 +20,13 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/next.config.js": {
-    "mtime": 1788045008.20614,
-    "ast_hash": "42561bff4223d092542ed374ba226bfe",
+    "mtime": 1790109156.9385722,
+    "ast_hash": "62104cbcfe22fdd8218a576e06ec2e04",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/tsconfig.json": {
-    "mtime": 1790108698.4266162,
-    "ast_hash": "bc338932e72b5a078c83c82e63f4d147",
+    "mtime": 1791034764.6620522,
+    "ast_hash": "7897e49b86f91c261f85de04dc966c34",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/postcss.config.js": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/package.json": {
-    "mtime": 1790107956.3423061,
-    "ast_hash": "a883e8f90ab55bb21992e98894b9ff79",
+    "mtime": 1791142226.086994,
+    "ast_hash": "617f66c52c0ac00ba3e95e98888fc81e",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/vite-env.d.ts": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/app/(public)/layout.tsx": {
-    "mtime": 1785070531.24115,
-    "ast_hash": "87d5ab8b8fc2af8f47f053cab6551a6e",
+    "mtime": 1791036179.6732655,
+    "ast_hash": "a67c51ebd4a3b23bf8b4d60fdade43b9",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/app/(public)/page.tsx": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/hooks/useContentBlock.ts": {
-    "mtime": 1788044874.6926677,
-    "ast_hash": "93974b147538baa9f7894c7b5b2027cd",
+    "mtime": 1791034251.8781128,
+    "ast_hash": "08fc3322dda08ed3b7157b374a661eac",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/hooks/useGsapAnimation.ts": {
@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/hooks/useNavItems.ts": {
-    "mtime": 1779692027.3311176,
-    "ast_hash": "3378c8f11f36345eff7f9ea0349eb388",
+    "mtime": 1791069554.070164,
+    "ast_hash": "12fe7581a6099a7c43cba2faf4979bf3",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/hooks/useAppDataReady.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/StarsBackground.tsx": {
-    "mtime": 1785488468.074064,
-    "ast_hash": "e9f9922beda3de06665afb9e699cdfc6",
+    "mtime": 1791142204.1968696,
+    "ast_hash": "a7d63d0b11169a00c5b01f5ef2af28b4",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/NotFoundPage.tsx": {
@@ -185,18 +185,18 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/footer/Footer.tsx": {
-    "mtime": 1788044885.4447055,
-    "ast_hash": "82dbf0862b54668c0e6f928738506d30",
+    "mtime": 1791040019.9618692,
+    "ast_hash": "c90eedd62c30b11db591fbf5a5522be9",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/navMenu.tsx": {
-    "mtime": 1785069955.0676005,
-    "ast_hash": "031e889288cb72643aa9ca20c91e3266",
+    "mtime": 1791069563.006189,
+    "ast_hash": "be0babcfed763d3704d70b83a1fe8333",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/menuResponsive.tsx": {
-    "mtime": 1785069979.524365,
-    "ast_hash": "ee51fe67b28dd2389de4872922d2b27e",
+    "mtime": 1791069581.2652414,
+    "ast_hash": "89f95b0550c78f8e3770504202b68eda",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/admin/AdminDashboard.tsx": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/components/MermaidBlock.tsx": {
-    "mtime": 1785491398.6453583,
-    "ast_hash": "13a9ebae31750f2d356c516ea2b4f802",
+    "mtime": 1791089628.7078333,
+    "ast_hash": "b3faaec4681c416eb9d431e1122581ab",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/components/MarkdownRenderer.tsx": {
@@ -280,8 +280,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/services/supabase/supabase.ts": {
-    "mtime": 1785071527.3419316,
-    "ast_hash": "0d837e58727b879670ac8a3503a76154",
+    "mtime": 1791034285.0481336,
+    "ast_hash": "347a4f687c748c9ae7d2b4352230d69f",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/services/supabase/supabaseStorage.ts": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/views/Home.tsx": {
-    "mtime": 1788044922.8618374,
-    "ast_hash": "6dda9a7593369bdef1fe3ba3ab055dd1",
+    "mtime": 1791149228.0393825,
+    "ast_hash": "f86927cb93bd3fc3f9885ef0f4591459",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/types/supabase.ts": {
@@ -300,13 +300,13 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/types/types.ts": {
-    "mtime": 1784623903.072385,
-    "ast_hash": "561884a9721f87c7d5ba432d09679c35",
+    "mtime": 1791039857.3219328,
+    "ast_hash": "d433fbe5a463ad7cc8b774687f036a7e",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/config/fallbacks.ts": {
-    "mtime": 1781475424.3752553,
-    "ast_hash": "acb1586187f70aa448b30f1b04418bb8",
+    "mtime": 1791144927.9231458,
+    "ast_hash": "664f5d549eb87e119dc5defba8df74d5",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/config/cards.ts": {
@@ -325,18 +325,18 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useProjectsMeta.ts": {
-    "mtime": 1783755716.1232948,
-    "ast_hash": "6c1b2ca5c062baae4280f5604dbbccf7",
+    "mtime": 1791034256.7331157,
+    "ast_hash": "7ad95412593ad73210d0824c110b8cff",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useCertificates.ts": {
-    "mtime": 1784623916.8093,
-    "ast_hash": "af5a1770cfd3bfe27bf6ac16fba22ff8",
+    "mtime": 1791145023.6756415,
+    "ast_hash": "dcbc69226a855cdcbe6446127929ef72",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useCards.ts": {
-    "mtime": 1783755708.0532699,
-    "ast_hash": "d4409992fd608606f3a2e34e5e094fdf",
+    "mtime": 1791039875.68792,
+    "ast_hash": "f23bebdc85319a5c3f3ab5dac2c4d36f",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useAdminProjectContent.ts": {
@@ -355,8 +355,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useInfoSections.ts": {
-    "mtime": 1783755720.6583087,
-    "ast_hash": "713d6f8addf13cc8b2f96aba4e16ec65",
+    "mtime": 1791034174.2700672,
+    "ast_hash": "b7dfe1e6f6eae2d0998af5522616ca03",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/admin/AdminProjectsCRUD.tsx": {
@@ -435,8 +435,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/ExpAndTecnologies.tsx": {
-    "mtime": 1785481810.16176,
-    "ast_hash": "a96a554c71cab423ced1fff3df301e09",
+    "mtime": 1791149217.5863695,
+    "ast_hash": "a05c45ac7758c1fa1d43ab71d30be8e7",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/ProjectCard.tsx": {
@@ -445,13 +445,13 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/CertificateWidget.tsx": {
-    "mtime": 1785070858.3231087,
-    "ast_hash": "1689258cf673b2447ad514989455da87",
+    "mtime": 1791145782.5074403,
+    "ast_hash": "9489dc84ba783dc836529743da5ee522",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/SkillSection.tsx": {
-    "mtime": 1785481816.1737196,
-    "ast_hash": "7e6b6dbedb880e4907089e9192fd90f6",
+    "mtime": 1791061091.8108249,
+    "ast_hash": "dde7ae7f64a1b50da9786e93b6a95b39",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/pages/ProjectsPage.tsx": {
@@ -465,13 +465,13 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/pages/ProjectDetailsPage.tsx": {
-    "mtime": 1785707997.297699,
-    "ast_hash": "f4d6127e6ab2a0af4e60822564f8a3d8",
+    "mtime": 1791035523.3771904,
+    "ast_hash": "daa85d4c3894005929b3a7f58daf52ab",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/hooks/useHeroContent.ts": {
-    "mtime": 1783755711.4632804,
-    "ast_hash": "b3adce5acd7fffa8204858b89ba46fb5",
+    "mtime": 1791034169.0570645,
+    "ast_hash": "67160a2a4f402268eaf149a5c3d34d9f",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/admin/AdminHero.tsx": {
@@ -480,8 +480,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/components/WordCloud.tsx": {
-    "mtime": 1785071293.2100894,
-    "ast_hash": "e33a88574730e9ce48870dcbc1bcd7ba",
+    "mtime": 1791035195.9133506,
+    "ast_hash": "0e9e18adc1e8c0d785ae9967a1c36d5b",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/components/GlitchPresentation.tsx": {
@@ -580,7 +580,7 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/pnpm-workspace.yaml": {
-    "mtime": 1790108267.3147292,
+    "mtime": 1791069240.820086,
     "ast_hash": "c3dd7262847d512cf502a50accad8a9e",
     "semantic_hash": ""
   },
@@ -817,6 +817,66 @@
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/public/images/bg-proyecto1.jpg": {
     "mtime": 1785483075.1195054,
     "ast_hash": "5a53823997b5302c551e2f9a6d6b6a4b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/app/(public)/notas/page.tsx": {
+    "mtime": 1791063538.5917084,
+    "ast_hash": "b17bfb2890f70083d7d539df3a22eae9",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/config/navigation.ts": {
+    "mtime": 1791069453.7088983,
+    "ast_hash": "2f26960d627504a2ec43a37fae61e0fa",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/DockMobileNav.tsx": {
+    "mtime": 1791069572.2232153,
+    "ast_hash": "d7d7280e764e2d778c4b82845e37f450",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/components/HeroCTA.tsx": {
+    "mtime": 1791040027.0748687,
+    "ast_hash": "0410b02552bbb13ae1a3f8f679a0f137",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/hooks/useGithubReadme.ts": {
+    "mtime": 1791035000.047204,
+    "ast_hash": "672ebdf896e28b1056ad890caa47dd7e",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/FeaturedProjects.tsx": {
+    "mtime": 1791039882.488916,
+    "ast_hash": "41de64dab9d450a4bacd475e9007597f",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/CertificatesSection.tsx": {
+    "mtime": 1791149210.9703612,
+    "ast_hash": "a094b9152e269ffd1ae771900a5398f1",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/notes/hooks/useGithubNotes.ts": {
+    "mtime": 1791065278.9571302,
+    "ast_hash": "6339a885999e692ca26bbcc850070209",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/notes/pages/NotesPage.tsx": {
+    "mtime": 1791066529.940728,
+    "ast_hash": "849b2affcf516237dba7fc43c1da789b",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/components/GithubActivity.tsx": {
+    "mtime": 1791039337.3052015,
+    "ast_hash": "c32fecae6d7619bad684239ef9edc707",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/supabase/migrations/20261003000001_add_updated_at_triggers.sql": {
+    "mtime": 1791034826.9585989,
+    "ast_hash": "dbe1daa08f59801dc23f3dda5060cc13",
+    "semantic_hash": ""
+  },
+  "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/.agents/rules/frontend-design.md": {
+    "mtime": 1791035151.8497121,
+    "ast_hash": "ce58b485adc8e832efc3b83e3086eb19",
     "semantic_hash": ""
   }
 }

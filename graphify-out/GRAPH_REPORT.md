@@ -1,16 +1,16 @@
-# Graph Report - portfolio-next  (2026-09-22)
+# Graph Report - portfolio-next  (2026-10-04)
 
 ## Corpus Check
-- 145 files · ~411,890 words
+- 157 files · ~415,355 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1096 nodes · 1422 edges · 106 communities (73 shown, 33 thin omitted)
+- 1144 nodes · 1506 edges · 113 communities (79 shown, 34 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70cdb4f8`
+- Built from commit: `4402df4f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -108,24 +108,31 @@
 - [[_COMMUNITY_Community 100|Community 100]]
 - [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
+- [[_COMMUNITY_Community 106|Community 106]]
+- [[_COMMUNITY_Community 107|Community 107]]
+- [[_COMMUNITY_Community 108|Community 108]]
+- [[_COMMUNITY_Community 109|Community 109]]
+- [[_COMMUNITY_Community 110|Community 110]]
+- [[_COMMUNITY_Community 111|Community 111]]
+- [[_COMMUNITY_Community 112|Community 112]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `Files` - 26 edges
 2. `Files` - 25 edges
 3. `supabase` - 19 edges
 4. `compilerOptions` - 17 edges
-5. `compilerOptions` - 16 edges
+5. `compilerOptions` - 17 edges
 6. `Files` - 14 edges
 7. `isSupabaseConfigured` - 13 edges
-8. `Documentación Técnica del Portfolio` - 13 edges
-9. `Files` - 13 edges
-10. `getStoragePublicUrl()` - 12 edges
+8. `useCards()` - 13 edges
+9. `Documentación Técnica del Portfolio` - 13 edges
+10. `Files` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `PublicLayout()` --calls--> `useAppDataReady()`  [EXTRACTED]
   src/app/(public)/layout.tsx → src/core/hooks/useAppDataReady.ts
-- `useNavItems()` --calls--> `useContentBlock()`  [EXTRACTED]
-  src/core/hooks/useNavItems.ts → src/core/hooks/useContentBlock.ts
+- `DockMobileNav()` --calls--> `useNavItems()`  [EXTRACTED]
+  src/core/components/navbar/DockMobileNav.tsx → src/core/hooks/useNavItems.ts
 - `NavMenu()` --calls--> `useNavItems()`  [EXTRACTED]
   src/core/components/navbar/navMenu.tsx → src/core/hooks/useNavItems.ts
 - `ResponsiveMenu()` --calls--> `useNavItems()`  [EXTRACTED]
@@ -133,15 +140,15 @@
 - `useAppDataReady()` --calls--> `useHeroContent()`  [EXTRACTED]
   src/core/hooks/useAppDataReady.ts → src/modules/profile/hooks/useHeroContent.ts
 
-## Communities (106 total, 33 thin omitted)
+## Communities (113 total, 34 thin omitted)
 
 ### Community 0 - "Community 0"
-Cohesion: 0.13
-Nodes (16): AdminContent(), ProjectContentEditor(), MediaBlock(), MediaBlockProps, ProjectCardProps, Grid(), TextBlock(), TextBlockProps (+8 more)
+Cohesion: 0.07
+Nodes (35): AdminContent(), ProjectContentEditor(), AdminHero(), AdminMessages(), FeaturedProjects(), MediaBlock(), MediaBlockProps, Grid() (+27 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.14
-Nodes (13): AdminCertificates(), CertificateFormModal(), Props, TagInput(), TagInputProps, CertificateWidget(), CertificateWidgetProps, LightboxModal() (+5 more)
+Cohesion: 0.24
+Nodes (8): AdminCertificates(), CertificateFormModal(), Props, TagInput(), TagInputProps, CertificateForm, emptyCertificateForm, useAdminCertificates()
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
@@ -169,7 +176,7 @@ Nodes (31): code:block1 (supabase/), code:`sql (-- Ejemplo: Agregar contenido de
 
 ### Community 8 - "Community 8"
 Cohesion: 0.08
-Nodes (14): GlitchProps, LoadingScreen(), PublicLayout(), projectIds, projectMetaFallback, DEFAULT_NAV_ITEMS, EXCLUDED_NAV_ITEMS, filterNavItems() (+6 more)
+Nodes (23): SectionEditor(), LoadingScreen(), PublicLayout(), getNavMetadata(), NAV_ICONS, projectIds, projectMetaFallback, AppDataReadyStatus (+15 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.08
@@ -188,8 +195,8 @@ Cohesion: 0.11
 Nodes (17): 1. Propósito de la página, 2.1 Stack, 2.2 Estructura de carpetas (src), 2.3 Flujo de datos y rutas, 2.4 Patrones usados, 2. Arquitectura, 3.1 Rutas y navegación, 3.2 Consistencia de nombres y tipos (+9 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.14
-Nodes (13): COLOR_CONFIG, LightboxModalProps, COLOR_CONFIG, KnowledgeTimelineItem(), KnowledgeTimelineItemProps, COLOR_CONFIG, FALLBACK_KNOWLEDGES, FALLBACK_SKILLS (+5 more)
+Cohesion: 0.26
+Nodes (8): COLOR_CONFIG, FALLBACK_CERTIFICATES, FALLBACK_KNOWLEDGES, FALLBACK_SKILLS, InfoSectionRow, CareerGroup, CertificateProps, SkillGroup
 
 ### Community 14 - "Community 14"
 Cohesion: 0.14
@@ -244,8 +251,8 @@ Cohesion: 0.20
 Nodes (8): Componentes en demos/, config/project.ts, Demos, Dependencias, Mejoras sugeridas, Propósito, Ubicación, Uso
 
 ### Community 27 - "Community 27"
-Cohesion: 0.22
-Nodes (9): code:typescript (/**), code:typescript (// NotFoundPage.tsx), code:typescript (/**), code:typescript (import { supabase } from '../../shared/services/supabase/sup), code:javascript (import { defineConfig } from 'vite';), File: src/core/components/NotFoundPage.tsx, File: src/core/hooks/useContentBlock.ts, File: src/core/utils/testSupabaseConnection.ts (+1 more)
+Cohesion: 0.40
+Nodes (5): code:typescript (/**), code:typescript (import { supabase } from '../../shared/services/supabase/sup), code:javascript (import { defineConfig } from 'vite';), File: src/core/utils/testSupabaseConnection.ts, File: vite.config.js
 
 ### Community 28 - "Community 28"
 Cohesion: 0.18
@@ -288,12 +295,12 @@ Cohesion: 0.60
 Nodes (3): Boundaries, Output, Scan
 
 ### Community 40 - "Community 40"
-Cohesion: 0.06
-Nodes (36): AdminInfoSections(), COLOR_OPTIONS, ColorOption, EditableSection, EditableSectionItem, SectionType, addSectionBtn, itemInput (+28 more)
+Cohesion: 0.12
+Nodes (14): addSectionBtn, itemInput, jobDescInput, jobTitleInput, knowledgeTab, mockDelete, mockEq, mockIn (+6 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.06
-Nodes (36): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+28 more)
+Cohesion: 0.05
+Nodes (37): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+29 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.12
@@ -308,16 +315,16 @@ Cohesion: 0.22
 Nodes (9): code:typescript (/**), code:block2 (node_modules), code:typescript (import React from 'react';), code:typescript (import React, { useState, useEffect } from 'react';), File: .dockerignore, File: src/core/components/admin/AdminDashboard.tsx, File: src/core/components/admin/AdminLayout.tsx, File: src/core/components/navbar/navMenu.tsx (+1 more)
 
 ### Community 49 - "Community 49"
-Cohesion: 0.22
-Nodes (9): code:javascript (/** @type {import('tailwindcss').Config} */), code:typescript (import React from 'react';), code:typescript (// Importaciones necesarias), code:typescript (import React from 'react';), code:json ({), File: package.json, File: src/core/components/footer/Footer.tsx, File: src/core/components/PublicLayout.tsx (+1 more)
+Cohesion: 0.40
+Nodes (5): code:typescript (// Importaciones necesarias), code:typescript (import React from 'react';), code:json ({), File: package.json, File: src/core/components/footer/Footer.tsx
 
 ### Community 50 - "Community 50"
-Cohesion: 0.36
-Nodes (8): code:dockerfile (# Stage 1: Build), code:typescript (import React, { useState, useEffect, useRef } from 'react';), code:typescript (import React from 'react';), File: Dockerfile, File: src/core/components/LoadingScreen.tsx, File: src/core/components/navbar/menuResponsive.tsx, File: src/core/hooks/useNavItems.ts, Files
+Cohesion: 0.24
+Nodes (12): code:typescript (/**), code:typescript (// NotFoundPage.tsx), code:dockerfile (# Stage 1: Build), code:typescript (import React, { useState, useEffect, useRef } from 'react';), code:typescript (import React from 'react';), File: Dockerfile, File: src/core/components/LoadingScreen.tsx, File: src/core/components/navbar/menuResponsive.tsx (+4 more)
 
 ### Community 51 - "Community 51"
-Cohesion: 0.29
-Nodes (7): code:typescript (import React, { useEffect, useRef } from "react";), code:ini (server {), code:css (@media (max-width: 460px) {), File: nginx.conf, File: src/core/components/navbar/navMenu.css, File: src/core/components/StarsBackground.tsx, File: tailwind.config.js
+Cohesion: 0.40
+Nodes (5): code:ini (server {), code:css (@media (max-width: 460px) {), File: nginx.conf, File: src/core/components/navbar/navMenu.css, File: src/core/components/StarsBackground.tsx
 
 ### Community 52 - "Community 52"
 Cohesion: 0.29
@@ -344,24 +351,24 @@ Cohesion: 0.09
 Nodes (22): devDependencies, autoprefixer, eslint, @eslint/js, eslint-plugin-react, eslint-plugin-react-hooks, eslint-plugin-react-refresh, globals (+14 more)
 
 ### Community 68 - "Community 68"
-Cohesion: 0.43
-Nodes (7): SectionEditor(), AppDataReadyStatus, useAppDataReady(), useContentBlock(), useKnowledgeSections(), useSkillSections(), useProjectsMeta()
+Cohesion: 0.17
+Nodes (11): AdminInfoSections(), COLOR_OPTIONS, ColorOption, EditableSection, EditableSectionItem, SectionType, ColorOption, EditableSection (+3 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.15
-Nodes (8): AdminMessages(), EMPTY_BLOCKS, ProjectContentBlock, CertificateRow, ContactSubmissionRow, ContentBlockRow, HeroContent, ProjectContentRow
+Cohesion: 0.23
+Nodes (6): useGithubReadme(), useProjectContent(), CardDetails(), getOrCreateInfoCard(), hideInfo(), showInfo()
 
 ### Community 71 - "Community 71"
-Cohesion: 0.15
-Nodes (13): dependencies, gsap, @gsap/react, mermaid, next, react, react-dom, react-markdown (+5 more)
+Cohesion: 0.12
+Nodes (16): dependencies, gsap, @gsap/react, mermaid, next, react, react-dom, react-github-calendar (+8 more)
 
 ### Community 95 - "Community 95"
 Cohesion: 0.13
-Nodes (8): AdminHero(), CircleProfileProps, CircleProfileSize, ExpAndTecnologies(), SkillSection(), useHeroContent(), Home(), Home()
+Nodes (9): CircleProfileProps, CircleProfileSize, ExpAndTecnologies(), GithubActivity(), HeroCTA(), SkillSection(), useHeroContent(), Home() (+1 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.24
-Nodes (11): fetchCards(), fetchCertificates(), DEFAULT_HERO, fetchHero(), fetchProjectsMeta(), ProjectMeta, isSupabaseConfigured, supabase (+3 more)
+Cohesion: 0.22
+Nodes (6): COLOR_CONFIG, LightboxModalProps, COLOR_CONFIG, KnowledgeTimelineItem(), KnowledgeTimelineItemProps, CareerItem
 
 ### Community 97 - "Community 97"
 Cohesion: 0.33
@@ -372,28 +379,52 @@ Cohesion: 0.40
 Nodes (5): overrides, brace-expansion, glob, postcss, sharp
 
 ### Community 99 - "Community 99"
-Cohesion: 0.40
-Nodes (3): CardData, cards, CardRow
+Cohesion: 0.29
+Nodes (7): MarkdownEditor(), MarkdownEditorProps, MarkdownRenderer(), MarkdownRendererProps, MermaidBlock, ALLOWED_HTML_TAGS, parseMarkdownToHtml()
+
+### Community 106 - "Community 106"
+Cohesion: 0.31
+Nodes (6): CertificatesSection(), CertificateWidget(), CertificateWidgetProps, LightboxModal(), LightboxModalProps, useCertificates()
+
+### Community 107 - "Community 107"
+Cohesion: 0.36
+Nodes (5): GithubNode, useGithubNoteContent(), useGithubNotesTree(), metadata, NotesPage()
+
+### Community 108 - "Community 108"
+Cohesion: 0.42
+Nodes (8): public.set_current_timestamp_updated_at(), set_cards_updated_at, set_certificates_updated_at, set_content_blocks_updated_at, set_hero_content_updated_at, set_info_sections_updated_at, set_project_content_updated_at, set_projects_meta_updated_at
+
+### Community 109 - "Community 109"
+Cohesion: 0.25
+Nodes (7): 1. Identidad Visual: Dark Mode Puro, 2. Patrón de Tarjetas: Glassmorphism, 3. Animaciones e Interacciones: GSAP, 4. Botones y Llamados a la Acción (CTA), 5. CSS Modules vs Clases Globales, 6. Iconografía, Reglas de Diseño Frontend (portfolio-next)
+
+### Community 110 - "Community 110"
+Cohesion: 0.38
+Nodes (4): ProjectCardProps, CardProps, handleMouseMove(), resetCardPosition()
+
+### Community 111 - "Community 111"
+Cohesion: 0.33
+Nodes (6): code:typescript (import React, { useEffect, useRef } from "react";), code:javascript (/** @type {import('tailwindcss').Config} */), code:typescript (import React from 'react';), File: src/core/components/PublicLayout.tsx, File: src/core/hooks/useGsapAnimation.ts, File: tailwind.config.js
 
 ## Knowledge Gaps
-- **503 isolated node(s):** `public`, `ignore`, `cleanUrls`, `__dirname`, `nextConfig` (+498 more)
+- **516 isolated node(s):** `public`, `ignore`, `cleanUrls`, `nextConfig`, `target` (+511 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **34 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `supabase` connect `Community 96` to `Community 0`, `Community 1`, `Community 99`, `Community 5`, `Community 69`, `Community 40`, `Community 13`, `Community 20`, `Community 95`?**
+- **Why does `supabase` connect `Community 0` to `Community 1`, `Community 68`, `Community 5`, `Community 13`, `Community 20`?**
   _High betweenness centrality (0.006) - this node is a cross-community bridge._
-- **Why does `useHeroContent()` connect `Community 95` to `Community 96`, `Community 68`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `Community 3` to `Community 47`?**
+  _High betweenness centrality (0.004) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `Community 71` to `Community 47`?**
-  _High betweenness centrality (0.002) - this node is a cross-community bridge._
+  _High betweenness centrality (0.003) - this node is a cross-community bridge._
 - **What connects `public`, `ignore`, `cleanUrls` to the rest of the system?**
-  _503 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _516 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.12615384615384614 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.14285714285714285 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06666666666666667 - nodes in this community are weakly interconnected._
 - **Should `Community 2` be split into smaller, more focused modules?**
   _Cohesion score 0.05 - nodes in this community are weakly interconnected._
+- **Should `Community 3` be split into smaller, more focused modules?**
+  _Cohesion score 0.08333333333333333 - nodes in this community are weakly interconnected._
