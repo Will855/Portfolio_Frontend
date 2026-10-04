@@ -110,7 +110,8 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
             actorMargin: 50,
             boxMargin: 10,
           },
-          securityLevel: 'loose',
+          securityLevel: 'strict',
+          suppressErrorRendering: true,
         });
 
         let { svg } = await mermaid.render(containerId, code);
@@ -123,6 +124,10 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
           setError(null);
         }
       } catch (err: any) {
+        // Limpiar contenedores residuales inyectados en document.body por Mermaid en caso de error
+        document.getElementById(`d${containerId}`)?.remove();
+        document.getElementById(containerId)?.remove();
+
         if (isMounted) {
           console.error('Mermaid render error:', err);
           setError(err?.message || 'Error rendering diagram');
@@ -131,7 +136,11 @@ const MermaidBlock: React.FC<MermaidBlockProps> = ({ code }) => {
     };
 
     renderDiagram();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+      document.getElementById(`d${containerId}`)?.remove();
+      document.getElementById(containerId)?.remove();
+    };
   }, [code, containerId]);
 
   // Tecla Escape para salir de pantalla completa
