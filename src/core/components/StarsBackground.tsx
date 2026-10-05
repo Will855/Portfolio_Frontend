@@ -2,12 +2,12 @@
 
 import React, { useEffect, useRef } from "react";
 
-// Parámetros físicos idénticos a la simulación original
+// Parámetros físicos calibrados para distribución uniforme en el frustum 3D
 const STAR_COUNT = 700;
-const FALL_SPEED = 4.8; // Unidades del mundo 3D por segundo (independiente de FPS)
-const WORLD_BOUND_Y = 50; // Límites del volumen cúbico 3D [-50, 50]
-const MIN_DEPTH = 5;      // Plano cercano de proyección
-const MAX_DEPTH = 95;     // Plano lejano de proyección
+const FALL_SPEED = 5.5; // Velocidad de caída en unidades de espacio 3D
+const MIN_DEPTH = 5;    // Plano cercano de proyección
+const MAX_DEPTH = 95;   // Plano lejano de proyección
+const FRUSTUM_MARGIN = 1.08; // Margen del 8% fuera de pantalla para transiciones suaves
 
 const BackgroundStars = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,19 +23,26 @@ const BackgroundStars = () => {
         const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
         // ─── Estructura de Memoria Zero-GC (Float32Array plano) ─────────────
-        // Evita pausas de recolección de basura (GC) en el motor V8
-        // [x0, y0, z0,  x1, y1, z1, ...]
         const stars = new Float32Array(STAR_COUNT * 3);
-        for (let i = 0; i < STAR_COUNT * 3; i += 3) {
-            stars[i]     = (Math.random() - 0.5) * 100;                 // X: [-50, 50]
-            stars[i + 1] = (Math.random() - 0.5) * 100;                 // Y: [-50, 50]
-            stars[i + 2] = MIN_DEPTH + Math.random() * (MAX_DEPTH - MIN_DEPTH); // Z: [5, 95]
-        }
 
         let width = 0;
         let height = 0;
         let fovFactor = 0;
         let dpr = 1;
+
+        // ─── Generación con Frustum Equilibrado (Densidad Uniforme Centro-Bordes) ───
+        // A mayor profundidad Z, el campo visual es más ancho.
+        // Dimensionar el volumen de generación proporcional a Z elimina la acumulación en el centro.
+        const initStar = (i: number, randomY: boolean, w: number, h: number, fov: number) => {
+            const z = MIN_DEPTH + Math.random() * (MAX_DEPTH - MIN_DEPTH);
+            const ratio = (z / (fov || 450)) * FRUSTUM_MARGIN;
+            const halfW = (w * 0.5) * ratio;
+            const halfH = (h * 0.5) * ratio;
+
+            stars[i]     = (Math.random() - 0.5) * 2 * halfW;
+            stars[i + 1] = randomY ? (Math.random() - 0.5) * 2 * halfH : halfH;
+            stars[i + 2] = z;
+        };
 
         // ─── Calibración de Resolución y Matriz de Proyección ──────────────
         const handleResize = () => {
@@ -53,6 +60,11 @@ const BackgroundStars = () => {
 
         handleResize();
         window.addEventListener("resize", handleResize);
+
+        // Inicializar todas las estrellas distribuidas equitativamente en todo el frustum
+        for (let i = 0; i < STAR_COUNT * 3; i += 3) {
+            initStar(i, true, width, height, fovFactor);
+        }
 
         // ─── Bucle Cinemático con Geometría Proyectiva (Pinhole Camera) ────
         let rafId = 0;
@@ -79,18 +91,20 @@ const BackgroundStars = () => {
             ctx.fillStyle = "#ffffff";
 
             for (let i = 0; i < STAR_COUNT * 3; i += 3) {
+                const z = stars[i + 2];
+                const ratio = (z / fovFactor) * FRUSTUM_MARGIN;
+                const halfH = (height * 0.5) * ratio;
+
                 // Cinemática: caída vertical por delta-time
                 if (!prefersReducedMotion) {
                     stars[i + 1] -= step;
-                    // Envoltura toroidal: al cruzar el límite inferior, reaparece arriba
-                    if (stars[i + 1] < -WORLD_BOUND_Y) {
-                        stars[i + 1] = WORLD_BOUND_Y;
-                        stars[i]     = (Math.random() - 0.5) * 100;
-                        stars[i + 2] = MIN_DEPTH + Math.random() * (MAX_DEPTH - MIN_DEPTH);
+                    // Envoltura toroidal: al cruzar el límite inferior de su frustum, reaparece arriba
+                    if (stars[i + 1] < -halfH) {
+                        initStar(i, false, width, height, fovFactor);
+                        continue;
                     }
                 }
 
-                const z = stars[i + 2];
                 // Proyección de Perspectiva 3D: S = focal / Z
                 const scale = fov / z;
                 const screenX = cx + stars[i] * scale;
