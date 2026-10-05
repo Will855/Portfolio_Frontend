@@ -65,7 +65,7 @@ const DockMobileNav = () => {
         >
             <nav 
                 ref={navRef}
-                className="pointer-events-auto flex items-center p-2 rounded-full backdrop-blur-xl bg-black/60 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="pointer-events-auto flex items-center p-2 rounded-full bg-slate-950/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                 style={{ willChange: 'transform, width' }}
             >
                 {navItemsMetadata.map(({ label, href, icon, isActive }) => {

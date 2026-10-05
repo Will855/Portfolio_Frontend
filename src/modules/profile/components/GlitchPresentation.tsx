@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import React from 'react';
 import './glitch.css';
 
 // Interface para las props
@@ -19,24 +18,8 @@ const Glitch: React.FC<GlitchProps> = ({
   title = "Hi, I'm Wilmer", 
   subtitle = "Web Developer" 
 }) => {
-    const containerRef = useRef<HTMLDivElement>(null); // Referencia al contenedor principal
-
-  useEffect(() => { // Animación GSAP
-    if (containerRef.current) { // Verificación de seguridad
-      gsap.to(containerRef.current, {
-        duration: 0.6, // Duración de la animación
-        x: 1, // Desplazamiento horizontal
-        y: 1, // Desplazamiento vertical
-        repeat: -1,
-        yoyo: true, // Efecto de ida y vuelta
-        ease: "power1.inOut" // Easing de la animación
-      });
-    }
-  }, []); // Dependencia: se ejecuta cuando cambia la referencia
-
   return (
     <div  // Contenedor principal
-      ref={containerRef}
       className="relative w-full text-center mx-auto px-4" // Clases Tailwind
       style={{
         fontSize: 'clamp(1rem, 2vw, 1.5rem)',

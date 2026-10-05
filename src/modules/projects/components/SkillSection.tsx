@@ -36,21 +36,9 @@ const COLOR_CONFIG = {
     }
 } as const;
 
-const SkillGroupCard: React.FC<{ readonly group: SkillGroup; readonly index: number }> = ({ group, index }) => {
+const SkillGroupCard: React.FC<{ readonly group: SkillGroup; readonly index: number }> = ({ group }) => {
     const currentColor = COLOR_CONFIG[group.color] ?? COLOR_CONFIG.blue;
     const cardRef = useRef<HTMLDivElement>(null);
-    const contentRef = useRef<HTMLDivElement>(null);
-
-    useGSAP(() => {
-        // Floating animation
-        gsap.to(contentRef.current, {
-            y: -2,
-            duration: 4.5 + (index % 3) * 0.6,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut"
-        });
-    }, { scope: cardRef });
 
     const handleMouseEnter = () => {
         gsap.to(cardRef.current, { y: -3, scale: 1.02, duration: 0.3, ease: "power2.out" });
@@ -65,13 +53,10 @@ const SkillGroupCard: React.FC<{ readonly group: SkillGroup; readonly index: num
             ref={cardRef}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="skill-card relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] min-w-0 break-words overflow-hidden opacity-0 translate-y-5"
+            className="skill-card relative bg-slate-900/60 rounded-xl p-4 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.35)] min-w-0 break-words overflow-hidden opacity-0 translate-y-5"
         >
             <div className={`absolute -top-2 -right-2 w-3 h-3 rounded-full ${currentColor.bg} shadow-lg ${currentColor.shadow}`} />
-            <div
-                ref={contentRef}
-                className="relative z-10 transform-gpu will-change-transform"
-            >
+            <div className="relative z-10">
                 <h3 className={`font-semibold text-sm md:text-base mb-2.5 bg-gradient-to-r ${currentColor.gradient} bg-clip-text text-transparent`}>
                     {group.title}
                 </h3>

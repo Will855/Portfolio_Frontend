@@ -107,9 +107,7 @@ const BackgroundStars = () => {
                 const alpha = 0.25 + depthRatio * 0.65;
 
                 ctx.globalAlpha = alpha;
-                ctx.beginPath();
-                ctx.arc(screenX, screenY, size, 0, Math.PI * 2);
-                ctx.fill();
+                ctx.fillRect(screenX - size * 0.5, screenY - size * 0.5, size, size);
             }
 
             if (!prefersReducedMotion) {
@@ -154,6 +152,9 @@ const BackgroundStars = () => {
             style={{
                 zIndex: -1,
                 background: "linear-gradient(to bottom, #000000 0%, #0a0a1a 60%, #1a1a2e 100%)",
+                contain: "strict",
+                transform: "translateZ(0)",
+                willChange: "transform",
             }}
         />
     );

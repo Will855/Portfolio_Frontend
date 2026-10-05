@@ -46,7 +46,7 @@ const Home = () => {
                 ref={infoRef}
                 className="mx-auto w-full max-w-4xl opacity-0"
             >
-                <div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 backdrop-blur-lg bg-white/5 rounded-2xl shadow-xl hover:shadow-2xl hover:bg-white/10 transition-all duration-300">
+                <div className="p-6 sm:p-8 lg:p-10 text-slate-50 flex flex-col gap-8 sm:gap-12 bg-slate-900/75 border border-white/10 rounded-2xl shadow-xl hover:shadow-2xl hover:border-white/20 transition-all duration-300">
                     <SkillSection />
                 </div>
             </section>

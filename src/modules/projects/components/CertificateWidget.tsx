@@ -16,7 +16,7 @@ export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificat
     return (
         <div 
             ref={widgetRef}
-            className={`relative bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden group ${className}`}
+            className={`relative bg-slate-900/75 rounded-2xl p-5 sm:p-6 border border-white/10 hover:border-white/20 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden group ${className}`}
         >
             {/* Background glowing gradients */}
             <div className="absolute -right-24 -bottom-24 w-48 h-48 rounded-full bg-blue-500/10 blur-3xl group-hover:bg-blue-500/15 transition-all duration-500" />
@@ -74,8 +74,8 @@ export const CertificateWidget: React.FC<CertificateWidgetProps> = ({ certificat
                             aria-label={`Ampliar certificado de ${certificate.issuer}`}
                         >
                             {/* Overlay hover effect */}
-                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10 backdrop-blur-[1px]">
-                                <div className="bg-white/10 backdrop-blur-md rounded-full p-2.5 border border-white/20 transform translate-y-2 group-hover/img:translate-y-0 transition-transform duration-300">
+                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                                <div className="bg-slate-900/80 rounded-full p-2.5 border border-white/20 transform translate-y-2 group-hover/img:translate-y-0 transition-transform duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.637zM10.5 7.5v6m3-3h-6" />
                                     </svg>

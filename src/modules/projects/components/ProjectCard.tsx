@@ -76,7 +76,7 @@ const Card: React.FC<ProjectCardProps> = ({ id, img, title, description, buttonT
       ref={cardRef}
       onMouseMove={handleMouseMoveEvent}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/5 to-transparent p-8 backdrop-blur-xl border border-white/10 hover:border-white/25 transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
+      className="relative overflow-hidden rounded-2xl bg-slate-900/80 p-8 border border-white/10 hover:border-white/25 transition-all duration-500 ease-out hover:scale-[1.02] hover:shadow-2xl h-72 cursor-pointer group"
       role="article"
       aria-label={`Tarjeta del proyecto: ${title}`}
       style={{
@@ -113,7 +113,7 @@ const Card: React.FC<ProjectCardProps> = ({ id, img, title, description, buttonT
         {/* Botón con feedback interactivo */}
         <button
           onClick={handleNavigation}
-          className="w-fit px-6 py-3 rounded-lg bg-white/5 backdrop-blur-lg border border-white/20 shadow-lg hover:shadow-xl text-white/90 font-medium transition-all duration-300 flex items-center gap-2 hover:bg-white/10 hover:border-white/30 hover:text-white active:scale-95"
+          className="w-fit px-6 py-3 rounded-lg bg-white/10 border border-white/20 shadow-lg hover:shadow-xl text-white/90 font-medium transition-all duration-300 flex items-center gap-2 hover:bg-white/20 hover:border-white/30 hover:text-white active:scale-95"
           aria-label={`Ver demo del proyecto: ${title}`}
         >
           <span>{buttonText}</span>

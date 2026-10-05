@@ -31,7 +31,7 @@ function NavMenu() {
       max-w-2xl mx-auto px-4
       transition-colors duration-200 ease-in-out
       rounded-full hidden sm:block
-      ${isScrolled ? 'bg-gray-200/90 backdrop-blur-sm' : 'bg-transparent'}
+      ${isScrolled ? 'bg-slate-900/90 border border-white/10 shadow-lg shadow-black/30' : 'bg-transparent'}
     `}>
       <ul className="flex justify-between items-center py-2">
         {navItems.map((item) => {
@@ -45,9 +45,8 @@ function NavMenu() {
                   px-4 py-2 mx-2 rounded-full
                   text-md md:text-lg font-medium
                   transition-colors duration-200
-                  hover:bg-gray-300/50
-                  ${isScrolled ? 'text-gray-800' : 'text-white'}
-                  ${isActive ? 'bg-gray-300/50' : ''}
+                  hover:bg-white/10 text-white
+                  ${isActive ? 'bg-white/15' : ''}
                 `}
               >
                 {item} {/* Renderizar el nombre del elemento */}
