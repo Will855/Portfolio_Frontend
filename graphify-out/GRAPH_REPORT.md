@@ -1,16 +1,16 @@
-# Graph Report - portfolio-next  (2026-10-04)
+# Graph Report - portfolio-next  (2026-10-05)
 
 ## Corpus Check
-- 157 files · ~415,355 words
+- 157 files · ~415,230 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1144 nodes · 1506 edges · 113 communities (79 shown, 34 thin omitted)
+- 1144 nodes · 1506 edges · 112 communities (78 shown, 34 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4402df4f`
+- Built from commit: `742d5ba0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -113,7 +113,6 @@
 - [[_COMMUNITY_Community 108|Community 108]]
 - [[_COMMUNITY_Community 109|Community 109]]
 - [[_COMMUNITY_Community 110|Community 110]]
-- [[_COMMUNITY_Community 111|Community 111]]
 - [[_COMMUNITY_Community 112|Community 112]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -140,7 +139,7 @@
 - `useAppDataReady()` --calls--> `useHeroContent()`  [EXTRACTED]
   src/core/hooks/useAppDataReady.ts → src/modules/profile/hooks/useHeroContent.ts
 
-## Communities (113 total, 34 thin omitted)
+## Communities (112 total, 34 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.07
@@ -251,8 +250,8 @@ Cohesion: 0.20
 Nodes (8): Componentes en demos/, config/project.ts, Demos, Dependencias, Mejoras sugeridas, Propósito, Ubicación, Uso
 
 ### Community 27 - "Community 27"
-Cohesion: 0.40
-Nodes (5): code:typescript (/**), code:typescript (import { supabase } from '../../shared/services/supabase/sup), code:javascript (import { defineConfig } from 'vite';), File: src/core/utils/testSupabaseConnection.ts, File: vite.config.js
+Cohesion: 0.29
+Nodes (7): code:typescript (// NotFoundPage.tsx), code:typescript (/**), code:typescript (import { supabase } from '../../shared/services/supabase/sup), code:javascript (import { defineConfig } from 'vite';), File: src/core/hooks/useContentBlock.ts, File: src/core/utils/testSupabaseConnection.ts, File: vite.config.js
 
 ### Community 28 - "Community 28"
 Cohesion: 0.18
@@ -311,24 +310,24 @@ Cohesion: 0.17
 Nodes (11): name, overrides, postcss, sharp, private, type, version, name (+3 more)
 
 ### Community 48 - "Community 48"
-Cohesion: 0.22
-Nodes (9): code:typescript (/**), code:block2 (node_modules), code:typescript (import React from 'react';), code:typescript (import React, { useState, useEffect } from 'react';), File: .dockerignore, File: src/core/components/admin/AdminDashboard.tsx, File: src/core/components/admin/AdminLayout.tsx, File: src/core/components/navbar/navMenu.tsx (+1 more)
+Cohesion: 0.33
+Nodes (6): code:block2 (node_modules), code:typescript (import React from 'react';), code:typescript (import React, { useState, useEffect } from 'react';), File: .dockerignore, File: src/core/components/admin/AdminDashboard.tsx, File: src/core/components/navbar/navMenu.tsx
 
 ### Community 49 - "Community 49"
-Cohesion: 0.40
-Nodes (5): code:typescript (// Importaciones necesarias), code:typescript (import React from 'react';), code:json ({), File: package.json, File: src/core/components/footer/Footer.tsx
+Cohesion: 0.22
+Nodes (9): code:javascript (/** @type {import('tailwindcss').Config} */), code:typescript (import React from 'react';), code:typescript (// Importaciones necesarias), code:typescript (import React from 'react';), code:json ({), File: package.json, File: src/core/components/footer/Footer.tsx, File: src/core/components/PublicLayout.tsx (+1 more)
 
 ### Community 50 - "Community 50"
-Cohesion: 0.24
-Nodes (12): code:typescript (/**), code:typescript (// NotFoundPage.tsx), code:dockerfile (# Stage 1: Build), code:typescript (import React, { useState, useEffect, useRef } from 'react';), code:typescript (import React from 'react';), File: Dockerfile, File: src/core/components/LoadingScreen.tsx, File: src/core/components/navbar/menuResponsive.tsx (+4 more)
+Cohesion: 0.29
+Nodes (10): code:typescript (/**), code:dockerfile (# Stage 1: Build), code:typescript (import React, { useState, useEffect, useRef } from 'react';), code:typescript (import React from 'react';), File: Dockerfile, File: src/core/components/LoadingScreen.tsx, File: src/core/components/navbar/menuResponsive.tsx, File: src/core/components/NotFoundPage.tsx (+2 more)
 
 ### Community 51 - "Community 51"
-Cohesion: 0.40
-Nodes (5): code:ini (server {), code:css (@media (max-width: 460px) {), File: nginx.conf, File: src/core/components/navbar/navMenu.css, File: src/core/components/StarsBackground.tsx
+Cohesion: 0.29
+Nodes (7): code:typescript (import React, { useEffect, useRef } from "react";), code:ini (server {), code:css (@media (max-width: 460px) {), File: nginx.conf, File: src/core/components/navbar/navMenu.css, File: src/core/components/StarsBackground.tsx, File: tailwind.config.js
 
 ### Community 52 - "Community 52"
-Cohesion: 0.29
-Nodes (7): code:typescript (import React, { useState } from 'react';), code:typescript (/**), code:typescript (import GA4 from 'react-ga4';), code:html (<!doctype html>), File: index.html, File: src/core/hooks/useAppDataReady.ts, File: src/core/utils/analytics.ts
+Cohesion: 0.20
+Nodes (10): code:typescript (/**), code:typescript (import React, { useState } from 'react';), code:typescript (/**), code:typescript (import GA4 from 'react-ga4';), code:html (<!doctype html>), File: index.html, File: src/core/components/admin/AdminLayout.tsx, File: src/core/hooks/useAnalytics.ts (+2 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.29
@@ -401,10 +400,6 @@ Nodes (7): 1. Identidad Visual: Dark Mode Puro, 2. Patrón de Tarjetas: Glassmor
 ### Community 110 - "Community 110"
 Cohesion: 0.38
 Nodes (4): ProjectCardProps, CardProps, handleMouseMove(), resetCardPosition()
-
-### Community 111 - "Community 111"
-Cohesion: 0.33
-Nodes (6): code:typescript (import React, { useEffect, useRef } from "react";), code:javascript (/** @type {import('tailwindcss').Config} */), code:typescript (import React from 'react';), File: src/core/components/PublicLayout.tsx, File: src/core/hooks/useGsapAnimation.ts, File: tailwind.config.js
 
 ## Knowledge Gaps
 - **516 isolated node(s):** `public`, `ignore`, `cleanUrls`, `nextConfig`, `target` (+511 more)

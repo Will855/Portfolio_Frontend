@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/StarsBackground.tsx": {
-    "mtime": 1791142204.1968696,
-    "ast_hash": "a7d63d0b11169a00c5b01f5ef2af28b4",
+    "mtime": 1791182296.9750082,
+    "ast_hash": "723e5051db2e43334a433f0eb653e3fd",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/NotFoundPage.tsx": {
@@ -190,8 +190,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/navMenu.tsx": {
-    "mtime": 1791069563.006189,
-    "ast_hash": "be0babcfed763d3704d70b83a1fe8333",
+    "mtime": 1791182599.1060724,
+    "ast_hash": "4875e1bd77acd78ad67f77dbdf4ca3d7",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/menuResponsive.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/views/Home.tsx": {
-    "mtime": 1791149228.0393825,
-    "ast_hash": "f86927cb93bd3fc3f9885ef0f4591459",
+    "mtime": 1791182543.380854,
+    "ast_hash": "bf1694f8673255651a5ffeca21857255",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/types/supabase.ts": {
@@ -440,18 +440,18 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/ProjectCard.tsx": {
-    "mtime": 1788044932.0198696,
-    "ast_hash": "c210d9ab1af63973bf0891bba8117636",
+    "mtime": 1791182584.9000158,
+    "ast_hash": "767455b358c613a50fdbb5de1afc6d92",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/CertificateWidget.tsx": {
-    "mtime": 1791145782.5074403,
-    "ast_hash": "9489dc84ba783dc836529743da5ee522",
+    "mtime": 1791182574.4349747,
+    "ast_hash": "a815139d1f45bababbf1bf6cfdbf29e8",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/components/SkillSection.tsx": {
-    "mtime": 1791061091.8108249,
-    "ast_hash": "dde7ae7f64a1b50da9786e93b6a95b39",
+    "mtime": 1791182532.9008138,
+    "ast_hash": "be0137434c838fd0a16b5f16fc77c8fb",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/projects/pages/ProjectsPage.tsx": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/components/GlitchPresentation.tsx": {
-    "mtime": 1779692027.3291178,
-    "ast_hash": "a68b3448882d3ef62ba5b56fd7fa504a",
+    "mtime": 1791182505.7237113,
+    "ast_hash": "3c5e65655a0c2104bbea3e55ecd7c41f",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/auth/hooks/useAdminAuth.ts": {
@@ -830,8 +830,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/core/components/navbar/DockMobileNav.tsx": {
-    "mtime": 1791069572.2232153,
-    "ast_hash": "d7d7280e764e2d778c4b82845e37f450",
+    "mtime": 1791182612.8991275,
+    "ast_hash": "e6b485b9da1d20dafec56e510412dbab",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/shared/components/HeroCTA.tsx": {
@@ -865,8 +865,8 @@
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/src/modules/profile/components/GithubActivity.tsx": {
-    "mtime": 1791039337.3052015,
-    "ast_hash": "c32fecae6d7619bad684239ef9edc707",
+    "mtime": 1791182552.6188896,
+    "ast_hash": "c84f978a131b646e304868ee771796f4",
     "semantic_hash": ""
   },
   "/home/parz7val/Documents/01_Proyectos_y_Codigo/Desarrollo_Web_y_Apps/portfolio-next/supabase/migrations/20261003000001_add_updated_at_triggers.sql": {
