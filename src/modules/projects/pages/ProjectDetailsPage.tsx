@@ -95,22 +95,26 @@ const CardDetails: React.FC = () => {
                 className="header h-[60vh] bg-transparent flex justify-center items-center relative text-white"
             >
                 <div className="button flex gap-4">
-                    <button
-                        className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
-                        onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva al código del proyecto.")}
-                        onMouseOut={hideInfo}
-                        onClick={() => codeUrl && window.open(codeUrl, "_blank")}
-                    >
-                        Código
-                    </button>
-                    <button
-                        className="info-btn border-2 border-white px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
-                        onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva a la vista del proyecto.")}
-                        onMouseOut={hideInfo}
-                        onClick={() => demoUrl && (demoUrl.startsWith('http') ? window.open(demoUrl, "_blank") : window.location.href = demoUrl)}
-                    >
-                        Ver Proyecto
-                    </button>
+                    {codeUrl && (
+                        <button
+                            className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
+                            onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva al código del proyecto.")}
+                            onMouseOut={hideInfo}
+                            onClick={() => window.open(codeUrl, "_blank")}
+                        >
+                            Código
+                        </button>
+                    )}
+                    {demoUrl && (
+                        <button
+                            className="info-btn border-2 border-white px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
+                            onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva a la vista del proyecto.")}
+                            onMouseOut={hideInfo}
+                            onClick={() => demoUrl.startsWith('http') ? window.open(demoUrl, "_blank") : window.location.href = demoUrl}
+                        >
+                            Ver Proyecto
+                        </button>
+                    )}
                 </div>
             </header>
 

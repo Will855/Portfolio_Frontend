@@ -1,0 +1,75 @@
+     table_name      |    column_name     |        data_type         | is_nullable 
+---------------------+--------------------+--------------------------+-------------
+ admin_emails        | email              | text                     | NO
+ admin_emails        | created_at         | timestamp with time zone | YES
+ cards               | id                 | text                     | NO
+ cards               | title              | text                     | NO
+ cards               | description        | text                     | NO
+ cards               | button_text        | text                     | NO
+ cards               | image_path         | text                     | NO
+ cards               | created_at         | timestamp with time zone | YES
+ cards               | updated_at         | timestamp with time zone | YES
+ cards               | code_url           | text                     | NO
+ cards               | demo_url           | text                     | NO
+ cards               | bg_image_path      | text                     | NO
+ cards               | order              | smallint                 | NO
+ cards               | problem_solved     | text                     | NO
+ cards               | architectural_doc  | text                     | NO
+ cards               | category           | text                     | NO
+ cards               | tags               | ARRAY                    | NO
+ certificates        | id                 | uuid                     | NO
+ certificates        | title              | text                     | NO
+ certificates        | issuer             | text                     | NO
+ certificates        | provider           | text                     | NO
+ certificates        | description        | text                     | YES
+ certificates        | status_badge       | text                     | YES
+ certificates        | type_badge         | text                     | YES
+ certificates        | tags               | ARRAY                    | YES
+ certificates        | image_path         | text                     | YES
+ certificates        | order              | integer                  | YES
+ certificates        | created_at         | timestamp with time zone | NO
+ certificates        | updated_at         | timestamp with time zone | NO
+ contact_submissions | id                 | uuid                     | NO
+ contact_submissions | name               | text                     | NO
+ contact_submissions | email              | text                     | NO
+ contact_submissions | phone              | text                     | YES
+ contact_submissions | message            | text                     | NO
+ contact_submissions | created_at         | timestamp with time zone | YES
+ content_blocks      | id                 | uuid                     | NO
+ content_blocks      | key                | text                     | NO
+ content_blocks      | content            | text                     | NO
+ content_blocks      | type               | text                     | NO
+ content_blocks      | updated_at         | timestamp with time zone | YES
+ hero_content        | id                 | text                     | NO
+ hero_content        | title              | text                     | NO
+ hero_content        | subtitle           | text                     | NO
+ hero_content        | profile_image_path | text                     | NO
+ hero_content        | updated_at         | timestamp with time zone | YES
+ info_sections       | id                 | uuid                     | NO
+ info_sections       | section_type       | text                     | NO
+ info_sections       | title              | text                     | NO
+ info_sections       | color              | text                     | NO
+ info_sections       | items              | jsonb                    | NO
+ info_sections       | order              | smallint                 | NO
+ info_sections       | created_at         | timestamp with time zone | YES
+ info_sections       | updated_at         | timestamp with time zone | YES
+ project_content     | id                 | uuid                     | NO
+ project_content     | project_id         | text                     | NO
+ project_content     | type               | text                     | NO
+ project_content     | content            | text                     | NO
+ project_content     | caption            | text                     | YES
+ project_content     | order              | smallint                 | NO
+ project_content     | created_at         | timestamp with time zone | YES
+ project_content     | updated_at         | timestamp with time zone | YES
+ projects_meta       | id                 | text                     | NO
+ projects_meta       | bg_image_path      | text                     | NO
+ projects_meta       | code_url           | text                     | NO
+ projects_meta       | demo_url           | text                     | NO
+ projects_meta       | order              | smallint                 | YES
+ projects_meta       | updated_at         | timestamp with time zone | YES
+ site_settings       | key                | text                     | NO
+ site_settings       | value              | jsonb                    | NO
+ site_settings       | description        | text                     | YES
+ site_settings       | updated_at         | timestamp with time zone | YES
+(71 rows)
+

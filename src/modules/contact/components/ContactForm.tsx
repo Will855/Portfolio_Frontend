@@ -9,6 +9,8 @@ import { Textarea } from '../../../shared/components/Textarea';
 import { trackContactAttempt } from '../../../core/utils/analytics';
 import { useContactForm } from '../hooks/useContactForm';
 
+import { useSiteSettings } from '../../../core/hooks/useSiteSettings';
+
 interface SocialLink {
   name: string;
   icon: React.ComponentProps<typeof IonIcon>['name'];
@@ -17,19 +19,21 @@ interface SocialLink {
   ariaLabel: string;
 }
 
-const SOCIAL_LINKS = {
-  whatsapp: 'https://wa.me/+584265940917',
-  instagram: 'https://www.instagram.com/techno__monster/',
-  github: 'https://github.com/Will855'
-};
-
-const SOCIAL_ITEMS: SocialLink[] = [
-  { name: 'whatsapp', icon: 'logo-whatsapp', url: SOCIAL_LINKS.whatsapp, hoverColor: 'hover:text-green-400', ariaLabel: 'Contactar por WhatsApp' },
-  { name: 'instagram', icon: 'logo-instagram', url: SOCIAL_LINKS.instagram, hoverColor: 'hover:text-pink-400', ariaLabel: 'Seguir en Instagram' },
-  { name: 'github', icon: 'logo-github', url: SOCIAL_LINKS.github, hoverColor: 'hover:text-gray-400', ariaLabel: 'Ver perfil de GitHub' }
-];
-
 export const ContactForm: React.FC = () => {
+  const { settings } = useSiteSettings();
+  
+  const SOCIAL_LINKS = {
+    whatsapp: settings.socialMedia?.whatsapp?.url || 'https://wa.me/+584265940917',
+    instagram: 'https://www.instagram.com/techno__monster/',
+    github: settings.socialMedia?.github?.url || 'https://github.com/Will855'
+  };
+
+  const SOCIAL_ITEMS: SocialLink[] = [
+    { name: 'whatsapp', icon: 'logo-whatsapp', url: SOCIAL_LINKS.whatsapp, hoverColor: 'hover:text-green-400', ariaLabel: 'Contactar por WhatsApp' },
+    { name: 'instagram', icon: 'logo-instagram', url: SOCIAL_LINKS.instagram, hoverColor: 'hover:text-pink-400', ariaLabel: 'Seguir en Instagram' },
+    { name: 'github', icon: 'logo-github', url: SOCIAL_LINKS.github, hoverColor: 'hover:text-gray-400', ariaLabel: 'Ver perfil de GitHub' }
+  ];
+
   const { formData, isSubmitting, error, responseMessage, fieldErrors, handleChange, handleSubmit } = useContactForm();
 
   const formRef = useRef<HTMLFormElement>(null);

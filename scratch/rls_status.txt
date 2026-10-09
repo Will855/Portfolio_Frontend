@@ -1,0 +1,14 @@
+     table_name      | rls_enabled 
+---------------------+-------------
+ admin_emails        | t
+ cards               | t
+ certificates        | t
+ contact_submissions | t
+ content_blocks      | t
+ hero_content        | t
+ info_sections       | t
+ project_content     | t
+ projects_meta       | t
+ site_settings       | t
+(10 rows)
+

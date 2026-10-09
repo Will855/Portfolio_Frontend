@@ -1,0 +1,41 @@
+      tablename      |                   policyname                    |  cmd   |      roles      |                              qual                               | with_check 
+---------------------+-------------------------------------------------+--------+-----------------+-----------------------------------------------------------------+------------
+ admin_emails        | Only existing admins can read admin_emails      | SELECT | {public}        | ((auth.jwt() ->> 'email'::text) = email)                        | 
+ cards               | Admin write cards                               | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ cards               | Public read cards                               | SELECT | {public}        | true                                                            | 
+ certificates        | Allow authenticated full access on certificates | ALL    | {authenticated} | true                                                            | true
+ certificates        | Allow public read access on certificates        | SELECT | {public}        | true                                                            | 
+ contact_submissions | Admin delete contact_submissions                | DELETE | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ contact_submissions | Admin read contact_submissions                  | SELECT | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ content_blocks      | Admin write content_blocks                      | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ content_blocks      | Public read content_blocks                      | SELECT | {public}        | true                                                            | 
+ hero_content        | Admin write hero_content                        | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ hero_content        | Public read hero_content                        | SELECT | {public}        | true                                                            | 
+ info_sections       | Admin write info_sections                       | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ info_sections       | Public read info_sections                       | SELECT | {public}        | true                                                            | 
+ project_content     | Admin write project_content                     | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ project_content     | Public read project_content                     | SELECT | {public}        | true                                                            | 
+ projects_meta       | Admin write projects_meta                       | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ projects_meta       | Public read projects_meta                       | SELECT | {public}        | true                                                            | 
+ site_settings       | Admin write site_settings                       | ALL    | {public}        | (EXISTS ( SELECT 1                                             +| 
+                     |                                                 |        |                 |    FROM admin_emails                                           +| 
+                     |                                                 |        |                 |   WHERE (admin_emails.email = (auth.jwt() ->> 'email'::text)))) | 
+ site_settings       | Public read site_settings                       | SELECT | {public}        | true                                                            | 
+(19 rows)
+

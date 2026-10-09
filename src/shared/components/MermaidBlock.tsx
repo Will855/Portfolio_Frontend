@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useId } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TransformWrapper, TransformComponent, useTransformEffect } from 'react-zoom-pan-pinch';
 

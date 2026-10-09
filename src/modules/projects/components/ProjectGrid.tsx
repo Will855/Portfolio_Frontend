@@ -42,13 +42,14 @@ const Grid: React.FC = () => {
   });
 
   useGSAP(() => {
-    if (containerRef.current) {
-      gsap.fromTo(
-        containerRef.current.children,
-        { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1, duration: 0.4, stagger: 0.05, ease: "back.out(1.5)", clearProps: "all" }
-      );
-    }
+    const children = containerRef.current?.children;
+    if (!children || children.length === 0) return;
+
+    gsap.fromTo(
+      Array.from(children),
+      { opacity: 0, scale: 0.9 },
+      { opacity: 1, scale: 1, duration: 0.4, stagger: 0.05, ease: "back.out(1.5)", clearProps: "all" }
+    );
   }, [filteredCards]);
 
   return (

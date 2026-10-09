@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase, isSupabaseConfigured } from '../../../shared/services/supabase/supabase';
+
 import { isValidEmail, isValidPhone } from '../../../shared/utils/validation';
 
 export interface ContactFormData {
@@ -64,26 +64,29 @@ export const useContactForm = () => {
         return;
       }
 
-      if (!isSupabaseConfigured) {
-        setError('El formulario de contacto no está configurado.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      const { error: submitError } = await supabase.from('contact_submissions').insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim() || null,
-        message: formData.message.trim(),
+      // Enviar datos al endpoint protegido
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim() || null,
+          message: formData.message.trim(),
+        }),
       });
 
-      if (submitError) throw submitError;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Error al enviar el mensaje');
+      }
 
       setResponseMessage('¡Formulario enviado con éxito!');
       setFormData({ name: '', email: '', phone: '', message: '' });
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error al enviar el mensaje:', err);
-      setError('Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+      setError(err.message || 'Error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
     } finally {
       setIsSubmitting(false);
     }

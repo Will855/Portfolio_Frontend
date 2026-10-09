@@ -5,37 +5,40 @@ import IonIcon from '@reacticons/ionicons';
 import QRCode from 'react-qr-code';
 import { trackContactAttempt } from '../../utils/analytics';
 
-// Configuración reutilizable
-const CONTACT_INFO = {
-  email: 'lynchwilmer@gmail.com',
-  phone: '+58 4265940917',
-  socialMedia: {
-    github: {
-      url: 'https://github.com/Will855',
-      label: 'GitHub/Will855',
-      iconName: 'logo-github'
-    },
-    instagram: {
-      url: 'https://www.instagram.com/techno__monster/',
-      label: 'Instagram/techno_monster',
-      iconName: 'logo-instagram'
-    },
-    linkedin: {
-      url: 'https://www.linkedin.com/in/wilmer-lynch/',
-      label: 'LinkedIn/wilmer-lynch',
-      iconName: 'logo-linkedin'
-    },
-    whatsapp: {
-      url: 'https://wa.me/+584265940917',
-      label: 'WhatsApp',
-      iconName: 'logo-whatsapp'
-    }
-  }
-};
+import { useSiteSettings } from '../../hooks/useSiteSettings';
 
 const Footer: React.FC = () => {
+  const { settings } = useSiteSettings();
+
   const handleSocialClick = (platform: string) => {
     trackContactAttempt(platform);
+  };
+
+  const CONTACT_INFO = {
+    email: settings.email,
+    phone: settings.phone,
+    socialMedia: {
+      github: {
+        url: settings.socialMedia?.github?.url || 'https://github.com/Will855',
+        label: 'GitHub',
+        iconName: 'logo-github'
+      },
+      instagram: {
+        url: 'https://www.instagram.com/techno__monster/',
+        label: 'Instagram',
+        iconName: 'logo-instagram'
+      },
+      linkedin: {
+        url: settings.socialMedia?.linkedin?.url || 'https://www.linkedin.com/in/wilmer-lynch/',
+        label: 'LinkedIn',
+        iconName: 'logo-linkedin'
+      },
+      whatsapp: {
+        url: settings.socialMedia?.whatsapp?.url || 'https://wa.me/+584265940917',
+        label: 'WhatsApp',
+        iconName: 'logo-whatsapp'
+      }
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ import Footer from '../../../core/components/footer/Footer';
 export const NotesPage: React.FC = () => {
   const searchParams = useSearchParams();
   const currentPath = searchParams.get('path') || '';
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const isExpanded = false;
   
   // Si el path termina en .md, es un archivo. Si no, asumimos que es una carpeta.
   const isFile = currentPath.endsWith('.md');
