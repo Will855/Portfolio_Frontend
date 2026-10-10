@@ -12,6 +12,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: 'Portfolio - Wilmer Lynch',
   description: 'Mi portafolio profesional y proyectos',
+  icons: {
+    icon: '/logo.jpg',
+  },
 };
 
 export default function RootLayout({

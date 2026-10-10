@@ -34,11 +34,6 @@ function NavMenu() {
       ${isScrolled ? 'bg-slate-900/90 border border-white/10 shadow-lg shadow-black/30' : 'bg-transparent'}
     `}>
       <ul className="flex justify-between items-center py-2">
-        <li className="mr-4 ml-2">
-          <Link href="/">
-            <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-full hover:scale-105 transition-transform object-cover" />
-          </Link>
-        </li>
         {navItems.map((item) => {
           const href = `/${item.toLowerCase()}`;
           const isActive = pathname === href || (pathname === '/' && href === '/inicio') || (href === '/notas' && pathname.startsWith('/notas'));
