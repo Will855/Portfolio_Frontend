@@ -12,7 +12,7 @@ export interface SiteSettings {
 }
 
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-  email: 'lynchwilmer@gmail.com',
+  email: 'Wilmer@parz7val.online',
   phone: '+58 4265940917',
   socialMedia: {
     github: { url: 'https://github.com/Will855' },
