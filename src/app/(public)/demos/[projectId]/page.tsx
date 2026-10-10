@@ -1,8 +1,11 @@
 import Demo from '../../../../modules/projects/pages/DemosRedirectPage';
+import { projectIds } from '../../../../modules/projects/config/project';
 
-// Render at request time — this page reads Supabase data that
-// requires env vars not available during static generation.
-export const dynamic = 'force-dynamic';
+export function generateStaticParams() {
+  return projectIds.map((id) => ({
+    projectId: id,
+  }));
+}
 
 export default function DemoRedirectRoute() {
   return <Demo />;
