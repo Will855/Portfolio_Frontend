@@ -28,6 +28,9 @@ jobs:
 
       # 3. Install dependencies and build the project
       - name: Install dependencies and build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
         run: pnpm install --frozen-lockfile && pnpm run build
 
       # 4. Deploy to Firebase Hosting

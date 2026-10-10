@@ -3,6 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
 const customFetch = async (url: RequestInfo | URL, options?: RequestInit) => {
   const endpoint = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
   const method = options?.method ?? (url instanceof Request ? url.method : 'GET');
@@ -37,10 +39,22 @@ const customFetch = async (url: RequestInfo | URL, options?: RequestInit) => {
   }
 };
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  global: {
-    fetch: customFetch,
-  },
-});
+// Lazy singleton — only instantiated when Supabase is actually configured,
+// preventing "supabaseUrl is required" crashes during SSR/static generation.
+let _client: ReturnType<typeof createClient> | null = null;
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export function getSupabaseClient() {
+  if (!isSupabaseConfigured) return null;
+  if (!_client) {
+    _client = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { fetch: customFetch },
+    });
+  }
+  return _client;
+}
+
+// Backwards-compatible default export — safe to use in client components.
+// Will be null when env vars are missing (build time / SSR without secrets).
+export const supabase = isSupabaseConfigured
+  ? createClient(supabaseUrl, supabaseAnonKey, { global: { fetch: customFetch } })
+  : null as unknown as ReturnType<typeof createClient>;
