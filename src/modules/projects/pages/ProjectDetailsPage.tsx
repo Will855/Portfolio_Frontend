@@ -7,6 +7,7 @@ import { useCards } from "../hooks/useCards";
 import { useProjectContent, type ProjectContentBlock } from "../hooks/useProjectContent";
 import { getStoragePublicUrl } from "../../../shared/services/supabase/supabaseStorage";
 import { MarkdownRenderer } from "../../../shared/components/MarkdownRenderer";
+import { useGithubReadme } from "../hooks/useGithubReadme";
 
 const DynamicContent: React.FC<{ blocks: ProjectContentBlock[] }> = ({ blocks }) => (
     <div className="bg-gray-50 p-4 sm:p-6 md:p-12 space-y-6">
@@ -74,6 +75,7 @@ const CardDetails: React.FC = () => {
     const { blocks, isLoading: contentLoading } = useProjectContent(id);
     const card = cards.find((c) => c.id === id);
     const codeUrl = card?.codeUrl ?? '';
+    const { data: readme, isLoading: readmeLoading } = useGithubReadme(codeUrl);
 
     if (!id || !card) {
         return (
@@ -140,14 +142,21 @@ const CardDetails: React.FC = () => {
                             </section>
                         )}
 
-                        {card.architectural_doc && card.architectural_doc.trim().length > 0 && (
+                        {(readmeLoading || readme || (card.architectural_doc && card.architectural_doc.trim().length > 0)) && (
                             <section className="space-y-3">
                                 <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
-                                    Documentación de Arquitectura
+                                    {readmeLoading || readme ? 'Documentación del Repositorio (README)' : 'Documentación de Arquitectura'}
                                 </h2>
-                                <div className="prose max-w-none text-slate-800">
-                                    <MarkdownRenderer markdown={card.architectural_doc} />
-                                </div>
+                                {readmeLoading ? (
+                                    <div className="flex items-center gap-2 text-slate-500 py-4">
+                                        <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                                        Obteniendo README desde GitHub...
+                                    </div>
+                                ) : (
+                                    <div className="prose max-w-none text-slate-800">
+                                        <MarkdownRenderer markdown={readme || card.architectural_doc} />
+                                    </div>
+                                )}
                             </section>
                         )}
                     </div>
