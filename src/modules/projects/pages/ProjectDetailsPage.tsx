@@ -88,7 +88,6 @@ const CardDetails: React.FC = () => {
 
     const demoUrl = card.demoUrl ?? '';
     const hasDynamicContent = blocks.length > 0;
-    const coverImage = card.img || card.bgImage;
     const cleanedReadme = readme ? readme.replace(/!\[.*?\]\(https?:\/\/via\.placeholder\.com\/.*?\)/gi, '') : '';
 
     const formatExternalUrl = (raw: string): string => {
@@ -121,16 +120,7 @@ const CardDetails: React.FC = () => {
     return (
         <>
             <header
-                className="header h-[50vh] sm:h-[60vh] flex justify-center items-center relative text-white bg-slate-950 overflow-hidden"
-                style={
-                    coverImage
-                        ? {
-                              backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.95)), url(${coverImage})`,
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center',
-                          }
-                        : undefined
-                }
+                className="header h-[50vh] sm:h-[60vh] flex justify-center items-center relative text-white bg-transparent"
             >
                 <div className="button flex gap-4 z-10">
                     {targetCodeUrl && (
