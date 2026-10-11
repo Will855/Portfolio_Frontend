@@ -115,6 +115,9 @@ const CardDetails: React.FC = () => {
         }
     };
 
+    const targetCodeUrl = formatExternalUrl(codeUrl);
+    const targetDemoUrl = formatExternalUrl(demoUrl);
+
     return (
         <>
             <header
@@ -130,25 +133,29 @@ const CardDetails: React.FC = () => {
                 }
             >
                 <div className="button flex gap-4 z-10">
-                    {codeUrl && (
-                        <button
-                            className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
+                    {targetCodeUrl && (
+                        <a
+                            href={targetCodeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors inline-flex items-center justify-center cursor-pointer"
                             onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva al código del proyecto.")}
                             onMouseOut={hideInfo}
-                            onClick={() => handleOpenUrl(codeUrl)}
                         >
                             Código
-                        </button>
+                        </a>
                     )}
-                    {demoUrl && (
-                        <button
-                            className="info-btn border-2 border-white px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
+                    {targetDemoUrl && (
+                        <a
+                            href={targetDemoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="info-btn border-2 border-white px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors inline-flex items-center justify-center cursor-pointer"
                             onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva a la vista del proyecto.")}
                             onMouseOut={hideInfo}
-                            onClick={() => handleOpenUrl(demoUrl)}
                         >
                             Ver Proyecto
-                        </button>
+                        </a>
                     )}
                 </div>
             </header>
