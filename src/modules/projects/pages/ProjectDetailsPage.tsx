@@ -91,6 +91,30 @@ const CardDetails: React.FC = () => {
     const coverImage = card.img || card.bgImage;
     const cleanedReadme = readme ? readme.replace(/!\[.*?\]\(https?:\/\/via\.placeholder\.com\/.*?\)/gi, '') : '';
 
+    const formatExternalUrl = (raw: string): string => {
+        if (!raw) return '';
+        let url = raw.trim();
+        // Fix single-slash protocol typos (e.g., https:/domain.com -> https://domain.com)
+        url = url.replace(/^https?:\/(?!\/)/i, (m) => m + '/');
+        // If it starts with a single slash, it's an internal relative path
+        if (url.startsWith('/') && !url.startsWith('//')) return url;
+        // If no protocol is provided, default to https://
+        if (!/^https?:\/\//i.test(url)) {
+            return `https://${url}`;
+        }
+        return url;
+    };
+
+    const handleOpenUrl = (rawUrl: string) => {
+        const target = formatExternalUrl(rawUrl);
+        if (!target) return;
+        if (target.startsWith('/') && !target.startsWith('//')) {
+            window.location.href = target;
+        } else {
+            window.open(target, '_blank', 'noopener,noreferrer');
+        }
+    };
+
     return (
         <>
             <header
@@ -111,7 +135,7 @@ const CardDetails: React.FC = () => {
                             className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
                             onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva al código del proyecto.")}
                             onMouseOut={hideInfo}
-                            onClick={() => window.open(codeUrl, "_blank")}
+                            onClick={() => handleOpenUrl(codeUrl)}
                         >
                             Código
                         </button>
@@ -121,7 +145,7 @@ const CardDetails: React.FC = () => {
                             className="info-btn border-2 border-white px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
                             onMouseOver={(e) => showInfo(e.currentTarget, "Este botón te lleva a la vista del proyecto.")}
                             onMouseOut={hideInfo}
-                            onClick={() => demoUrl.startsWith('http') ? window.open(demoUrl, "_blank") : window.location.href = demoUrl}
+                            onClick={() => handleOpenUrl(demoUrl)}
                         >
                             Ver Proyecto
                         </button>
