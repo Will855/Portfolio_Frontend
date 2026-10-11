@@ -121,3 +121,32 @@
   margin-bottom: 8px;
 }
 
+/* Soporte para contenedores claros en tarjetas de proyectos */
+.bg-white .prose,
+.bg-white .prose p,
+.bg-white .prose li {
+  color: #334155 !important;
+}
+
+.bg-white .prose strong,
+.bg-white .prose b {
+  color: #0f172a !important;
+  font-weight: 700;
+}
+
+.bg-white .prose h1,
+.bg-white .prose h2,
+.bg-white .prose h3,
+.bg-white .prose h4 {
+  color: #0f172a !important;
+}
+
+.bg-white .prose a {
+  color: #2563eb !important;
+}
+
+.bg-white .prose code:not(pre code) {
+  background-color: #f1f5f9 !important;
+  color: #7c3aed !important;
+}
+
