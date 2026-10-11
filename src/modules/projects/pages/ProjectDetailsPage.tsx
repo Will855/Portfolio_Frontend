@@ -88,13 +88,24 @@ const CardDetails: React.FC = () => {
 
     const demoUrl = card.demoUrl ?? '';
     const hasDynamicContent = blocks.length > 0;
+    const coverImage = card.img || card.bgImage;
+    const cleanedReadme = readme ? readme.replace(/!\[.*?\]\(https?:\/\/via\.placeholder\.com\/.*?\)/gi, '') : '';
 
     return (
         <>
             <header
-                className="header h-[60vh] bg-transparent flex justify-center items-center relative text-white"
+                className="header h-[50vh] sm:h-[60vh] flex justify-center items-center relative text-white bg-slate-950 overflow-hidden"
+                style={
+                    coverImage
+                        ? {
+                              backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.95)), url(${coverImage})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                          }
+                        : undefined
+                }
             >
-                <div className="button flex gap-4">
+                <div className="button flex gap-4 z-10">
                     {codeUrl && (
                         <button
                             className="info-btn border-2 px-6 py-2 font-bold relative hover:bg-white hover:text-black transition-colors"
@@ -122,6 +133,16 @@ const CardDetails: React.FC = () => {
                 <div className="max-w-6xl mx-auto space-y-8 px-4 sm:px-6 lg:px-8 pt-8">
                     {/* Caso de Estudio Fixed Narratives */}
                     <div className="bg-white rounded-3xl shadow-xl overflow-hidden p-6 sm:p-10 space-y-8">
+                        {card.img && (
+                            <div className="w-full h-56 sm:h-80 md:h-96 rounded-2xl overflow-hidden bg-slate-100 shadow-md">
+                                <img
+                                    src={card.img}
+                                    alt={card.title}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        )}
+
                         <section className="space-y-3">
                             <h2 className="text-2xl font-bold text-slate-800 border-b pb-2 border-slate-200">
                                 Descripción
@@ -154,7 +175,7 @@ const CardDetails: React.FC = () => {
                                     </div>
                                 ) : (
                                     <div className="prose max-w-none text-slate-800">
-                                        <MarkdownRenderer markdown={readme || card.architectural_doc} />
+                                        <MarkdownRenderer markdown={cleanedReadme || card.architectural_doc} />
                                     </div>
                                 )}
                             </section>
