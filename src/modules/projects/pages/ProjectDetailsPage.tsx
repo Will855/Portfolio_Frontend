@@ -93,6 +93,8 @@ const CardDetails: React.FC = () => {
     const formatExternalUrl = (raw: string): string => {
         if (!raw) return '';
         let url = raw.trim();
+        // Fix accidental leading slash on absolute URLs (e.g., /https://domain.com -> https://domain.com)
+        url = url.replace(/^\/+(https?:\/\/)/i, '$1');
         // Fix single-slash protocol typos (e.g., https:/domain.com -> https://domain.com)
         url = url.replace(/^https?:\/(?!\/)/i, (m) => m + '/');
         // If it starts with a single slash, it's an internal relative path
